@@ -1,18 +1,39 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <form action="submit"></form>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+  },
+  data: () => ({
+    vaccines: [
+      {
+        id: "VO_0004809",
+        name: "2008-2009 trivalent influenza vaccine"
+      },
+      {
+        id: "VO_0000047",
+        name: "Fluzone"
+      },
+      {
+        id: "VO_0000642",
+        name: "Influenza virus vaccine"
+      },
+      {
+        id: "VO_0000044",
+        name: "FluMist"
+      },
+      {
+        id: "VO_0000045",
+        name: "Fluarix"
+      }
+    ]
+  }),
 }
 </script>
 
