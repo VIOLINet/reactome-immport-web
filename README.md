@@ -1,4 +1,4 @@
-# idg-homepage documentation
+# immport-reactome-web documentation
 
 ## Dev Environment setup
 This dev environment assumes a Mac or Linux dev environment.
