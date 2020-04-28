@@ -11,11 +11,7 @@
           <td>Vaccine</td>
           <td>
             <div v-for="vaccine in this.vaccines" :key="vaccine.id" class="checkBox">
-              <input
-                type="checkbox"
-                v-model="selectedVaccines"
-                :value="vaccine.id"
-              />
+              <input type="checkbox" v-model="selectedVaccines" :value="vaccine.id" />
               <label :for="vaccine.name">{{ vaccine.name }}</label>
             </div>
           </td>
@@ -24,13 +20,25 @@
           <td>Gender</td>
           <td>
             <div class="checkBox">
-              <input type="checkbox" v-model="selectedGenders" value="male">
+              <input type="checkbox" v-model="selectedGenders" value="male" />
               <label for="male">Male</label>
             </div>
             <div class="checkBox">
-              <input type="checkbox" v-model="selectedGenders" value="female">
+              <input type="checkbox" v-model="selectedGenders" value="female" />
               <label for="female">Female</label>
             </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Collection Times</td>
+          <td>
+            <select v-model="selectedTimes" :size="10" multiple class="multi-select">
+              <option
+                v-for="time in collectionTimes"
+                :key="time.time + ' ' + time.units"
+                v-bind:value="''+time.time+'' + ' ' + time.units "
+              >{{time.time + ' ' + time.units}}</option>
+            </select>
           </td>
         </tr>
       </table>
@@ -40,7 +48,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "App",
@@ -68,22 +76,194 @@ export default {
         name: "Fluarix"
       }
     ],
+    collectionTimes: [
+      {
+        time: "-7.0",
+        units: "Days"
+      },
+      {
+        time: "-168.0",
+        units: "Hours"
+      },
+      {
+        time: "0.0",
+        units: "Hours"
+      },
+      {
+        time: "0.0",
+        units: "Days"
+      },
+      {
+        time: "1.5",
+        units: "Hours"
+      },
+      {
+        time: "3.0",
+        units: "Hours"
+      },
+      {
+        time: "6.0",
+        units: "Hours"
+      },
+      {
+        time: "9.0",
+        units: "Hours"
+      },
+      {
+        time: "12.0",
+        units: "Hours"
+      },
+      {
+        time: "0.5",
+        units: "Days"
+      },
+      {
+        time: "15.0",
+        units: "Hours"
+      },
+      {
+        time: "24.0",
+        units: "Hours"
+      },
+      {
+        time: "1.0",
+        units: "Days"
+      },
+      {
+        time: "36.0",
+        units: "Hours"
+      },
+      {
+        time: "48.0",
+        units: "Hours"
+      },
+      {
+        time: "2.0",
+        units: "Days"
+      },
+      {
+        time: "3.0",
+        units: "Days"
+      },
+      {
+        time: "4.0",
+        units: "Days"
+      },
+      {
+        time: "5.0",
+        units: "Days"
+      },
+      {
+        time: "7.0",
+        units: "Days"
+      },
+      {
+        time: "8.0",
+        units: "Days"
+      },
+      {
+        time: "9.0",
+        units: "Days"
+      },
+      {
+        time: "10.0",
+        units: "Days"
+      },
+      {
+        time: "11.0",
+        units: "Days"
+      },
+      {
+        time: "14.0",
+        units: "Days"
+      },
+      {
+        time: "17.0",
+        units: "Days"
+      },
+      {
+        time: "21.0",
+        units: "Days"
+      },
+      {
+        time: "24.0",
+        units: "Days"
+      },
+      {
+        time: "25.0",
+        units: "Days"
+      },
+      {
+        time: "27.0",
+        units: "Days"
+      },
+      {
+        time: "28.0",
+        units: "Days"
+      },
+      {
+        time: "30.0",
+        units: "Days"
+      },
+      {
+        time: "32.0",
+        units: "Days"
+      },
+      {
+        time: "35.0",
+        units: "Days"
+      },
+      {
+        time: "36.0",
+        units: "Days"
+      },
+      {
+        time: "37.0",
+        units: "Days"
+      },
+      {
+        time: "38.0",
+        units: "Days"
+      },
+      {
+        time: "41.0",
+        units: "Days"
+      },
+      {
+        time: "43.0",
+        units: "Days"
+      },
+      {
+        time: "46.0",
+        units: "Days"
+      },
+      {
+        time: "49.0",
+        units: "Days"
+      },
+      {
+        time: "180.0",
+        units: "Days"
+      }
+    ],
     selectedVaccines: [],
-    selectedGenders: []
+    selectedGenders: [],
+    selectedTimes: []
   }),
   methods: {
     handleSubmit() {
-      axios.post('http://localhost:8076/immportws/expSample/vaccine',
-                {
-                  voIds: this.selectedVaccines,
-                  genderList: this.selectedGenders
-                })
-           .then(response => {
-             console.log(response)
-           })
-           .catch(error => {
-             console.error(error)
-           })
+      axios
+        .post("http://localhost:8076/immportws/expSample/vaccine", {
+          voIds: this.selectedVaccines,
+          genderList: this.selectedGenders,
+          times: this.selectedTimes
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };
@@ -109,12 +289,15 @@ table {
   padding: 0;
   border: 1px solid grey;
 }
-.checkBox{
+.checkBox {
   text-align: left;
 }
-.tableHeader{
+.tableHeader {
   margin: 0 auto;
   padding: 0;
   width: 100%;
+}
+.multi-select {
+  width: 10em;
 }
 </style>
