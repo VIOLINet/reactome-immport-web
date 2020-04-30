@@ -42,7 +42,7 @@
           </td>
         </tr>
       </table>
-      <input type="submit" value="analyze" />
+      <v-btn small class="submitButton" v-on:click="handleSubmit">Analyze</v-btn>
     </form>
     <v-container>
       <p
@@ -334,6 +334,12 @@ table {
   width: 100%;
 }
 .multi-select {
+  margin: 0.5em;
   width: 10em;
+  height: 10em;
+  border: 1px solid black;
+}
+.submitButton {
+  margin:0.5em;
 }
 </style>
