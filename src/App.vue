@@ -1,65 +1,70 @@
 <template>
   <v-app id="app">
-    <form @submit.prevent="handleSubmit">
-      <table>
-        <h3 class="tableHeader">Perform Reactome enrichment on Vaccine data</h3>
-        <tr>
-          <td style="background-color:lightgrey;">Search Field</td>
-          <td style="background-color:lightgrey;" class="searchColumn">Search Parameter</td>
-        </tr>
-        <tr>
-          <td>Vaccine</td>
-          <td>
-            <div v-for="vaccine in this.vaccines" :key="vaccine.id" class="checkBox">
-              <input type="checkbox" v-model="selectedVaccines" :value="vaccine.id" />
-              <label :for="vaccine.name">{{ vaccine.name }}</label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Gender</td>
-          <td>
-            <div class="checkBox">
-              <input type="checkbox" v-model="selectedGenders" value="male" />
-              <label for="male">Male</label>
-            </div>
-            <div class="checkBox">
-              <input type="checkbox" v-model="selectedGenders" value="female" />
-              <label for="female">Female</label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Collection Times</td>
-          <td>
-            <select v-model="selectedTimes" :size="10" multiple class="multi-select">
-              <option
-                v-for="time in collectionTimes"
-                :key="time.time + ' ' + time.units"
-                v-bind:value="''+time.time+'' + ' ' + time.units "
-              >{{time.time + ' ' + time.units}}</option>
-            </select>
-          </td>
-        </tr>
-      </table>
-      <v-btn small class="submitButton" v-on:click="handleSubmit">Analyze</v-btn>
-    </form>
     <v-container>
-      <p
+      <form @submit.prevent="handleSubmit">
+        <table>
+          <h3 class="tableHeader">Perform Reactome enrichment on Vaccine data</h3>
+          <tr>
+            <td style="background-color:lightgrey;">Search Field</td>
+            <td style="background-color:lightgrey;" class="searchColumn">Search Parameter</td>
+          </tr>
+          <tr>
+            <td>Vaccine</td>
+            <td>
+              <div v-for="vaccine in this.vaccines" :key="vaccine.id" class="checkBox">
+                <input type="checkbox" v-model="selectedVaccines" :value="vaccine.id" />
+                <label :for="vaccine.name">{{ vaccine.name }}</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Gender</td>
+            <td>
+              <div class="checkBox">
+                <input type="checkbox" v-model="selectedGenders" value="male" />
+                <label for="male">Male</label>
+              </div>
+              <div class="checkBox">
+                <input type="checkbox" v-model="selectedGenders" value="female" />
+                <label for="female">Female</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Collection Times</td>
+            <td>
+              <select v-model="selectedTimes" :size="10" multiple class="multi-select">
+                <option
+                  v-for="time in collectionTimes"
+                  :key="time.time + ' ' + time.units"
+                  v-bind:value="''+time.time+'' + ' ' + time.units "
+                >{{time.time + ' ' + time.units}}</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <v-btn small class="submitButton" @click="handleSubmit" primary>Analyze</v-btn>
+      </form>
+    </v-container>
+    <v-container>
+      <span
         style="color:red; text-align:left;"
         v-for="(message, index) in errorMessages"
         :key="index"
-      >{{message}}</p>
+      >{{message}}</span>
     </v-container>
+    <ResultsPanel :analysisData="analysisData" :fiData="fiData" v-if="dataLoaded" />
   </v-app>
 </template>
 
 <script>
 import axios from "axios";
-
+import ResultsPanel from "./components/ImmportResults/ResultsPanel";
 export default {
   name: "App",
-  components: {},
+  components: {
+    ResultsPanel
+  },
   data: () => ({
     vaccines: [
       {
@@ -256,7 +261,10 @@ export default {
     selectedVaccines: [],
     selectedGenders: [],
     selectedTimes: [],
-    errorMessages: []
+    errorMessages: [],
+    analysisData: {},
+    fiData: {},
+    dataLoaded: false
   }),
   methods: {
     handleSubmit() {
@@ -272,13 +280,14 @@ export default {
           return axios.get("http://localhost:8076/immportws/analysis/pathways");
         })
         .then(response => {
-          console.log(response);
+          this.analysisData = response.data;
+          this.dataLoaded = true;
           return axios.get(
             "http://localhost:8076/immportws/analysis/fi_network"
           );
         })
         .then(response => {
-          console.log(response);
+          this.fiData = response.data;
         })
         .catch(error => {
           console.error(error);
@@ -288,15 +297,15 @@ export default {
       this.errorMessages = [];
       let rtn = true;
       if (this.selectedVaccines.length <= 0) {
-        this.errorMessages.push("You must choose at least 1 vaccine.");
+        this.errorMessages.push("You must choose at least 1 vaccine. ");
         rtn = false;
       }
       if (this.selectedGenders.length <= 0) {
-        this.errorMessages.push("You must choose at least 1 sex.");
+        this.errorMessages.push("You must choose at least 1 sex. ");
         rtn = false;
       }
       if (this.selectedTimes <= 0) {
-        this.errorMessages.push("You must choose at least 1 time.");
+        this.errorMessages.push("You must choose at least 1 time. ");
         rtn = false;
       }
       return rtn;
@@ -340,6 +349,6 @@ table {
   border: 1px solid black;
 }
 .submitButton {
-  margin:0.5em;
+  margin: 0.5em;
 }
 </style>

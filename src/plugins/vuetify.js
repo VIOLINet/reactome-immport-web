@@ -3,6 +3,16 @@ import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css"; // Add this line
 
 Vue.use(Vuetify);
-const opts = {};
+const opts = {
+    theme: {
+        dark: false
+    },
+    options: {
+        customProperties: true
+    },
+    icons: {
+        iconfont: "mdi"
+    }
+};
 
 export default new Vuetify(opts);
