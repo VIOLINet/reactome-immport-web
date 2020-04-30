@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <form @submit.prevent="handleSubmit">
       <table>
         <h3 class="tableHeader">Perform Reactome enrichment on Vaccine data</h3>
@@ -44,7 +44,14 @@
       </table>
       <input type="submit" value="analyze" />
     </form>
-  </div>
+    <v-container>
+      <p
+        style="color:red; text-align:left;"
+        v-for="(message, index) in errorMessages"
+        :key="index"
+      >{{message}}</p>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -248,10 +255,12 @@ export default {
     ],
     selectedVaccines: [],
     selectedGenders: [],
-    selectedTimes: []
+    selectedTimes: [],
+    errorMessages: []
   }),
   methods: {
     handleSubmit() {
+      if (!this.validateForm()) return;
       axios
         .post("http://localhost:8076/immportws/expSample/vaccine", {
           voIds: this.selectedVaccines,
@@ -260,10 +269,37 @@ export default {
         })
         .then(response => {
           console.log(response);
+          return axios.get("http://localhost:8076/immportws/analysis/pathways");
+        })
+        .then(response => {
+          console.log(response);
+          return axios.get(
+            "http://localhost:8076/immportws/analysis/fi_network"
+          );
+        })
+        .then(response => {
+          console.log(response);
         })
         .catch(error => {
           console.error(error);
         });
+    },
+    validateForm() {
+      this.errorMessages = [];
+      let rtn = true;
+      if (this.selectedVaccines.length <= 0) {
+        this.errorMessages.push("You must choose at least 1 vaccine.");
+        rtn = false;
+      }
+      if (this.selectedGenders.length <= 0) {
+        this.errorMessages.push("You must choose at least 1 sex.");
+        rtn = false;
+      }
+      if (this.selectedTimes <= 0) {
+        this.errorMessages.push("You must choose at least 1 time.");
+        rtn = false;
+      }
+      return rtn;
     }
   }
 };
