@@ -262,7 +262,7 @@ export default {
     selectedGenders: [],
     selectedTimes: [],
     errorMessages: [],
-    analysisData: [],
+    analysisData: {},
     fiData: {},
     dataLoaded: false
   }),
@@ -280,7 +280,7 @@ export default {
           return axios.get("http://localhost:8076/immportws/analysis/pathways");
         })
         .then(response => {
-          this.analysisData = response.data.pathways;
+          this.analysisData = response.data;
           this.dataLoaded = true;
           return axios.get(
             "http://localhost:8076/immportws/analysis/fi_network"
