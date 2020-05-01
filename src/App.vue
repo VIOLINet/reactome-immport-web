@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-container>
+    <v-container fluid>
       <form @submit.prevent="handleSubmit">
         <table>
           <h3 class="tableHeader">Perform Reactome enrichment on Vaccine data</h3>
@@ -262,7 +262,7 @@ export default {
     selectedGenders: [],
     selectedTimes: [],
     errorMessages: [],
-    analysisData: {},
+    analysisData: [],
     fiData: {},
     dataLoaded: false
   }),
@@ -280,7 +280,7 @@ export default {
           return axios.get("http://localhost:8076/immportws/analysis/pathways");
         })
         .then(response => {
-          this.analysisData = response.data;
+          this.analysisData = response.data.pathways;
           this.dataLoaded = true;
           return axios.get(
             "http://localhost:8076/immportws/analysis/fi_network"
@@ -331,6 +331,7 @@ td {
 }
 table {
   margin: 0 auto;
+  width:90%;
   padding: 0;
   border: 1px solid grey;
 }
