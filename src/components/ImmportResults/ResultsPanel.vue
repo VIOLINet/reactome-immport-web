@@ -35,17 +35,32 @@
               :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisData.summary.token}`"
               target="_blank"
             >
-              <img :src="'/static/images/reactome_icon.png'" alt="Reactome Icon" class="smallIcon" title="Open Reactome"/>
+              <img
+                :src="'/static/images/reactome_icon.png'"
+                alt="Reactome Icon"
+                class="smallIcon"
+                title="Open Reactome"
+              />
             </a>
           </template>
         </v-data-table>
       </v-tab-item>
       <v-tab>Functional Interactions</v-tab>
       <v-tab-item>
-        <v-card raised>
+        <v-card tile>
           <v-card-text>
-            <cytoscape ref="cy" :config="cyConfig" style="border:1px solid black;">
-              <cy-element v-for="def in fiData" :key="`${def.data.id}`" :definition="def" />
+            <cytoscape
+              ref="cy"
+              :config="cyConfig"
+              :afterCreated="afterCreated"
+              style="border:1px solid black;"
+            >
+              <cy-element
+                v-for="def in fiData"
+                :key="`${def.data.id}`"
+                :definition="def"
+                :afterCreated="afterCreated"
+              />
             </cytoscape>
           </v-card-text>
         </v-card>
@@ -76,208 +91,173 @@ export default {
       { text: "Entities pValue", value: "pathways.entities.pValue" },
       { text: "Entities FDR", value: "pathways.entities.fdr" }
     ],
-    cyConfig: { style: [
-      {
-        selector: "node",
-        style: {
-          width: "9",
-          height: "9",
-          label: "data(name)",
-          "font-size": "6px",
-          shape: "ellipse",
-          "background-color": "#00CC00",
-          "border-color": "#00CC00",
-          "background-opacity": ".4"
+    cyConfig: {
+      style: [
+        {
+          selector: "node",
+          style: {
+            width: "9",
+            height: "9",
+            label: "data(name)",
+            "font-size": "6px",
+            shape: "ellipse",
+            "background-color": "#00CC00",
+            "border-color": "#00CC00",
+            "background-opacity": ".4"
+          }
+        },
+        {
+          selector: "node:selected",
+          style: {
+            "border-width": "6px",
+            "border-color": "#AAD8FF",
+            "border-opacity": "0.5",
+            "text-outline-color": "#0bb50b"
+          }
+        },
+        {
+          selector: "edge",
+          style: {
+            "curve-style": "bezier",
+            "line-color": "#bbb",
+            width: "1",
+            "overlay-padding": "20px"
+          }
+        },
+        {
+          selector: "edge:selected",
+          style: {
+            "line-color": "#FF0000",
+            width: "2"
+          }
+        },
+        {
+          selector: 'edge[direction="->"]',
+          style: {
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="->"]:selected',
+          style: {
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#FF0000"
+          }
+        },
+        {
+          selector: 'edge[direction="->"].hovered',
+          style: {
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#0000FF"
+          }
+        },
+        {
+          selector: 'edge[direction="<-"]',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="<-"]:selected',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#FF0000"
+          }
+        },
+        {
+          selector: 'edge[direction="<-"].hovered',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#0000FF"
+          }
+        },
+        {
+          selector: 'edge[direction="-|"]',
+          style: {
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="-|"]:selected',
+          style: {
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#FF0000"
+          }
+        },
+        {
+          selector: 'edge[direction="-|"].hovered',
+          style: {
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#0000FF"
+          }
+        },
+        {
+          selector: 'edge[direction="|-"]',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="|-"]:selected',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#FF0000"
+          }
+        },
+        {
+          selector: 'edge[direction="|->"]',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#bbb",
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="|->"]:selected',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#FF0000",
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#FF0000"
+          }
+        },
+        {
+          selector: 'edge[direction="<-|"]',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#bbb",
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#bbb"
+          }
+        },
+        {
+          selector: 'edge[direction="<-|"]:selected',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#FF0000",
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#FF0000"
+          }
         }
-      },
-      {
-        selector: "node.overlay",
-        style: {
-          "background-color": "data(color)",
-          "border-color": "data(color)",
-          "background-opacity": ".8"
-        }
-      },
-      {
-        selector: "node:selected",
-        style: {
-          "border-width": "6px",
-          "border-color": "#AAD8FF",
-          "border-opacity": "0.5",
-          "text-outline-color": "#0bb50b"
-        }
-      },
-      {
-        selector: "edge",
-        style: {
-          "curve-style": "bezier",
-          "line-color": "#bbb",
-          width: "1",
-          "overlay-padding": "20px"
-        }
-      },
-      {
-        selector: "edge:selected",
-        style: {
-          "line-color": "#FF0000",
-          width: "2"
-        }
-      },
-      {
-        selector: "edge.highlighted",
-        style: {
-          "line-color": "#FF0000"
-        }
-      },
-      {
-        selector: "edge.hovered",
-        style: {
-          "line-color": "#0000FF"
-        }
-      },
-      {
-        selector: 'edge[direction="->"]',
-        style: {
-          "target-arrow-shape": "vee",
-          "target-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="->"]:selected',
-        style: {
-          "target-arrow-shape": "vee",
-          "target-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'edge[direction="->"].hovered',
-        style: {
-          "target-arrow-shape": "vee",
-          "target-arrow-color": "#0000FF"
-        }
-      },
-      {
-        selector: 'edge[direction="<-"]',
-        style: {
-          "source-arrow-shape": "vee",
-          "source-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="<-"]:selected',
-        style: {
-          "source-arrow-shape": "vee",
-          "source-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'edge[direction="<-"].hovered',
-        style: {
-          "source-arrow-shape": "vee",
-          "source-arrow-color": "#0000FF"
-        }
-      },
-      {
-        selector: 'edge[direction="-|"]',
-        style: {
-          "target-arrow-shape": "tee",
-          "target-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="-|"]:selected',
-        style: {
-          "target-arrow-shape": "tee",
-          "target-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'edge[direction="-|"].hovered',
-        style: {
-          "target-arrow-shape": "tee",
-          "target-arrow-color": "#0000FF"
-        }
-      },
-      {
-        selector: 'edge[direction="|-"]',
-        style: {
-          "source-arrow-shape": "tee",
-          "source-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="|-"]:selected',
-        style: {
-          "source-arrow-shape": "tee",
-          "source-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'edge[direction="|->"]',
-        style: {
-          "source-arrow-shape": "tee",
-          "source-arrow-color": "#bbb",
-          "target-arrow-shape": "vee",
-          "target-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="|->"]:selected',
-        style: {
-          "source-arrow-shape": "tee",
-          "source-arrow-color": "#FF0000",
-          "target-arrow-shape": "vee",
-          "target-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'edge[direction="<-|"]',
-        style: {
-          "source-arrow-shape": "vee",
-          "source-arrow-color": "#bbb",
-          "target-arrow-shape": "tee",
-          "target-arrow-color": "#bbb"
-        }
-      },
-      {
-        selector: 'edge[direction="<-|"]:selected',
-        style: {
-          "source-arrow-shape": "vee",
-          "source-arrow-color": "#FF0000",
-          "target-arrow-shape": "tee",
-          "target-arrow-color": "#FF0000"
-        }
-      },
-      {
-        selector: 'node[interactor="true"]',
-        style: {
-          shape: "triangle"
-        }
-      },
-      {
-        selector: 'node[drug="true"]',
-        style: {
-          shape: "hexagon"
-        }
-      },
-      {
-        selector: 'edge[lineStyle="positive"]',
-        style: {
-          "line-style": "dashed"
-        }
-      },
-      {
-        selector: 'edge[lineStyle="negative"]',
-        style: {
-          "line-style": "dotted"
-        }
+      ],
+      layout: {
+        name: "grid",
+        rows: 10
       }
-    ],
-    layout: {
-      name: 'grid',
-      rows: 1
-    }}
-  })
+    }
+  }),
+  methods: {
+    afterCreated(cy) {
+      cy.layout({ name: "cose" }).run();
+      cy.fit();
+      alert("layout changed");
+    }
+  }
 };
 </script>
 

@@ -356,7 +356,7 @@ table {
 .submitButton {
   margin: 0.5em;
 }
-#app /deep/ canvas { /* Fix for cytoscape issue where canvas is placed incorrectly */
+#app canvas { /* Fix for cytoscape issue where canvas is placed incorrectly */
   top: 0;
   left: 0;
 }
