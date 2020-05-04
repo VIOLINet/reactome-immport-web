@@ -296,8 +296,4 @@ table th {
 table td {
   border-left: 1px solid #dddddd;
 }
-/deep/ canvas {
-  top: 0;
-  left: 0;
-}
 </style>

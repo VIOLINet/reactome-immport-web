@@ -22,4 +22,9 @@ export default {
 </script>
 
 <style scoped>
+p {
+    margin: 0 auto;
+    text-align: left;
+    width: 90%;
+}
 </style>
