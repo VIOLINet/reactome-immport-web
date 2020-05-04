@@ -1,5 +1,6 @@
 <template>
   <v-app id="app">
+    <Docs />
     <v-container fluid>
       <form @submit.prevent="handleSubmit">
         <table>
@@ -60,10 +61,13 @@
 <script>
 import axios from "axios";
 import ResultsPanel from "./components/ImmportResults/ResultsPanel";
+import Docs from "./components/Docs"
+
 export default {
   name: "App",
   components: {
-    ResultsPanel
+    ResultsPanel,
+    Docs
   },
   data: () => ({
     vaccines: [
@@ -263,7 +267,7 @@ export default {
     selectedTimes: [],
     errorMessages: [],
     analysisData: {},
-    fiData: {},
+    fiData: [],
     dataLoaded: false
   }),
   methods: {
