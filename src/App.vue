@@ -285,13 +285,14 @@ export default {
         })
         .then(response => {
           this.analysisData = response.data;
-          this.dataLoaded = true;
           return axios.get(
             "http://localhost:8076/immportws/analysis/fi_network"
           );
         })
         .then(response => {
           this.fiData = response.data;
+          this.dataLoaded = true;
+
         })
         .catch(error => {
           console.error(error);

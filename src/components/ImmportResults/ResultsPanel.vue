@@ -45,23 +45,13 @@
           </template>
         </v-data-table>
       </v-tab-item>
-      <v-tab>Functional Interactions</v-tab>
+      <v-tab @click="setInitialLayout">Functional Interactions</v-tab>
       <v-tab-item>
         <v-card tile>
           <v-card-text>
-            <cytoscape
-              ref="cy"
-              :config="cyConfig"
-              :afterCreated="afterCreated"
-              style="border:1px solid black;"
-            >
-              <cy-element
-                v-for="def in fiData"
-                :key="`${def.data.id}`"
-                :definition="def"
-                :afterCreated="afterCreated"
-              />
+            <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated">
             </cytoscape>
+            <div id="cyto" refs="cyto"></div>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -130,134 +120,25 @@ export default {
             "line-color": "#FF0000",
             width: "2"
           }
-        },
-        {
-          selector: 'edge[direction="->"]',
-          style: {
-            "target-arrow-shape": "vee",
-            "target-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="->"]:selected',
-          style: {
-            "target-arrow-shape": "vee",
-            "target-arrow-color": "#FF0000"
-          }
-        },
-        {
-          selector: 'edge[direction="->"].hovered',
-          style: {
-            "target-arrow-shape": "vee",
-            "target-arrow-color": "#0000FF"
-          }
-        },
-        {
-          selector: 'edge[direction="<-"]',
-          style: {
-            "source-arrow-shape": "vee",
-            "source-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="<-"]:selected',
-          style: {
-            "source-arrow-shape": "vee",
-            "source-arrow-color": "#FF0000"
-          }
-        },
-        {
-          selector: 'edge[direction="<-"].hovered',
-          style: {
-            "source-arrow-shape": "vee",
-            "source-arrow-color": "#0000FF"
-          }
-        },
-        {
-          selector: 'edge[direction="-|"]',
-          style: {
-            "target-arrow-shape": "tee",
-            "target-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="-|"]:selected',
-          style: {
-            "target-arrow-shape": "tee",
-            "target-arrow-color": "#FF0000"
-          }
-        },
-        {
-          selector: 'edge[direction="-|"].hovered',
-          style: {
-            "target-arrow-shape": "tee",
-            "target-arrow-color": "#0000FF"
-          }
-        },
-        {
-          selector: 'edge[direction="|-"]',
-          style: {
-            "source-arrow-shape": "tee",
-            "source-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="|-"]:selected',
-          style: {
-            "source-arrow-shape": "tee",
-            "source-arrow-color": "#FF0000"
-          }
-        },
-        {
-          selector: 'edge[direction="|->"]',
-          style: {
-            "source-arrow-shape": "tee",
-            "source-arrow-color": "#bbb",
-            "target-arrow-shape": "vee",
-            "target-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="|->"]:selected',
-          style: {
-            "source-arrow-shape": "tee",
-            "source-arrow-color": "#FF0000",
-            "target-arrow-shape": "vee",
-            "target-arrow-color": "#FF0000"
-          }
-        },
-        {
-          selector: 'edge[direction="<-|"]',
-          style: {
-            "source-arrow-shape": "vee",
-            "source-arrow-color": "#bbb",
-            "target-arrow-shape": "tee",
-            "target-arrow-color": "#bbb"
-          }
-        },
-        {
-          selector: 'edge[direction="<-|"]:selected',
-          style: {
-            "source-arrow-shape": "vee",
-            "source-arrow-color": "#FF0000",
-            "target-arrow-shape": "tee",
-            "target-arrow-color": "#FF0000"
-          }
         }
       ],
       layout: {
-        name: "grid",
-        rows: 10
+        name: "cose"
       }
-    }
+    },
+    cyInitialized: false
   }),
   methods: {
     afterCreated(cy) {
+      this.cy = cy;
       cy.layout({ name: "cose" }).run();
-      cy.fit();
-      alert("layout changed");
-    }
-  }
+      this.addInitialNodes();
+    },
+    addInitialNodes() {
+      this.cy.add(this.fiData);
+      this.cy.layout({ name: "cose" }).run();
+    },
+  },
 };
 </script>
 
