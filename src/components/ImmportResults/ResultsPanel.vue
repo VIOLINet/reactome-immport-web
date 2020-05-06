@@ -45,13 +45,12 @@
           </template>
         </v-data-table>
       </v-tab-item>
-      <v-tab @click="setInitialLayout">Functional Interactions</v-tab>
+      <v-tab>Functional Interactions</v-tab>
       <v-tab-item>
         <v-card tile>
           <v-card-text>
             <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated">
             </cytoscape>
-            <div id="cyto" refs="cyto"></div>
           </v-card-text>
         </v-card>
       </v-tab-item>
