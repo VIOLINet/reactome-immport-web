@@ -7,8 +7,9 @@
           dense
           :headers="analysisHeaders"
           :items="analysisData.pathways"
-          :items-per-page="20"
           class="elevation-1"
+          :rows-per-page-items="rowsPerPageItems"
+          :pagination.sync="pagination"
         >
           <template v-slot:item.pathways.name="{item}">
             <a
@@ -124,6 +125,10 @@ export default {
       layout: {
         name: "cose"
       }
+    },
+    rowsPerPageItems: [20,40,50,100],
+    pagination: {
+      rowsPerPage: 20
     },
     cyInitialized: false
   }),

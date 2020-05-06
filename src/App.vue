@@ -274,15 +274,7 @@ export default {
     handleSubmit() {
       if (!this.validateForm()) return;
       axios
-        .post("http://localhost:8076/immportws/expSample/vaccine", {
-          voIds: this.selectedVaccines,
-          genderList: this.selectedGenders,
-          times: this.selectedTimes
-        })
-        .then(response => {
-          console.log(response);
-          return axios.get("http://localhost:8076/immportws/analysis/pathways");
-        })
+        .get("http://localhost:8076/immportws/analysis/pathways")
         .then(response => {
           this.analysisData = response.data;
           return axios.get(
