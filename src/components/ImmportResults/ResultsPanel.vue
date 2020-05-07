@@ -3,54 +3,66 @@
     <v-tabs :centered="true">
       <v-tab>Reactome Enrichment Analysis</v-tab>
       <v-tab-item>
-        <v-data-table
-          dense
-          :headers="analysisHeaders"
-          :items="analysisData.pathways"
-          class="elevation-1"
-          :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
-        >
-          <template v-slot:item.pathways.name="{item}">
-            <a
-              :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisData.summary.token}`"
-              target="_blank"
-              title="View in Reactome"
-            >{{item.name}}</a>
-          </template>
+        <v-card tile>
+          <v-card-title>
+            Pathways 
+            <v-spacer></v-spacer>
+            <v-text-field
+            v-model="search"
+            label="Search by Pathway..."
+            single-line
+            hide-details
+          ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            dense
+            :headers="analysisHeaders"
+            :items="analysisDataPathways"
+            class="elevation-1"
+            :search="search"
+            :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
+          >
+            <template v-slot:item.name="{item}">
+              <a
+                :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisDataSummary.token}`"
+                target="_blank"
+                title="View in Reactome"
+              >{{item.name}}</a>
+            </template>
 
-          <template v-slot:item.pathways.entities.found="{item}">{{item.entities.found}}</template>
-          <template v-slot:item.pathways.entities.total="{item}">{{item.entities.total}}</template>
+            <template v-slot:item.entities.found="{item}">{{item.entities.found}}</template>
+            <template v-slot:item.entities.total="{item}">{{item.entities.total}}</template>
 
-          <template
-            v-slot:item.pathways.entities.ratio="{item}"
-          >{{item.entities.ratio.toExponential(2)}}</template>
-          <template
-            v-slot:item.pathways.entities.pValue="{item}"
-          >{{item.entities.pValue.toExponential(2)}}</template>
-          <template
-            v-slot:item.pathways.entities.fdr="{item}"
-          >{{item.entities.fdr.toExponential(2)}}</template>
-          <template v-slot:footer="{}">
-            <a
-              :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisData.summary.token}`"
-              target="_blank"
-            >
-              <img
-                :src="'/static/images/reactome_icon.png'"
-                alt="Reactome Icon"
-                class="smallIcon"
-                title="Open Reactome"
-              />
-            </a>
-          </template>
-        </v-data-table>
+            <template
+              v-slot:item.entities.ratio="{item}"
+            >{{item.entities.ratio.toExponential(2)}}</template>
+            <template
+              v-slot:item.entities.pValue="{item}"
+            >{{item.entities.pValue.toExponential(2)}}</template>
+            <template
+              v-slot:item.entities.fdr="{item}"
+            >{{item.entities.fdr.toExponential(2)}}</template>
+            <template v-slot:footer="{}">
+              <a
+                :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisDataSummary.token}`"
+                target="_blank"
+              >
+                <img
+                  :src="'/static/images/reactome_icon.png'"
+                  alt="Reactome Icon"
+                  class="smallIcon"
+                  title="Open Reactome"
+                />
+              </a>
+            </template>
+          </v-data-table>
+        </v-card>
       </v-tab-item>
       <v-tab>Functional Interactions</v-tab>
       <v-tab-item>
         <v-card tile>
           <v-card-text>
-            <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated">
-            </cytoscape>
+            <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -62,23 +74,28 @@
 export default {
   name: "ResultsPanel",
   props: {
-    analysisData: {
+    analysisDataSummary: {
       type: Object,
       default: () => {}
     },
+    analysisDataPathways: {
+      type: Array,
+      default: () => []
+  },
     fiData: {
       type: Array,
       default: () => []
     }
   },
   data: () => ({
+    search: '',
     analysisHeaders: [
-      { text: "Pathway Name", value: "pathways.name" },
-      { text: "Entities Found", value: "pathways.entities.found" },
-      { text: "Entities Total", value: "pathways.entities.total" },
-      { text: "Entities Ratio", value: "pathways.entities.ratio" },
-      { text: "Entities pValue", value: "pathways.entities.pValue" },
-      { text: "Entities FDR", value: "pathways.entities.fdr" }
+      { text: "Pathway Name", value: "name" },
+      { text: "Entities Found", value: "entities.found" },
+      { text: "Entities Total", value: "entities.total" },
+      { text: "Entities Ratio", value: "entities.ratio" },
+      { text: "Entities pValue", value: "entities.pValue" },
+      { text: "Entities FDR", value: "entities.fdr" }
     ],
     cyConfig: {
       style: [
@@ -136,8 +153,8 @@ export default {
     addInitialNodes() {
       this.cy.add(this.fiData);
       this.cy.layout({ name: "cose" }).run();
-    },
-  },
+    }
+  }
 };
 </script>
 

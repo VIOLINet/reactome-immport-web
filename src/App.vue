@@ -54,7 +54,7 @@
         :key="index"
       >{{message}}</span>
     </v-container>
-    <ResultsPanel :analysisData="analysisData" :fiData="fiData" v-if="dataLoaded" />
+    <ResultsPanel :analysisDataPathways="analysisData.pathways" :analysisDataSummary="analysisData.summary" :fiData="fiData" v-if="dataLoaded" />
   </v-app>
 </template>
 
