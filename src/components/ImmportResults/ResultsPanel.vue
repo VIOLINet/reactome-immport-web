@@ -8,8 +8,7 @@
           :headers="analysisHeaders"
           :items="analysisData.pathways"
           class="elevation-1"
-          :rows-per-page-items="rowsPerPageItems"
-          :pagination.sync="pagination"
+          :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
         >
           <template v-slot:item.pathways.name="{item}">
             <a
@@ -125,10 +124,6 @@ export default {
       layout: {
         name: "cose"
       }
-    },
-    rowsPerPageItems: [20,40,50,100],
-    pagination: {
-      rowsPerPage: 20
     },
     cyInitialized: false
   }),
