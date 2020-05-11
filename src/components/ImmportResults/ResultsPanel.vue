@@ -26,7 +26,7 @@
               <a
                 :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisDataSummary.token}`"
                 target="_blank"
-                title="View in Reactome"
+                title="View Analyzed Pathway in Reactome"
               >{{item.name}}</a>
             </template>
 
@@ -51,7 +51,7 @@
                   :src="'/static/images/reactome_icon.png'"
                   alt="Reactome Icon"
                   class="smallIcon"
-                  title="Open Reactome"
+                  title="View Detailed Results in Reactome"
                 />
               </a>
             </template>
@@ -65,12 +65,14 @@
             <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
           </v-card-text>
         </v-card>
+        <v-btn @click="getCluster">Cluster Network</v-btn>
       </v-tab-item>
     </v-tabs>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "ResultsPanel",
   props: {
@@ -153,6 +155,16 @@ export default {
     addInitialNodes() {
       this.cy.add(this.fiData);
       this.cy.layout({ name: "cose" }).run();
+    },
+    getCluster() {
+      const post = this.fiData
+      axios.post("http://localhost:8076/immportws/analysis/clustered_fi_network", post)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.error(error)
+      })
     }
   }
 };
