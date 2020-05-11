@@ -54,12 +54,11 @@
         :key="index"
       >{{message}}</span>
     </v-container>
-    <ResultsPanel :analysisDataPathways="analysisData.pathways" :analysisDataSummary="analysisData.summary" :fiData="fiData" v-if="dataLoaded" />
+    <ResultsPanel :immportRequestData="formData" v-if="formSubmitted" />
   </v-app>
 </template>
 
 <script>
-import axios from "axios";
 import ResultsPanel from "./components/ImmportResults/ResultsPanel";
 import Docs from "./components/Docs"
 
@@ -266,29 +265,14 @@ export default {
     selectedGenders: [],
     selectedTimes: [],
     errorMessages: [],
-    analysisData: {},
-    fiData: [],
-    dataLoaded: false
+    formSubmitted: false,
+    formData: {}
   }),
   methods: {
     handleSubmit() {
       if (!this.validateForm()) return;
-      axios
-        .get("http://localhost:8076/immportws/analysis/pathways")
-        .then(response => {
-          this.analysisData = response.data;
-          return axios.get(
-            "http://localhost:8076/immportws/analysis/fi_network"
-          );
-        })
-        .then(response => {
-          this.fiData = response.data;
-          this.dataLoaded = true;
-
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.formData = {voIds: this.selectedVaccines, genderList: this.selectedGenders, times: this.selectedTimes}
+      this.formSubmitted = true;
     },
     validateForm() {
       this.errorMessages = [];

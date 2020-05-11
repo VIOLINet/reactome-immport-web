@@ -5,14 +5,9 @@
       <v-tab-item>
         <v-card tile>
           <v-card-title>
-            Pathways 
+            Pathways
             <v-spacer></v-spacer>
-            <v-text-field
-            v-model="search"
-            label="Search by Pathway..."
-            single-line
-            hide-details
-          ></v-text-field>
+            <v-text-field v-model="search" label="Search by Pathway..." single-line hide-details></v-text-field>
           </v-card-title>
           <v-data-table
             dense
@@ -33,15 +28,9 @@
             <template v-slot:item.entities.found="{item}">{{item.entities.found}}</template>
             <template v-slot:item.entities.total="{item}">{{item.entities.total}}</template>
 
-            <template
-              v-slot:item.entities.ratio="{item}"
-            >{{item.entities.ratio.toExponential(2)}}</template>
-            <template
-              v-slot:item.entities.pValue="{item}"
-            >{{item.entities.pValue.toExponential(2)}}</template>
-            <template
-              v-slot:item.entities.fdr="{item}"
-            >{{item.entities.fdr.toExponential(2)}}</template>
+            <template v-slot:item.entities.ratio="{item}">{{item.entities.ratio.toExponential(2)}}</template>
+            <template v-slot:item.entities.pValue="{item}">{{item.entities.pValue.toExponential(2)}}</template>
+            <template v-slot:item.entities.fdr="{item}">{{item.entities.fdr.toExponential(2)}}</template>
             <template v-slot:footer="{}">
               <a
                 :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisDataSummary.token}`"
@@ -65,7 +54,7 @@
             <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
           </v-card-text>
         </v-card>
-        <v-btn @click="getCluster">Cluster Network</v-btn>
+        <v-btn @click="onClusterToggleClicked">Cluster Network</v-btn>
       </v-tab-item>
     </v-tabs>
   </v-container>
@@ -76,21 +65,13 @@ import axios from "axios";
 export default {
   name: "ResultsPanel",
   props: {
-    analysisDataSummary: {
+    immportRequestData: {
       type: Object,
       default: () => {}
-    },
-    analysisDataPathways: {
-      type: Array,
-      default: () => []
-  },
-    fiData: {
-      type: Array,
-      default: () => []
     }
   },
   data: () => ({
-    search: '',
+    search: "",
     analysisHeaders: [
       { text: "Pathway Name", value: "name" },
       { text: "Entities Found", value: "entities.found" },
@@ -124,6 +105,12 @@ export default {
           }
         },
         {
+          selector: "node.showClusters",
+          style: {
+            "background-color": "data(clusterColor)"
+          }
+        },
+        {
           selector: "edge",
           style: {
             "curve-style": "bezier",
@@ -144,27 +131,82 @@ export default {
         name: "cose"
       }
     },
-    cyInitialized: false
+    clusteringAdded: false,
+    analysisDataSummary: {},
+    analysisDataPathways: [],
+    fiData: [],
+    showClusters: false
   }),
+  watch: {
+    immportRequestData: {
+      deep: true,
+      handler() {
+        this.analysisDataSummary = {};
+        this.analysisDataPathways = [];
+        this.fiData = [];
+        this.clusteringAdded = false;
+        this.showClusters = false;
+        this.loadData();
+      }
+    }
+  },
+  created() {
+    this.loadData();
+  },
   methods: {
+    loadData() {
+      axios
+        .get("http://localhost:8076/immportws/analysis/pathways")
+        .then(response => {
+          this.analysisSummary = response.data.summary;
+          this.analysisDataPathways = response.data.pathways;
+          return axios.get(
+            "http://localhost:8076/immportws/analysis/fi_network"
+          );
+        })
+        .then(response => {
+          this.fiData = response.data;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
     afterCreated(cy) {
       this.cy = cy;
-      cy.layout({ name: "cose" }).run();
       this.addInitialNodes();
     },
     addInitialNodes() {
       this.cy.add(this.fiData);
       this.cy.layout({ name: "cose" }).run();
     },
-    getCluster() {
-      const post = this.fiData
-      axios.post("http://localhost:8076/immportws/analysis/clustered_fi_network", post)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    onClusterToggleClicked() {
+      if (!this.clusteringAdded) this.loadClusterData();
+      else this.doClusterToggle();
+    },
+    loadClusterData() {
+      axios
+        .post(
+          "http://localhost:8076/immportws/analysis/clustered_fi_network",
+          this.fiData
+        )
+        .then(response => {
+          this.fiData = response.data;
+          this.clusteringAdded = true;
+          this.cy.elements().remove();
+          this.addInitialNodes();
+          this.doClusterToggle();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    doClusterToggle() {
+      if (!this.showClusters) {
+        this.cy.elements("[clusterColor]").addClass("showClusters");
+      } else {
+        this.cy.elements("[clusterColor]").removeClass("showClusters");
+      }
+      this.showClusters = !this.showClusters;
     }
   }
 };
