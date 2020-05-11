@@ -3,7 +3,7 @@
     <v-tabs :centered="true">
       <v-tab>Reactome Enrichment Analysis</v-tab>
       <v-tab-item>
-        <v-card tile>
+        <v-card outlined>
           <v-card-title>
             Pathways
             <v-spacer></v-spacer>
@@ -49,12 +49,16 @@
       </v-tab-item>
       <v-tab>Functional Interactions</v-tab>
       <v-tab-item>
-        <v-card tile>
+        <v-card outlined>
           <v-card-text>
-            <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
+            <v-card outlined>
+              <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
+            </v-card>
           </v-card-text>
+          <v-container>
+            <v-btn @click="onClusterToggleClicked">Cluster Network</v-btn>
+          </v-container>
         </v-card>
-        <v-btn @click="onClusterToggleClicked">Cluster Network</v-btn>
       </v-tab-item>
     </v-tabs>
   </v-container>
