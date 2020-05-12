@@ -162,7 +162,7 @@ export default {
       axios
         .get("http://localhost:8076/immportws/analysis/pathways")
         .then(response => {
-          this.analysisSummary = response.data.summary;
+          this.analysisDataSummary = response.data.summary;
           this.analysisDataPathways = response.data.pathways;
           return axios.get(
             "http://localhost:8076/immportws/analysis/fi_network"
