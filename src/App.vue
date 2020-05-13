@@ -54,20 +54,20 @@
         :key="index"
       >{{message}}</span>
     </v-container>
-    <ResultsListPanel :formSubmissions="formData"  v-if="formData && formData.length > 0"/>
+    <ResultList :formSubmissions="formData"  v-if="formData && formData.length > 0"/>
     <!-- <ResultsPanel :immportRequestData="formData" v-if="formSubmitted" /> -->
   </v-app>
 </template>
 
 <script>
-import ResultsListPanel from "./components/ImmportResults/ResultsListPanel";
+import ResultList from "./components/ImmportResults/ResultList";
 // import ResultsPanel from "./components/ImmportResults/ResultsPanel";
 import Docs from "./components/Docs";
 
 export default {
   name: "App",
   components: {
-    ResultsListPanel,
+    ResultList,
     // ResultsPanel,
     Docs
   },
