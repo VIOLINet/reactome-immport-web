@@ -54,18 +54,21 @@
         :key="index"
       >{{message}}</span>
     </v-container>
-    <ResultsPanel :immportRequestData="formData" v-if="formSubmitted" />
+    <ResultsListPanel :formSubmissions="formData"  v-if="formData && formData.length > 0"/>
+    <!-- <ResultsPanel :immportRequestData="formData" v-if="formSubmitted" /> -->
   </v-app>
 </template>
 
 <script>
-import ResultsPanel from "./components/ImmportResults/ResultsPanel";
-import Docs from "./components/Docs"
+import ResultsListPanel from "./components/ImmportResults/ResultsListPanel";
+// import ResultsPanel from "./components/ImmportResults/ResultsPanel";
+import Docs from "./components/Docs";
 
 export default {
   name: "App",
   components: {
-    ResultsPanel,
+    ResultsListPanel,
+    // ResultsPanel,
     Docs
   },
   data: () => ({
@@ -266,12 +269,20 @@ export default {
     selectedTimes: [],
     errorMessages: [],
     formSubmitted: false,
-    formData: {}
+    formData: []
   }),
   methods: {
     handleSubmit() {
       if (!this.validateForm()) return;
-      this.formData = {voIds: this.selectedVaccines, genderList: this.selectedGenders, times: this.selectedTimes}
+      this.errorMessages = [];
+      const submitted = {
+        voIds: this.selectedVaccines,
+        genderList: this.selectedGenders,
+        times: this.selectedTimes
+      };
+      if (!(this.formData.some(el => el.voIds === submitted.voIds && el.genderList === submitted.genderList && el.times === submitted.times))) {
+        this.formData.push(submitted);
+      }
       this.formSubmitted = true;
     },
     validateForm() {
@@ -290,7 +301,7 @@ export default {
         rtn = false;
       }
       return rtn;
-    }
+    },
   }
 };
 </script>
@@ -312,7 +323,7 @@ td {
 }
 table {
   margin: 0 auto;
-  width:90%;
+  width: 90%;
   padding: 0;
   border: 1px solid grey;
 }
@@ -333,7 +344,8 @@ table {
 .submitButton {
   margin: 0.5em;
 }
-#app canvas { /* Fix for cytoscape issue where canvas is placed incorrectly */
+#app canvas {
+  /* Fix for cytoscape issue where canvas is placed incorrectly */
   top: 0;
   left: 0;
 }
