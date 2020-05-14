@@ -11,7 +11,7 @@ const opts = {
     customProperties: true,
   },
   icons: {
-    iconfont: "mdiSvg", // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4'
+    iconfont: "mdi", // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4'
   },
 };
 

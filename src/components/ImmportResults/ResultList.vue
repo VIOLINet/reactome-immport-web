@@ -1,9 +1,7 @@
 <template>
   <v-container fluid>
     <p class="title">Result Sets:</p>
-      <v-container v-if="results && results.length > 0">
       <ResultListItem v-for="result in results" :key="result.id" :result="result" />
-      </v-container>
   </v-container>
 </template>
 
