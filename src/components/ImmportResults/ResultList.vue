@@ -1,16 +1,16 @@
 <template>
   <v-container fluid>
     <p class="title">Result Sets:</p>
-    <v-card outlined>
-      <ResultListItem v-for="result in resultSets" :key="result.id" :data = "result"/>
-    </v-card>
+      <v-container v-if="results && results.length > 0">
+      <ResultListItem v-for="result in results" :key="result.id" :result="result" />
+      </v-container>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
-import {v4 as uudiv4} from "uuid";
-import ResultListItem from './ResultListItem';
+import { v4 as uudiv4 } from "uuid";
+import ResultListItem from "./ResultListItem";
 export default {
   name: "ResultList",
   components: {
@@ -20,12 +20,13 @@ export default {
     formSubmissions: { type: Array, default: () => [] }
   },
   data: () => ({
-    resultSets: []
+    results: [],
+    dataLoaded: false
   }),
   watch: {
-    formSubmissions: function(newVal, oldVal)  {
-      if(oldVal.length >= newVal) return; //method fires when formSubmissions has an item removed too. dont want to load new data in this case
-      this.loadData(newVal[newVal.length -1])
+    formSubmissions: function(newVal, oldVal) {
+      if (oldVal.length >= newVal) return; //method fires when formSubmissions has an item removed too. dont want to load new data in this case
+      this.loadData(newVal[newVal.length - 1]);
     }
   },
   created() {
@@ -40,6 +41,7 @@ export default {
       //test calls but with real data
       var returnData = {};
       returnData.id = uudiv4();
+      returnData.properties = postData;
       axios
         .get("http://localhost:8076/immportws/analysis/pathways")
         .then(response => {
@@ -50,7 +52,8 @@ export default {
         })
         .then(response => {
           returnData.fiData = response.data;
-          this.resultSets.push(returnData);
+          this.results.push(returnData);
+          this.dataLoaded = true;
         })
         .catch(error => {
           console.error(error);
