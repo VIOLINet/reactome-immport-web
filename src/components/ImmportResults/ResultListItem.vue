@@ -10,7 +10,7 @@
       </v-card-title>
       <v-expand-transition>
         <div v-show="expandCard" class="pa-1">
-          <v-switch v-model="showClustering" label="Show Clustering"></v-switch>
+          <v-switch v-model="showClusters" label="Show Clustering"></v-switch>
           <v-card outlined>
             <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
           </v-card>
@@ -49,13 +49,13 @@
                 />
               </a>
               <v-spacer></v-spacer>
-               <v-text-field
-                  v-model="search"
-                  label="Search"
-                  hide-details
-                  single-line
-                  class="search-box"
-                ></v-text-field>
+              <v-text-field
+                v-model="search"
+                label="Search"
+                hide-details
+                single-line
+                class="search-box"
+              ></v-text-field>
             </template>
           </v-data-table>
         </div>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "ResultListItem",
   props: {
@@ -138,8 +139,16 @@ export default {
     analysisSummary: {},
     analysisPathways: [],
     fiData: [],
-    showClustering: false
+    showClusters: false,
+    clustersLoaded: false
   }),
+  watch: {
+    showClusters(newVal){
+      if(!this.clustersLoaded)this.loadClustering();
+      else this.doClusterToggle(newVal);
+
+    }
+  },
   created() {
     this.analysisSummary = this.result.analysisData.summary;
     this.analysisPathways = this.result.analysisData.pathways;
@@ -153,6 +162,30 @@ export default {
     addInitialCyData() {
       this.cy.add(this.fiData);
       this.cy.layout({ name: "cose" }).run();
+    },
+    loadClustering() {
+      axios
+        .post(
+          "http://localhost:8076/immportws/analysis/clustered_fi_network",
+          this.fiData
+        )
+        .then(response => {
+          this.fiData = response.data;
+          this.clustersLoaded = true;
+          this.cy.elements().remove();
+          this.addInitialCyData();
+          this.doClusterToggle(true);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    doClusterToggle(show) {
+      if (show) {
+        this.cy.elements("[clusterColor]").addClass("showClusters");
+      } else {
+        this.cy.elements("[clusterColor]").removeClass("showClusters");
+      }
     }
   }
 };
@@ -166,6 +199,6 @@ export default {
 }
 .search-box {
   float: left;
-  max-width:25em;
+  max-width: 25em;
 }
 </style>
