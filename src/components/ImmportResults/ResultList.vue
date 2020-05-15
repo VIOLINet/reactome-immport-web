@@ -22,9 +22,11 @@ export default {
     dataLoaded: false
   }),
   watch: {
-    formSubmissions: function(newVal, oldVal) {
-      if (oldVal.length >= newVal) return; //method fires when formSubmissions has an item removed too. dont want to load new data in this case
-      this.loadData(newVal[newVal.length - 1]);
+    formSubmissions() {
+      this.formSubmissions.forEach(x => {
+        if(!(this.results.some(result => result.properties.voIds === x.voIds && result.properties.genderList === x.genderList && result.properties.selectedTimes === x.selectedTimes)))
+          this.loadData(x)
+      })
     }
   },
   created() {
@@ -32,8 +34,8 @@ export default {
   },
   methods: {
     loadData(postData) {
-      //do somthing with post data to avoid error while still making testin get requests for fake data
-      if (!postData) return;
+      //make sure post data is not null and that there is no result with a properties ovjeect equal to postData
+      if (!postData && !(this.results.some(x => x.properties === postData))) return;
 
       //eventually axios call will be a post call with the post data. when this happens, we will get the same response as making these
       //test calls but with real data
@@ -50,7 +52,7 @@ export default {
         })
         .then(response => {
           returnData.fiData = response.data;
-          this.results.push(returnData);
+          this.results.unshift(returnData);
           this.dataLoaded = true;
         })
         .catch(error => {
@@ -59,9 +61,9 @@ export default {
     },
     removeResultSet(key){
       const index = this.results.findIndex(x => x.id === key)
-      const formSubmissionIndex = this.results.findIndex(x => x === this.results[index].properties)
+      const properties = this.results[index].properties
       this.results.splice(index, 1)
-      this.$emit('removeFormSubmission', formSubmissionIndex)
+      this.$emit('removeFormSubmission', properties)
     }
   }
 };

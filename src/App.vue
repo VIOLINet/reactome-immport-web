@@ -301,7 +301,8 @@ export default {
       }
       return rtn;
     },
-    onRemoveFormSubmission(index){
+    onRemoveFormSubmission(properties){
+      const index = this.formData.findIndex(x => x.voIds === properties.voIds && x.genderList === properties.genderList && x.times === properties.times)
       this.formData.splice(index, 1)
     }
   }
