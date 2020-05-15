@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <p class="title">Result Sets:</p>
-      <ResultListItem v-for="result in results" :key="result.id" :result="result" />
+      <ResultListItem v-for="result in results" :key="result.id" :result="result" @removeResultSet="removeResultSet"/>
   </v-container>
 </template>
 
@@ -56,6 +56,12 @@ export default {
         .catch(error => {
           console.error(error);
         });
+    },
+    removeResultSet(key){
+      const index = this.results.findIndex(x => x.id === key)
+      const formSubmissionIndex = this.results.findIndex(x => x === this.results[index].properties)
+      this.results.splice(index, 1)
+      this.$emit('removeFormSubmission', formSubmissionIndex)
     }
   }
 };

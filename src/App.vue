@@ -54,8 +54,7 @@
         :key="index"
       >{{message}}</span>
     </v-container>
-    <ResultList :formSubmissions="formData"  v-if="formData && formData.length > 0"/>
-    <!-- <ResultsPanel :immportRequestData="formData" v-if="formSubmitted" /> -->
+    <ResultList :formSubmissions="formData"  v-if="formData && formData.length > 0" @removeFormSubmission="onRemoveFormSubmission"/>
   </v-app>
 </template>
 
@@ -302,6 +301,9 @@ export default {
       }
       return rtn;
     },
+    onRemoveFormSubmission(index){
+      this.formData.splice(index, 1)
+    }
   }
 };
 </script>
