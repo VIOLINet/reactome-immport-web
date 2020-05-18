@@ -13,54 +13,66 @@
       </v-card-title>
       <v-expand-transition>
         <div v-show="expandCard" class="pa-1">
-          <v-switch v-model="showClusters" label="Show Clustering"></v-switch>
-          <v-card outlined>
-            <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
-          </v-card>
-          <v-data-table
-            dense
-            :headers="analysisHeaders"
-            :items="analysisPathways"
-            class="elevation-1"
-            :search="search"
-            :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
-          >
-            <template v-slot:item.name="{item}">
-              <a
-                :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisSummary.token}`"
-                target="_blank"
-                title="View Analyzed Pathway in Reactome"
-              >{{item.name}}</a>
-            </template>
-
-            <template v-slot:item.entities.found="{item}">{{item.entities.found}}</template>
-            <template v-slot:item.entities.total="{item}">{{item.entities.total}}</template>
-
-            <template v-slot:item.entities.ratio="{item}">{{item.entities.ratio.toExponential(2)}}</template>
-            <template v-slot:item.entities.pValue="{item}">{{item.entities.pValue.toExponential(2)}}</template>
-            <template v-slot:item.entities.fdr="{item}">{{item.entities.fdr.toExponential(2)}}</template>
-            <template v-slot:footer="{}">
-              <a
-                :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisSummary.token}`"
-                target="_blank"
+          <v-tabs :centered="true">
+            <v-tab>Reactome Enrichment Analysis</v-tab>
+            <v-tab-item>
+              <v-data-table
+                dense
+                :headers="analysisHeaders"
+                :items="analysisPathways"
+                class="elevation-1"
+                :search="search"
+                :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
               >
-                <img
-                  :src="'/static/images/reactome_icon.png'"
-                  alt="Reactome Icon"
-                  class="smallIcon"
-                  title="View Detailed Results in Reactome"
-                />
-              </a>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                label="Search"
-                hide-details
-                single-line
-                class="search-box"
-              ></v-text-field>
-            </template>
-          </v-data-table>
+                <template v-slot:item.name="{item}">
+                  <a
+                    :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisSummary.token}`"
+                    target="_blank"
+                    title="View Analyzed Pathway in Reactome"
+                  >{{item.name}}</a>
+                </template>
+
+                <template v-slot:item.entities.found="{item}">{{item.entities.found}}</template>
+                <template v-slot:item.entities.total="{item}">{{item.entities.total}}</template>
+
+                <template
+                  v-slot:item.entities.ratio="{item}"
+                >{{item.entities.ratio.toExponential(2)}}</template>
+                <template
+                  v-slot:item.entities.pValue="{item}"
+                >{{item.entities.pValue.toExponential(2)}}</template>
+                <template v-slot:item.entities.fdr="{item}">{{item.entities.fdr.toExponential(2)}}</template>
+                <template v-slot:footer="{}">
+                  <a
+                    :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisSummary.token}`"
+                    target="_blank"
+                  >
+                    <img
+                      :src="'/static/images/reactome_icon.png'"
+                      alt="Reactome Icon"
+                      class="smallIcon"
+                      title="View Detailed Results in Reactome"
+                    />
+                  </a>
+                  <v-spacer></v-spacer>
+                  <v-text-field
+                    v-model="search"
+                    label="Search"
+                    hide-details
+                    single-line
+                    class="search-box"
+                  ></v-text-field>
+                </template>
+              </v-data-table>
+            </v-tab-item>
+            <v-tab>Functional Interactions</v-tab>
+            <v-tab-item>
+              <v-switch v-model="showClusters" label="Show Clustering"></v-switch>
+              <v-card outlined>
+                <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
         </div>
       </v-expand-transition>
     </v-card>
@@ -68,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "ResultListItem",
   props: {
@@ -146,10 +158,9 @@ export default {
     clustersLoaded: false
   }),
   watch: {
-    showClusters(newVal){
-      if(!this.clustersLoaded)this.loadClustering();
+    showClusters(newVal) {
+      if (!this.clustersLoaded) this.loadClustering();
       else this.doClusterToggle(newVal);
-
     }
   },
   created() {
@@ -189,7 +200,7 @@ export default {
       } else {
         this.cy.elements("[clusterColor]").removeClass("showClusters");
       }
-    },
+    }
   }
 };
 </script>
