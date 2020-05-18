@@ -69,6 +69,8 @@
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
               <v-switch v-model="showClusters" label="Show Clustering"></v-switch>
+              <v-spacer></v-spacer>
+              <v-btn @click="resetCytoscape">Reset</v-btn>
               <v-card outlined>
                 <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
               </v-card>
@@ -141,7 +143,9 @@ export default {
       ],
       layout: {
         name: "cose"
-      }
+      },
+      maxZoom: 5,
+      minZoom: 0.2
     },
     search: "",
     analysisHeaders: [
@@ -171,16 +175,23 @@ export default {
   },
   computed: {
     vaccineNames() {
-      return this.result.properties.voIds.map(({name}) => name).join(", ")
+      return this.result.properties.voIds.map(({ name }) => name).join(", ");
     },
-    subHeader(){
-      return this.result.properties.genderList.join(", ") + "; " + this.result.properties.times.join(", ")
+    subHeader() {
+      return (
+        this.result.properties.genderList.join(", ") +
+        "; " +
+        this.result.properties.times.join(", ")
+      );
     }
   },
   methods: {
     afterCreated(cy) {
       this.cy = cy;
       this.addInitialCyData();
+    },
+    resetCytoscape() {
+      this.cy.fit();
     },
     addInitialCyData() {
       this.cy.add(this.fiData);
@@ -193,15 +204,19 @@ export default {
           this.fiData
         )
         .then(response => {
-          this.fiData = response.data;
-          this.clustersLoaded = true;
-          this.cy.elements().remove();
-          this.addInitialCyData();
+          this.addClusteringToFIData(response.data);
           this.doClusterToggle(true);
         })
         .catch(error => {
           console.error(error);
         });
+    },
+    addClusteringToFIData(map) {
+      for (const [key, value] of Object.entries(map)) {
+        if(value === null) continue;
+        this.cy.$(`#${key}`).data("clusterColor", value);
+      }
+      this.clustersLoaded = true;
     },
     doClusterToggle(show) {
       if (show) {
@@ -223,5 +238,8 @@ export default {
 .search-box {
   float: left;
   max-width: 25em;
+}
+.v-input--switch {
+  display: inline-block;
 }
 </style>
