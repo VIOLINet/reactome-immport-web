@@ -2,7 +2,8 @@
   <v-container>
     <v-card outlined>
       <v-card-title>
-        {{this.result.properties.voIds}}
+        {{this.vaccineNames}}
+        <v-subheader>{{this.subHeader}}</v-subheader>
         <v-spacer></v-spacer>
         <v-btn icon @click="expandCard = !expandCard">
           <v-icon>{{ expandCard ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
@@ -167,6 +168,14 @@ export default {
     this.analysisSummary = this.result.analysisData.summary;
     this.analysisPathways = this.result.analysisData.pathways;
     this.fiData = this.result.fiData;
+  },
+  computed: {
+    vaccineNames() {
+      return this.result.properties.voIds.map(({name}) => name).join(", ")
+    },
+    subHeader(){
+      return this.result.properties.genderList.join(", ") + "; " + this.result.properties.times.join(", ")
+    }
   },
   methods: {
     afterCreated(cy) {

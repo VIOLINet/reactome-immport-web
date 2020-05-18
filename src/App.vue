@@ -13,7 +13,7 @@
             <td>Vaccine</td>
             <td>
               <div v-for="vaccine in this.vaccines" :key="vaccine.id" class="checkBox">
-                <input type="checkbox" v-model="selectedVaccines" :value="vaccine.id" />
+                <input type="checkbox" v-model="selectedVaccines" :value="vaccine" />
                 <label :for="vaccine.name">{{ vaccine.name }}</label>
               </div>
             </td>
