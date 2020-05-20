@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-container fluid v-if="comparisons && results.length > 1">
+    <v-container fluid v-if="showComparisons && results.length > 1">
       <p class="title">Compare results:</p>
       <v-card outlined>
         <v-card-text>
