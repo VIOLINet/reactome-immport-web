@@ -21,6 +21,9 @@
       <hr class="mt-5" />
     </v-container>
     <p class="title">Result Sets:</p>
+    <v-card outlined style="background-color: #fff;">
+    <v-progress-circular indeterminate color="primary" v-show="loading"></v-progress-circular>
+    </v-card>
     <ResultListItem
       v-for="result in results"
       :key="result.id"
@@ -51,7 +54,8 @@ export default {
     showComparisons: false,
     compareFrom: "",
     compareTo: "",
-    comparisons: []
+    comparisons: [],
+    loading: false
   }),
   computed: {
     items() {
@@ -99,7 +103,7 @@ export default {
       //make sure post data is not null and that there is no result with a properties ovjeect equal to postData
       if (!postData && !this.results.some(x => x.properties === postData))
         return;
-
+      this.loading = true;
       //eventually axios call will be a post call with the post data. when this happens, we will get the same response as making these
       //test calls but with real data
       var returnData = {};
@@ -117,9 +121,11 @@ export default {
           returnData.fiData = response.data;
           this.results.unshift(returnData);
           this.dataLoaded = true;
+          this.loading =  false;
         })
         .catch(error => {
           console.error(error);
+          this.loading = false;
         });
     },
     removeResultSet(key) {
