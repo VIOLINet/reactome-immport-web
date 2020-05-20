@@ -132,6 +132,7 @@ export default {
       this.showComparisons = true;
     },
     addComparison() {
+      if(this.validateComparisonForm()) return;
       const compareFrom = this.results.find(x => x.id === this.compareFrom);
       const compareTo = this.results.find(x => x.id === this.compareTo);
       var pathways = [];
@@ -158,6 +159,7 @@ export default {
       });
       var comparison = {};
       comparison.id = uudiv4();
+      comparison.resultSets = [compareFrom.id, compareTo.id]
       comparison.name = `Comparing: ${compareFrom.id} -> ${compareTo.id}`
       comparison.pathways = pathwayList
       this.comparisons.unshift(comparison);
@@ -173,6 +175,9 @@ export default {
           : "",
         targetEntitiesFDR: comparePathway ? comparePathway.entities.fdr : ""
       };
+    },
+    validateComparisonForm() {
+      return this.comparisons.some(x => x.resultSets.includes(this.compareFrom) && x.resultSets.includes(this.compareTo))
     }
   }
 };
