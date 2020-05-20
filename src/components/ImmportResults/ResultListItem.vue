@@ -5,6 +5,7 @@
         {{this.vaccineNames}}
         <v-subheader>{{this.subHeader}}</v-subheader>
         <v-spacer></v-spacer>
+        <v-btn @click="$emit('openComparison')">Compare!</v-btn>
         <v-btn icon @click="expandCard = !expandCard">
           <v-icon>{{ expandCard ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
         </v-btn>
@@ -84,7 +85,6 @@
 
 <script>
 import axios from "axios";
-import navigator from "cytoscape-navigator";
 export default {
   name: "ResultListItem",
   props: {
@@ -148,15 +148,6 @@ export default {
       maxZoom: 5,
       minZoom: 0.2
     },
-    cyNavDefaults: {
-      container: true // html dom element
-  , viewLiveFramerate: 0 // set false to update graph pan only on drag end; set 0 to do it instantly; set a number (frames per second) to update not more than N times per second
-  , thumbnailEventFramerate: 30 // max thumbnail's updates per second triggered by graph updates
-  , thumbnailLiveFramerate: false // max thumbnail's updates per second. Set false to disable
-  , dblClickDelay: 200 // milliseconds
-  , removeCustomContainer: true // destroy the container specified by user on plugin destroy
-  , rerenderDelay: 100 // ms to throttle rerender updates to the panzoom for performance
-    },
     search: "",
     analysisHeaders: [
       { text: "Pathway Name", value: "name" },
@@ -199,8 +190,6 @@ export default {
     afterCreated(cy) {
       this.cy = cy;
       this.addInitialCyData();
-      navigator(this.cy);
-      this.nav = this.cy.navigator(this.cyNavDefaults);
     },
     resetCytoscape() {
       this.cy.fit();
@@ -215,8 +204,8 @@ export default {
           "http://localhost:8076/immportws/analysis/clustered_fi_network",
           this.fiData
         )
-        .then(response => {
-          this.addClusteringToFIData(response.data);
+        .then(({data})=> {
+          this.addClusteringToFIData(data);
           this.doClusterToggle(true);
         })
         .catch(error => {

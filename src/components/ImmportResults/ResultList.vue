@@ -1,7 +1,33 @@
 <template>
   <v-container fluid>
+    <v-container fluid v-if="comparisons && results.length > 1">
+      <p class="title">Compare results:</p>
+      <v-card outlined>
+        <v-card-text>
+          <p>Select Results to compare</p>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-select :items="items" item-text="name" item-value="id" v-model="compareFrom"></v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select :items="compareItems" item-text="name" item-value="id" v-model="compareTo"></v-select>
+            </v-col>
+          </v-row>
+          <v-btn @click="addComparison">Add</v-btn>
+        </v-card-text>
+      </v-card>
+      <!-- Add ComparisonListItem v-for loop here -->
+      <ComparisonListItem v-for="comparison in comparisons" :key="comparison.id" :comparison="comparison"/>
+      <hr class="mt-5" />
+    </v-container>
     <p class="title">Result Sets:</p>
-      <ResultListItem v-for="result in results" :key="result.id" :result="result" @removeResultSet="removeResultSet"/>
+    <ResultListItem
+      v-for="result in results"
+      :key="result.id"
+      :result="result"
+      @removeResultSet="removeResultSet"
+      @openComparison="setShowComparisons"
+    />
   </v-container>
 </template>
 
@@ -9,24 +35,60 @@
 import axios from "axios";
 import { v4 as uudiv4 } from "uuid";
 import ResultListItem from "./ResultListItem";
+import ComparisonListItem from "./ComparisonListItem";
 export default {
   name: "ResultList",
   components: {
-    ResultListItem
+    ResultListItem,
+    ComparisonListItem
   },
   props: {
     formSubmissions: { type: Array, default: () => [] }
   },
   data: () => ({
     results: [],
-    dataLoaded: false
+    dataLoaded: false,
+    showComparisons: false,
+    compareFrom: "",
+    compareTo: "",
+    comparisons: []
   }),
+  computed: {
+    items() {
+      var items = [];
+      this.results.forEach(result => {
+        items.push({
+          id: result.id,
+          name: result.properties.voIds.map(({ name }) => name).join(", ")
+        });
+      });
+      return items;
+    },
+    compareItems() {
+      var items = [];
+      this.results.forEach(result => {
+        if (result.id === this.compareFrom) return;
+        items.push({
+          id: result.id,
+          name: result.properties.voIds.map(({ name }) => name).join(", ")
+        });
+      });
+      return items;
+    }
+  },
   watch: {
     formSubmissions() {
       this.formSubmissions.forEach(x => {
-        if(!(this.results.some(result => result.properties.voIds === x.voIds && result.properties.genderList === x.genderList && result.properties.selectedTimes === x.selectedTimes)))
-          this.loadData(x)
-      })
+        if (
+          !this.results.some(
+            result =>
+              result.properties.voIds === x.voIds &&
+              result.properties.genderList === x.genderList &&
+              result.properties.selectedTimes === x.selectedTimes
+          )
+        )
+          this.loadData(x);
+      });
     }
   },
   created() {
@@ -35,7 +97,8 @@ export default {
   methods: {
     loadData(postData) {
       //make sure post data is not null and that there is no result with a properties ovjeect equal to postData
-      if (!postData && !(this.results.some(x => x.properties === postData))) return;
+      if (!postData && !this.results.some(x => x.properties === postData))
+        return;
 
       //eventually axios call will be a post call with the post data. when this happens, we will get the same response as making these
       //test calls but with real data
@@ -59,11 +122,57 @@ export default {
           console.error(error);
         });
     },
-    removeResultSet(key){
-      const index = this.results.findIndex(x => x.id === key)
-      const properties = this.results[index].properties
-      this.results.splice(index, 1)
-      this.$emit('removeFormSubmission', properties)
+    removeResultSet(key) {
+      const index = this.results.findIndex(x => x.id === key);
+      const properties = this.results[index].properties;
+      this.results.splice(index, 1);
+      this.$emit("removeFormSubmission", properties);
+    },
+    setShowComparisons() {
+      this.showComparisons = true;
+    },
+    addComparison() {
+      const compareFrom = this.results.find(x => x.id === this.compareFrom);
+      const compareTo = this.results.find(x => x.id === this.compareTo);
+      var pathways = [];
+      var pathwayList = [];
+      compareFrom.analysisData.pathways.forEach(pathway => {
+        pathways.push(pathway.name);
+        var comparePathway = compareTo.analysisData.pathways.find(
+          x => x.name === pathway.name
+        );
+        pathwayList.push(
+          this.makeComparisonObject(pathway.name, pathway, comparePathway)
+        );
+      });
+      compareTo.analysisData.pathways.forEach(comparePathway => {
+        if (pathways.includes(comparePathway.name)) return;
+        pathways.push(comparePathway.name);
+        pathwayList.push(
+          this.makeComparisonObject(
+            comparePathway.name,
+            undefined,
+            comparePathway
+          )
+        );
+      });
+      var comparison = {};
+      comparison.id = uudiv4();
+      comparison.name = `Comparing: ${compareFrom.id} -> ${compareTo.id}`
+      comparison.pathways = pathwayList
+      this.comparisons.unshift(comparison);
+    },
+    makeComparisonObject(name, pathway, comparePathway) {
+      return {
+        name: name,
+        sourceEntitiesPValue: pathway ? pathway.entities.pValue : "",
+        sourceEntitiesFDR: pathway ? pathway.entities.fdr : "",
+
+        targetEntitiesPValue: comparePathway
+          ? comparePathway.entities.pValue
+          : "",
+        targetEntitiesFDR: comparePathway ? comparePathway.entities.fdr : ""
+      };
     }
   }
 };
