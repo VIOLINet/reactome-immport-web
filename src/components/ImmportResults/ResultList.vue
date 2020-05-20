@@ -21,8 +21,8 @@
       <hr class="mt-5" />
     </v-container>
     <p class="title">Result Sets:</p>
-    <v-card outlined style="background-color: #fff;">
-    <v-progress-circular indeterminate color="primary" v-show="loading"></v-progress-circular>
+    <v-card outlined class="pa-5" v-show="loading">
+    <v-progress-circular indeterminate color="primary" ></v-progress-circular>
     </v-card>
     <ResultListItem
       v-for="result in results"
