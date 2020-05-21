@@ -7,6 +7,9 @@
         <v-btn icon @click="expandCard = !expandCard">
           <v-icon>{{ expandCard ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
         </v-btn>
+        <v-btn icon @click="$emit('removeComparison', comparison.resultSets)">
+          <v-icon>{{ 'mdi-close' }}</v-icon>
+        </v-btn>
       </v-card-title>
       <v-expand-transition>
           <div v-show="expandCard" class="pa-1">

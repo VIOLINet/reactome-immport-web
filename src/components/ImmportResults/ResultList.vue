@@ -22,6 +22,7 @@
         v-for="comparison in comparisons"
         :key="comparison.id"
         :comparison="comparison"
+        @removeComparison="removeComparison"
       />
       <hr class="mt-5" />
     </v-container>
@@ -144,6 +145,10 @@ export default {
       const properties = this.results[index].properties;
       this.results.splice(index, 1);
       this.$emit("removeFormSubmission", properties);
+    },
+    removeComparison(comparisonIds) {
+      const index = this.comparisons.findIndex(x => x.resultSets.includes(comparisonIds[0]) && x.resultSets.includes(comparisonIds[1]))
+      this.comparisons.splice(index,1)
     },
     setShowComparisonForm() {
       this.showComparisonForm = true;
