@@ -1,35 +1,43 @@
 <template>
   <v-container fluid>
-    <v-container fluid v-if="showComparisons && results.length > 1">
-      <p class="title">Compare results:</p>
+    <v-dialog v-model="showComparisonForm" max-width="50%">
       <v-card outlined>
         <v-card-text>
           <p>Select Results to compare</p>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12">
               <v-select :items="items" item-text="name" item-value="id" v-model="compareFrom"></v-select>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12">
               <v-select :items="compareItems" item-text="name" item-value="id" v-model="compareTo"></v-select>
             </v-col>
           </v-row>
           <v-btn @click="addComparison">Add</v-btn>
         </v-card-text>
       </v-card>
-      <!-- Add ComparisonListItem v-for loop here -->
-      <ComparisonListItem v-for="comparison in comparisons" :key="comparison.id" :comparison="comparison"/>
+    </v-dialog>
+    <v-container fluid v-if="comparisons.length > 0">
+      <p class="title">Compare results:</p>
+      <ComparisonListItem
+        v-for="comparison in comparisons"
+        :key="comparison.id"
+        :comparison="comparison"
+      />
       <hr class="mt-5" />
     </v-container>
     <p class="title">Result Sets:</p>
-    <v-card outlined class="pa-5" v-show="loading">
-    <v-progress-circular indeterminate color="primary" ></v-progress-circular>
-    </v-card>
+    <v-container v-show="loading">
+      <v-card outlined class="pa-5">
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+      </v-card>
+    </v-container>
     <ResultListItem
       v-for="result in results"
       :key="result.id"
       :result="result"
+      :showCompareButton="showCompareButton"
       @removeResultSet="removeResultSet"
-      @openComparison="setShowComparisons"
+      @openComparison="setShowComparisonForm"
     />
   </v-container>
 </template>
@@ -51,7 +59,7 @@ export default {
   data: () => ({
     results: [],
     dataLoaded: false,
-    showComparisons: false,
+    showComparisonForm: false,
     compareFrom: "",
     compareTo: "",
     comparisons: [],
@@ -78,6 +86,9 @@ export default {
         });
       });
       return items;
+    },
+    showCompareButton() {
+      return this.results.length > 1;
     }
   },
   watch: {
@@ -121,7 +132,7 @@ export default {
           returnData.fiData = response.data;
           this.results.unshift(returnData);
           this.dataLoaded = true;
-          this.loading =  false;
+          this.loading = false;
         })
         .catch(error => {
           console.error(error);
@@ -134,11 +145,11 @@ export default {
       this.results.splice(index, 1);
       this.$emit("removeFormSubmission", properties);
     },
-    setShowComparisons() {
-      this.showComparisons = true;
+    setShowComparisonForm() {
+      this.showComparisonForm = true;
     },
     addComparison() {
-      if(this.validateComparisonForm()) return;
+      if (this.validateComparisonForm()) return;
       const compareFrom = this.results.find(x => x.id === this.compareFrom);
       const compareTo = this.results.find(x => x.id === this.compareTo);
       var pathways = [];
@@ -165,9 +176,9 @@ export default {
       });
       var comparison = {};
       comparison.id = uudiv4();
-      comparison.resultSets = [compareFrom.id, compareTo.id]
-      comparison.name = `Comparing: ${compareFrom.id} -> ${compareTo.id}`
-      comparison.pathways = pathwayList
+      comparison.resultSets = [compareFrom.id, compareTo.id];
+      comparison.name = `Comparing: ${compareFrom.id} -> ${compareTo.id}`;
+      comparison.pathways = pathwayList;
       this.comparisons.unshift(comparison);
     },
     makeComparisonObject(name, pathway, comparePathway) {
@@ -183,7 +194,13 @@ export default {
       };
     },
     validateComparisonForm() {
-      return this.comparisons.some(x => x.resultSets.includes(this.compareFrom) && x.resultSets.includes(this.compareTo))
+      var rtn = this.comparisons.some(
+        x =>
+          x.resultSets.includes(this.compareFrom) &&
+          x.resultSets.includes(this.compareTo)
+      );
+      if (!rtn) this.showComparisonForm = false;
+      return rtn;
     }
   }
 };

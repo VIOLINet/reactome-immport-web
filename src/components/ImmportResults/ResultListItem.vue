@@ -5,7 +5,7 @@
         {{this.vaccineNames}}
         <v-subheader>{{this.subHeader}}</v-subheader>
         <v-spacer></v-spacer>
-        <v-btn @click="$emit('openComparison')">Compare!</v-btn>
+        <v-btn @click="$emit('openComparison')" v-show="showCompareButton">Compare!</v-btn>
         <v-btn icon @click="expandCard = !expandCard">
           <v-icon>{{ expandCard ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
         </v-btn>
@@ -22,7 +22,6 @@
                 dense
                 :headers="analysisHeaders"
                 :items="analysisPathways"
-                class="elevation-1"
                 :search="search"
                 :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
               >
@@ -91,6 +90,10 @@ export default {
     result: {
       type: Object,
       default: () => {}
+    },
+    showCompareButton: {
+      type: Boolean,
+      default: () => false
     }
   },
   data: () => ({
