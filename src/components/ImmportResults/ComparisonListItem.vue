@@ -12,22 +12,53 @@
         </v-btn>
       </v-card-title>
       <v-expand-transition>
-          <div v-show="expandCard" class="pa-1">
-              <v-data-table dense :headers="comparisonHeaders" :items="pathways" :footer-props="{'items-per-page-options': [20,40,50,100,-1]}">
-                  <template v-slot:item.sourceEntitiesPValue="{item}">
-                      {{item.sourceEntitiesPValue.toExponential(2)}}
-                  </template>
-                  <template v-slot:item.sourceEntitiesFDR="{item}">
-                      {{item.sourceEntitiesFDR.toExponential(2)}}
-                  </template>
-                  <template v-slot:item.targetEntitiesPValue="{item}">
-                      {{item.targetEntitiesPValue.toExponential(2)}}
-                  </template>
-                  <template v-slot:item.targetEntitiesFDR="{item}">
-                      {{item.targetEntitiesFDR.toExponential(2)}}
-                  </template>
+        <div v-show="expandCard" class="pa-1">
+          <v-tabs :centered="true">
+            <v-tab>Reactome Enrichment Comparison</v-tab>
+            <v-tab-item>
+              <v-data-table
+                dense
+                :headers="comparisonHeaders"
+                :items="pathways"
+                :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
+              >
+                <template
+                  v-slot:item.sourceEntitiesPValue="{item}"
+                >{{item.sourceEntitiesPValue.toExponential(2)}}</template>
+                <template
+                  v-slot:item.sourceEntitiesFDR="{item}"
+                >{{item.sourceEntitiesFDR.toExponential(2)}}</template>
+                <template
+                  v-slot:item.targetEntitiesPValue="{item}"
+                >{{item.targetEntitiesPValue.toExponential(2)}}</template>
+                <template
+                  v-slot:item.targetEntitiesFDR="{item}"
+                >{{item.targetEntitiesFDR.toExponential(2)}}</template>
               </v-data-table>
-          </div>
+            </v-tab-item>
+            <v-tab>Functional Interactions</v-tab>
+            <v-tab-item>
+                <v-row no-gutters>
+                  <v-col cols="12" lg="6">
+                    <v-card outlined style="position:relative;">
+                      <v-card-title>Result {{comparison.resultSets[0]}}</v-card-title>
+                      <v-card-text>
+                        <cytoscape ref="cy0" :config="cyConfig" :afterCreated="after0Created"></cytoscape>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="12" lg="6">
+                    <v-card outlined style="position:relative;">
+                      <v-card-title>Result {{comparison.resultSets[1]}}</v-card-title>
+                      <v-card-text>
+                        <cytoscape ref="cy1" :config="cyConfig" :afterCreated="after1Created"></cytoscape>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+            </v-tab-item>
+          </v-tabs>
+        </div>
       </v-expand-transition>
     </v-card>
   </v-container>
@@ -51,14 +82,83 @@ export default {
       { text: "FDR²", value: "targetEntitiesFDR" }
     ],
     pathways: [],
-    expandCard: true
+    expandCard: true,
+    cyConfig: {
+      style: [
+        {
+          selector: "node",
+          style: {
+            width: "9",
+            height: "9",
+            label: "data(name)",
+            "font-size": "6px",
+            shape: "ellipse",
+            "background-color": "#00CC00",
+            "border-color": "#00CC00",
+            "background-opacity": ".4"
+          }
+        },
+        {
+          selector: "node:selected",
+          style: {
+            "border-width": "6px",
+            "border-color": "#AAD8FF",
+            "border-opacity": "0.5",
+            "text-outline-color": "#0bb50b"
+          }
+        },
+        {
+          selector: "node.showClusters",
+          style: {
+            "background-color": "data(clusterColor)"
+          }
+        },
+        {
+          selector: "edge",
+          style: {
+            "curve-style": "bezier",
+            "line-color": "#bbb",
+            width: "1",
+            "overlay-padding": "20px"
+          }
+        },
+        {
+          selector: "edge:selected",
+          style: {
+            "line-color": "#FF0000",
+            width: "2"
+          }
+        }
+      ],
+      layout: {
+        name: "cose"
+      },
+      maxZoom: 5,
+      minZoom: 0.2
+    },
+    cyElements0:[],
+    cyElements1:[]
   }),
   created() {
     this.pathways = this.comparison.pathways;
+    this.cyElements0 = this.comparison.fiNetworks[0];
+    this.cyElements1 = this.comparison.fiNetworks[1];
   },
   computed: {
     panelName() {
-      return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`
+      return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`;
+    }
+  },
+  methods: {
+    after0Created(cy) {
+      this.cy0 = cy
+      this.cy0.add(this.cyElements0)
+      this.cy0.layout({name: "cose"}).run();
+    },
+    after1Created(cy) {
+      this.cy1 = cy
+      this.cy1.add(this.cyElements1)
+      this.cy1.layout({name: "cose"}).run();
     }
   }
 };
