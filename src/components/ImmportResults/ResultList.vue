@@ -12,12 +12,18 @@
               <v-select :items="compareItems" item-text="name" item-value="id" v-model="compareTo"></v-select>
             </v-col>
           </v-row>
+          <span
+            style="color:red; text-align:left;"
+            v-for="(message, index) in errorMessages"
+            :key="index"
+          >{{message}}</span>
+          <br />
           <v-btn @click="addComparison">Add</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
     <v-container fluid v-if="comparisons.length > 0">
-      <p class="title">Compare results:</p>
+      <v-container class="pa-0"><p class="display-1 text-left">Compare results</p></v-container>
       <ComparisonListItem
         v-for="comparison in comparisons"
         :key="comparison.id"
@@ -26,7 +32,9 @@
       />
       <hr class="mt-5" />
     </v-container>
-    <p class="title">Result Sets:</p>
+    <v-container class="mt-5 pa-0">
+      <p class="display-1 text-left">Result Sets</p>
+    </v-container>
     <v-container v-show="loading">
       <v-card outlined class="pa-5">
         <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -64,7 +72,8 @@ export default {
     compareFrom: "",
     compareTo: "",
     comparisons: [],
-    loading: false
+    loading: false,
+    errorMessages: []
   }),
   computed: {
     items() {
@@ -119,7 +128,7 @@ export default {
       //eventually axios call will be a post call with the post data. when this happens, we will get the same response as making these
       //test calls but with real data
       var returnData = {};
-      returnData.id = uudiv4();
+      returnData.id = this.results.length+1;
       returnData.properties = postData;
       axios
         .get("http://localhost:8076/immportws/analysis/pathways")
@@ -147,8 +156,12 @@ export default {
       this.$emit("removeFormSubmission", properties);
     },
     removeComparison(comparisonIds) {
-      const index = this.comparisons.findIndex(x => x.resultSets.includes(comparisonIds[0]) && x.resultSets.includes(comparisonIds[1]))
-      this.comparisons.splice(index,1)
+      const index = this.comparisons.findIndex(
+        x =>
+          x.resultSets.includes(comparisonIds[0]) &&
+          x.resultSets.includes(comparisonIds[1])
+      );
+      this.comparisons.splice(index, 1);
     },
     setShowComparisonForm() {
       this.showComparisonForm = true;
@@ -157,6 +170,17 @@ export default {
       if (this.validateComparisonForm()) return;
       const compareFrom = this.results.find(x => x.id === this.compareFrom);
       const compareTo = this.results.find(x => x.id === this.compareTo);
+      var comparison = {};
+      comparison.id = uudiv4();
+      comparison.resultSets = [compareFrom.id, compareTo.id];
+      comparison.pathways = this.getComparedPathways(compareFrom, compareTo);
+      comparison.fiNetworks = this.getComparedNetworks(
+        compareFrom.fiData,
+        compareTo.fiData
+      );
+      this.comparisons.unshift(comparison);
+    },
+    getComparedPathways(compareFrom, compareTo) {
       var pathways = [];
       var pathwayList = [];
       compareFrom.analysisData.pathways.forEach(pathway => {
@@ -179,12 +203,7 @@ export default {
           )
         );
       });
-      var comparison = {};
-      comparison.id = uudiv4();
-      comparison.resultSets = [compareFrom.id, compareTo.id];
-      comparison.name = `Comparing: ${compareFrom.id} -> ${compareTo.id}`;
-      comparison.pathways = pathwayList;
-      this.comparisons.unshift(comparison);
+      return pathwayList;
     },
     makeComparisonObject(name, pathway, comparePathway) {
       return {
@@ -198,13 +217,33 @@ export default {
         targetEntitiesFDR: comparePathway ? comparePathway.entities.fdr : ""
       };
     },
+    getComparedNetworks(compareFrom, compareTo) {
+      compareFrom.forEach(edge => {
+        if (edge.group !== "edges") return;
+        const index = compareTo.findIndex(
+          comparedEdge =>
+            comparedEdge.data.source === edge.data.source &&
+            comparedEdge.data.target === edge.data.target
+        );
+        if (index !== -1) {
+          edge.data.shared = true;
+          compareTo[index].data.shared = true;
+        }
+      });
+      return [compareFrom, compareTo];
+    },
     validateComparisonForm() {
+      this.errorMessages = [];
       var rtn = this.comparisons.some(
         x =>
           x.resultSets.includes(this.compareFrom) &&
           x.resultSets.includes(this.compareTo)
       );
-      if (!rtn) this.showComparisonForm = false;
+      if (rtn)
+        this.errorMessages.push("These two Result sets are already compared.");
+      if (!rtn) {
+        this.showComparisonForm = false;
+      }
       return rtn;
     }
   }

@@ -2,7 +2,7 @@
   <v-container>
     <v-card outlined>
       <v-card-title>
-        {{this.vaccineNames}}
+        {{this.panelName}}
         <v-subheader>{{this.subHeader}}</v-subheader>
         <v-spacer></v-spacer>
         <v-btn @click="$emit('openComparison')" v-show="showCompareButton">Compare!</v-btn>
@@ -68,11 +68,14 @@
             </v-tab-item>
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
-              <v-switch v-model="showClusters" label="Show Clustering"></v-switch>
-              <v-spacer></v-spacer>
-              <v-btn @click="resetCytoscape">Reset</v-btn>
-              <v-card outlined>
+              <v-card outlined style="position:relative;">
                 <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
+                <v-btn icon @click="resetCytoscape" class="resetButton" title="Reset position">
+                  <v-icon >{{'mdi-restore'}}</v-icon>
+                </v-btn>
+                <v-btn icon @click="showClusters = !showClusters" class="clusterToggle" title="show/hide clustering">
+                  <v-icon >{{showClusters ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}</v-icon>
+                </v-btn>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -178,8 +181,8 @@ export default {
     }
   },
   computed: {
-    vaccineNames() {
-      return this.result.properties.voIds.map(({ name }) => name).join(", ");
+    panelName() {
+      return `Results ${this.result.id}: ${this.result.properties.voIds.map(({ name }) => name).join(", ")}`;
     },
     subHeader() {
       return (
@@ -245,5 +248,17 @@ export default {
 }
 .v-input--switch {
   display: inline-block;
+}
+.resetButton {
+  position: absolute;
+  top: 5px;
+  left: 5px; 
+  width: 10px;
+}
+.clusterToggle {
+  position: absolute;
+  top: 40px;
+  left: 5px;
+  width: 10px;
 }
 </style>

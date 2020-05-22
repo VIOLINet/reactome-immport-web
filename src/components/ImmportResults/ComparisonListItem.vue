@@ -2,7 +2,7 @@
   <v-container>
     <v-card outlined>
       <v-card-title>
-        {{this.comparison.name}}
+        {{this.panelName}}
         <v-spacer></v-spacer>
         <v-btn icon @click="expandCard = !expandCard">
           <v-icon>{{ expandCard ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
@@ -55,6 +55,11 @@ export default {
   }),
   created() {
     this.pathways = this.comparison.pathways;
+  },
+  computed: {
+    panelName() {
+      return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`
+    }
   }
 };
 </script>
