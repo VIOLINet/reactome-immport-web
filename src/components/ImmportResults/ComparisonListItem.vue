@@ -13,7 +13,7 @@
       </v-card-title>
       <v-expand-transition>
           <div v-show="expandCard" class="pa-1">
-              <v-data-table dense :headers="comparisonHeaders" :items="pathways">
+              <v-data-table dense :headers="comparisonHeaders" :items="pathways" :footer-props="{'items-per-page-options': [20,40,50,100,-1]}">
                   <template v-slot:item.sourceEntitiesPValue="{item}">
                       {{item.sourceEntitiesPValue.toExponential(2)}}
                   </template>

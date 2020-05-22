@@ -23,7 +23,7 @@
       </v-card>
     </v-dialog>
     <v-container fluid v-if="comparisons.length > 0">
-      <v-container class="pa-0"><p class="display-1 text-left">Compare results</p></v-container>
+      <v-container class="pl-3"><p class="display-1 text-left">Compare results</p></v-container>
       <ComparisonListItem
         v-for="comparison in comparisons"
         :key="comparison.id"
@@ -32,7 +32,7 @@
       />
       <hr class="mt-5" />
     </v-container>
-    <v-container class="mt-5 pa-0">
+    <v-container class="mt-5 pl-3">
       <p class="display-1 text-left">Result Sets</p>
     </v-container>
     <v-container v-show="loading">
