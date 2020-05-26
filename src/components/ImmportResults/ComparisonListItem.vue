@@ -20,6 +20,7 @@
                 dense
                 :headers="comparisonHeaders"
                 :items="pathways"
+                :search="search"
                 :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
               >
                 <template
@@ -34,6 +35,9 @@
                 <template
                   v-slot:item.targetEntitiesFDR="{item}"
                 >{{item.targetEntitiesFDR.toExponential(2)}}</template>
+                <template v-slot:footer="{}">
+                  <v-text-field v-model="search" label="Search" hide-details single-line class="search-box"></v-text-field>
+                </template>
               </v-data-table>
             </v-tab-item>
             <v-tab>Functional Interactions</v-tab>
@@ -127,6 +131,7 @@ export default {
       maxZoom: 5,
       minZoom: 0.2
     },
+    search: ""
   }),
   created() {
     this.pathways = this.comparison.pathways;
@@ -140,4 +145,8 @@ export default {
 </script>
 
 <style scoped>
+.search-box {
+  float: left;
+  max-width: 25em;
+}
 </style>
