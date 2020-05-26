@@ -68,15 +68,7 @@
             </v-tab-item>
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
-              <v-card outlined style="position:relative;">
-                <cytoscape ref="cy" :config="cyConfig" :afterCreated="afterCreated"></cytoscape>
-                <v-btn icon @click="resetCytoscape" class="resetButton" title="Reset position">
-                  <v-icon >{{'mdi-restore'}}</v-icon>
-                </v-btn>
-                <v-btn icon @click="showClusters = !showClusters" class="clusterToggle" title="show/hide clustering">
-                  <v-icon >{{showClusters ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}</v-icon>
-                </v-btn>
-              </v-card>
+              <CyInstance :cyElementsProp="result.fiData"/>
             </v-tab-item>
           </v-tabs>
         </div>
@@ -86,9 +78,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import CyInstance from "./CyInstance"
 export default {
   name: "ResultListItem",
+  components: {
+    CyInstance
+  },
   props: {
     result: {
       type: Object,
@@ -165,20 +160,10 @@ export default {
     ],
     analysisSummary: {},
     analysisPathways: [],
-    fiData: [],
-    showClusters: false,
-    clustersLoaded: false
   }),
   created() {
     this.analysisSummary = this.result.analysisData.summary;
     this.analysisPathways = this.result.analysisData.pathways;
-    this.fiData = this.result.fiData;
-  },
-  watch: {
-    showClusters(newVal) {
-      if (!this.clustersLoaded) this.loadClustering();
-      else this.doClusterToggle(newVal);
-    }
   },
   computed: {
     panelName() {
@@ -192,47 +177,7 @@ export default {
       );
     }
   },
-  methods: {
-    afterCreated(cy) {
-      this.cy = cy;
-      this.addInitialCyData();
-    },
-    resetCytoscape() {
-      this.cy.fit();
-    },
-    addInitialCyData() {
-      this.cy.add(this.fiData);
-      this.cy.layout({ name: "cose" }).run();
-    },
-    loadClustering() {
-      axios
-        .post(
-          "http://localhost:8076/immportws/analysis/clustered_fi_network",
-          this.fiData
-        )
-        .then(({data})=> {
-          this.addClusteringToFIData(data);
-          this.doClusterToggle(true);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    },
-    addClusteringToFIData(map) {
-      for (const [key, value] of Object.entries(map)) {
-        if(value === null) continue;
-        this.cy.$(`#${key}`).data("clusterColor", value);
-      }
-      this.clustersLoaded = true;
-    },
-    doClusterToggle(show) {
-      if (show) {
-        this.cy.elements("[clusterColor]").addClass("showClusters");
-      } else {
-        this.cy.elements("[clusterColor]").removeClass("showClusters");
-      }
-    }
-  }
+
 };
 </script>
 
@@ -246,19 +191,5 @@ export default {
   float: left;
   max-width: 25em;
 }
-.v-input--switch {
-  display: inline-block;
-}
-.resetButton {
-  position: absolute;
-  top: 5px;
-  left: 5px; 
-  width: 10px;
-}
-.clusterToggle {
-  position: absolute;
-  top: 40px;
-  left: 5px;
-  width: 10px;
-}
+
 </style>

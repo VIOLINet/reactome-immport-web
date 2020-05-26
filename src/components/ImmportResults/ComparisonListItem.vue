@@ -39,21 +39,8 @@
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
                 <v-row no-gutters>
-                  <v-col cols="12" lg="6">
-                    <v-card outlined style="position:relative;">
-                      <v-card-title>Result {{comparison.resultSets[0]}}</v-card-title>
-                      <v-card-text>
-                        <cytoscape ref="cy0" :config="cyConfig" :afterCreated="after0Created"></cytoscape>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="12" lg="6">
-                    <v-card outlined style="position:relative;">
-                      <v-card-title>Result {{comparison.resultSets[1]}}</v-card-title>
-                      <v-card-text>
-                        <cytoscape ref="cy1" :config="cyConfig" :afterCreated="after1Created"></cytoscape>
-                      </v-card-text>
-                    </v-card>
+                  <v-col cols="12" lg="6" v-for="(fiData, index) in comparison.fiNetworks" :key="index">
+                    <CyInstance :title="`${comparison.resultSets[index]}`" :cyElementsProp="fiData"/>
                   </v-col>
                 </v-row>
             </v-tab-item>
@@ -65,8 +52,12 @@
 </template>
 
 <script>
+import CyInstance from './CyInstance';
 export default {
   name: "ComparisonListItem",
+  components: {
+    CyInstance
+  },
   props: {
     comparison: {
       type: Object,
