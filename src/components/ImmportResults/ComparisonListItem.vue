@@ -127,31 +127,15 @@ export default {
       maxZoom: 5,
       minZoom: 0.2
     },
-    cyElements0:[],
-    cyElements1:[]
   }),
   created() {
     this.pathways = this.comparison.pathways;
-    this.cyElements0 = this.comparison.fiNetworks[0];
-    this.cyElements1 = this.comparison.fiNetworks[1];
   },
   computed: {
     panelName() {
       return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`;
     }
   },
-  methods: {
-    after0Created(cy) {
-      this.cy0 = cy
-      this.cy0.add(this.cyElements0)
-      this.cy0.layout({name: "cose"}).run();
-    },
-    after1Created(cy) {
-      this.cy1 = cy
-      this.cy1.add(this.cyElements1)
-      this.cy1.layout({name: "cose"}).run();
-    }
-  }
 };
 </script>
 
