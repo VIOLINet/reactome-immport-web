@@ -42,9 +42,10 @@
             </v-tab-item>
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
+              <v-btn @click="showShared = !showShared">Toggle Shared Interactions</v-btn>
                 <v-row no-gutters>
                   <v-col cols="12" lg="6" v-for="(fiData, index) in comparison.fiNetworks" :key="index">
-                    <CyInstance :title="`${comparison.resultSets[index]}`" :cyElementsProp="fiData"/>
+                    <CyInstance :title="`${comparison.resultSets[index]}`" :cyElementsProp="fiData" :showShared="showShared"/>
                   </v-col>
                 </v-row>
             </v-tab-item>
@@ -78,59 +79,7 @@ export default {
     ],
     pathways: [],
     expandCard: true,
-    cyConfig: {
-      style: [
-        {
-          selector: "node",
-          style: {
-            width: "9",
-            height: "9",
-            label: "data(name)",
-            "font-size": "6px",
-            shape: "ellipse",
-            "background-color": "#00CC00",
-            "border-color": "#00CC00",
-            "background-opacity": ".4"
-          }
-        },
-        {
-          selector: "node:selected",
-          style: {
-            "border-width": "6px",
-            "border-color": "#AAD8FF",
-            "border-opacity": "0.5",
-            "text-outline-color": "#0bb50b"
-          }
-        },
-        {
-          selector: "node.showClusters",
-          style: {
-            "background-color": "data(clusterColor)"
-          }
-        },
-        {
-          selector: "edge",
-          style: {
-            "curve-style": "bezier",
-            "line-color": "#bbb",
-            width: "1",
-            "overlay-padding": "20px"
-          }
-        },
-        {
-          selector: "edge:selected",
-          style: {
-            "line-color": "#FF0000",
-            width: "2"
-          }
-        }
-      ],
-      layout: {
-        name: "cose"
-      },
-      maxZoom: 5,
-      minZoom: 0.2
-    },
+    showShared: false,
     search: ""
   }),
   created() {

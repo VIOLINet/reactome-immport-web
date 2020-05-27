@@ -21,7 +21,7 @@
               <v-data-table
                 dense
                 :headers="analysisHeaders"
-                :items="analysisPathways"
+                :items="filteredItems"
                 :search="search"
                 :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
               >
@@ -61,8 +61,10 @@
                     label="Search"
                     hide-details
                     single-line
-                    class="search-box"
+                    class="search-box pr-1"
                   ></v-text-field>
+                  <v-text-field prefix="pVal <=" v-model="pValFilter" hide-details single-line class="search-box pr-1"></v-text-field>
+                  <v-text-field prefix="fdr <=" v-model="fdrFilter" hide-details single-line class="search-box pr-1"></v-text-field>
                 </template>
               </v-data-table>
             </v-tab-item>
@@ -96,60 +98,9 @@ export default {
   },
   data: () => ({
     expandCard: true,
-    cyConfig: {
-      style: [
-        {
-          selector: "node",
-          style: {
-            width: "9",
-            height: "9",
-            label: "data(name)",
-            "font-size": "6px",
-            shape: "ellipse",
-            "background-color": "#00CC00",
-            "border-color": "#00CC00",
-            "background-opacity": ".4"
-          }
-        },
-        {
-          selector: "node:selected",
-          style: {
-            "border-width": "6px",
-            "border-color": "#AAD8FF",
-            "border-opacity": "0.5",
-            "text-outline-color": "#0bb50b"
-          }
-        },
-        {
-          selector: "node.showClusters",
-          style: {
-            "background-color": "data(clusterColor)"
-          }
-        },
-        {
-          selector: "edge",
-          style: {
-            "curve-style": "bezier",
-            "line-color": "#bbb",
-            width: "1",
-            "overlay-padding": "20px"
-          }
-        },
-        {
-          selector: "edge:selected",
-          style: {
-            "line-color": "#FF0000",
-            width: "2"
-          }
-        }
-      ],
-      layout: {
-        name: "cose"
-      },
-      maxZoom: 5,
-      minZoom: 0.2
-    },
     search: "",
+    pValFilter: 1,
+    fdrFilter: 1,
     analysisHeaders: [
       { text: "Pathway Name", value: "name" },
       { text: "Entities Found", value: "entities.found" },
@@ -175,6 +126,11 @@ export default {
         "; " +
         this.result.properties.times.join(", ")
       );
+    },
+    filteredItems(){
+      return this.analysisPathways.filter(i => {
+        return i.entities.pValue <= this.pValFilter && i.entities.fdr <= this.fdrFilter
+      })
     }
   },
 

@@ -30,6 +30,10 @@ export default {
     cyElementsProp: {
       type: Array,
       default: () => []
+    },
+    showShared: {
+      type: Boolean,
+      default: () => false
     }
   },
   data: () => ({
@@ -73,6 +77,13 @@ export default {
           }
         },
         {
+          selector: "edge.shared",
+          style: {
+            "line-color": "#00F",
+            width: "1.5"
+          }
+        },
+        {
           selector: "edge:selected",
           style: {
             "line-color": "#FF0000",
@@ -97,6 +108,13 @@ export default {
     showClusters(newVal) {
       if (!this.clustersLoaded) this.loadClustering();
       else this.doClusterToggle(newVal);
+    },
+    showShared(show) {
+      if(show) {
+        this.cy.elements('[?shared]').addClass("shared")
+      } else {
+        this.cy.elements('[?shared]').removeClass("shared")
+      }
     }
   },
   computed: {
