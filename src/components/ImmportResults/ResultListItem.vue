@@ -27,7 +27,7 @@
               >
                 <template v-slot:item.name="{item}">
                   <a
-                    :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${analysisSummary.token}`"
+                    :href="`https://dev.reactome.org/PathwayBrowser/#/${item.stId}&DTAB=AN&ANALYSIS=${result.analysisData.summary.token}`"
                     target="_blank"
                     title="View Analyzed Pathway in Reactome"
                   >{{item.name}}</a>
@@ -45,7 +45,7 @@
                 <template v-slot:item.entities.fdr="{item}">{{item.entities.fdr.toExponential(2)}}</template>
                 <template v-slot:footer="{}">
                   <a
-                    :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${analysisSummary.token}`"
+                    :href="`https://dev.reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS=${result.analysisData.summary.token}`"
                     target="_blank"
                   >
                     <img
@@ -109,13 +109,7 @@ export default {
       { text: "Entities pValue", value: "entities.pValue" },
       { text: "Entities FDR", value: "entities.fdr" }
     ],
-    analysisSummary: {},
-    analysisPathways: [],
   }),
-  created() {
-    this.analysisSummary = this.result.analysisData.summary;
-    this.analysisPathways = this.result.analysisData.pathways;
-  },
   computed: {
     panelName() {
       return `Results ${this.result.id}: ${this.result.properties.voIds.map(({ name }) => name).join(", ")}`;
@@ -128,7 +122,7 @@ export default {
       );
     },
     filteredItems(){
-      return this.analysisPathways.filter(i => {
+      return this.result.analysisData.pathways.filter(i => {
         return i.entities.pValue <= this.pValFilter && i.entities.fdr <= this.fdrFilter
       })
     }
