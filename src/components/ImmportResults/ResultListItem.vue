@@ -63,8 +63,8 @@
                     single-line
                     class="search-box pr-1"
                   ></v-text-field>
-                  <v-text-field prefix="pVal <=" v-model="pValFilter" hide-details single-line class="search-box pr-1"></v-text-field>
-                  <v-text-field prefix="fdr <=" v-model="fdrFilter" hide-details single-line class="search-box pr-1"></v-text-field>
+                  <v-text-field prefix="pVal ≤" v-model="pValFilter" hide-details single-line class="search-box pr-1"></v-text-field>
+                  <v-text-field prefix="fdr ≤" v-model="fdrFilter" hide-details single-line class="search-box pr-1"></v-text-field>
                 </template>
               </v-data-table>
             </v-tab-item>

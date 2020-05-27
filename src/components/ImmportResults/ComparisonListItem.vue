@@ -19,7 +19,7 @@
               <v-data-table
                 dense
                 :headers="comparisonHeaders"
-                :items="pathways"
+                :items="filteredItems"
                 :search="search"
                 :footer-props="{'items-per-page-options': [20,40,50,100,-1]}"
               >
@@ -36,18 +36,47 @@
                   v-slot:item.targetEntitiesFDR="{item}"
                 >{{item.targetEntitiesFDR.toExponential(2)}}</template>
                 <template v-slot:footer="{}">
-                  <v-text-field v-model="search" label="Search" hide-details single-line class="search-box"></v-text-field>
+                  <v-text-field
+                    v-model="search"
+                    label="Search"
+                    hide-details
+                    single-line
+                    class="search-box pr-1"
+                  ></v-text-field>
+                  <v-text-field
+                    prefix="pVal 	≤"
+                    v-model="pValFilter"
+                    hide-details
+                    single-line
+                    class="search-box pr-1"
+                  ></v-text-field>
+                  <v-text-field
+                    prefix="fdr ≤"
+                    v-model="fdrFilter"
+                    hide-details
+                    single-line
+                    class="search-box pr-1"
+                  ></v-text-field>
                 </template>
               </v-data-table>
             </v-tab-item>
             <v-tab>Functional Interactions</v-tab>
             <v-tab-item>
               <v-btn @click="showShared = !showShared">Toggle Shared Interactions</v-btn>
-                <v-row no-gutters>
-                  <v-col cols="12" lg="6" v-for="(fiData, index) in comparison.fiNetworks" :key="index">
-                    <CyInstance :title="`${comparison.resultSets[index]}`" :cyElementsProp="fiData" :showShared="showShared"/>
-                  </v-col>
-                </v-row>
+              <v-row no-gutters>
+                <v-col
+                  cols="12"
+                  lg="6"
+                  v-for="(fiData, index) in comparison.fiNetworks"
+                  :key="index"
+                >
+                  <CyInstance
+                    :title="`${comparison.resultSets[index]}`"
+                    :cyElementsProp="fiData"
+                    :showShared="showShared"
+                  />
+                </v-col>
+              </v-row>
             </v-tab-item>
           </v-tabs>
         </div>
@@ -57,7 +86,7 @@
 </template>
 
 <script>
-import CyInstance from './CyInstance';
+import CyInstance from "./CyInstance";
 export default {
   name: "ComparisonListItem",
   components: {
@@ -80,7 +109,9 @@ export default {
     pathways: [],
     expandCard: true,
     showShared: false,
-    search: ""
+    search: "",
+    pValFilter: 1,
+    fdrFilter: 1
   }),
   created() {
     this.pathways = this.comparison.pathways;
@@ -88,8 +119,18 @@ export default {
   computed: {
     panelName() {
       return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`;
+    },
+    filteredItems() {
+      return this.comparison.pathways.filter(i => {
+        return (
+          (i.sourceEntitiesPValue <= this.pValFilter ||
+            i.targetEntitiesPValue <= this.pValFilter) &&
+          (i.sourceEntitiesFDR <= this.fdrFilter ||
+            i.targetEntitiesFDR <= this.fdrFilter)
+        );
+      });
     }
-  },
+  }
 };
 </script>
 
