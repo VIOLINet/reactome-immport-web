@@ -3,7 +3,7 @@
     <v-dialog v-model="showComparisonForm" max-width="50%">
       <v-card outlined>
         <v-card-text>
-          <p>Select Results to compare</p>
+          <p class="display-1">Select results to compare</p>
           <v-row>
             <v-col cols="12">
               <v-select :items="items" item-text="name" item-value="id" v-model="compareFrom"></v-select>
@@ -81,7 +81,7 @@ export default {
       this.results.forEach(result => {
         items.push({
           id: result.id,
-          name: result.properties.voIds.map(({ name }) => name).join(", ")
+          name:`Result ${result.id}: ${result.properties.voIds.map(({ name }) => name).join(", ")}`
         });
       });
       return items;
@@ -92,7 +92,7 @@ export default {
         if (result.id === this.compareFrom) return;
         items.push({
           id: result.id,
-          name: result.properties.voIds.map(({ name }) => name).join(", ")
+          name:`Result ${result.id}: ${result.properties.voIds.map(({ name }) => name).join(", ")}`
         });
       });
       return items;

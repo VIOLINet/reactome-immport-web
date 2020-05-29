@@ -44,14 +44,14 @@
                     class="search-box pr-1"
                   ></v-text-field>
                   <v-text-field
-                    prefix="pVal 	≤"
+                    prefix="pValue 	≤"
                     v-model="pValFilter"
                     hide-details
                     single-line
                     class="search-box pr-1"
                   ></v-text-field>
                   <v-text-field
-                    prefix="fdr ≤"
+                    prefix="FDR ≤"
                     v-model="fdrFilter"
                     hide-details
                     single-line
@@ -118,7 +118,7 @@ export default {
   },
   computed: {
     panelName() {
-      return `Comparing Results ${this.comparison.resultSets[0]} to Results ${this.comparison.resultSets[1]}`;
+      return `Comparing Result ${this.comparison.resultSets[0]} to Result ${this.comparison.resultSets[1]}`;
     },
     filteredItems() {
       return this.comparison.pathways.filter(i => {
