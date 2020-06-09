@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     loadData(postData) {
-      //make sure post data is not null and that there is no result with a properties ovjeect equal to postData
+      //make sure post data is not null and that there is no result with a properties object equal to postData
       if (!postData && !this.results.some(x => x.properties === postData))
         return;
       this.loading = true;
@@ -143,6 +143,12 @@ export default {
           this.results.unshift(returnData);
           this.dataLoaded = true;
           this.loading = false;
+          //Eventually this will be the only server call necessary to return FI and analysis data
+          return axios.post("http://localhost:8076/immportws/expSample/vaccine", {
+            voIds: postData.voIds.map(voId => voId.id), //must do this instead of passing post data because postData. voIds is an object containing names and ids
+            genderList : postData.genderList,
+            times: postData.times
+          })
         })
         .catch(error => {
           console.error(error);

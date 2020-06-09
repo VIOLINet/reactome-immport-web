@@ -112,14 +112,14 @@ export default {
   }),
   computed: {
     panelName() {
-      return `Result ${this.result.id}: ${this.result.properties.voIds.map(({ name }) => name).join(", ")}`;
+      const rtn = `Result ${this.result.id}: ${this.result.properties.voIds.map(({ name }) => name).join(", ")}`;
+      return rtn.length > 40 ? rtn.substring(0,40) + "..." : rtn;
     },
     subHeader() {
-      return (
-        this.result.properties.genderList.join(", ") +
-        "; " +
-        this.result.properties.times.join(", ")
-      );
+      const genders = this.result.properties.genderList.join(", ")
+      const times = this.result.properties.times.join(", ")
+      const rtn = genders + "; " + (times.length > 30 ? times.substring(0,40) + "..." : times) + ";"
+      return rtn;
     },
     filteredItems(){
       return this.result.analysisData.pathways.filter(i => {
