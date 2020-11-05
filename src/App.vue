@@ -2,7 +2,7 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <form @submit.prevent="handleSubmit">
+      <!-- <form @submit.prevent="handleSubmit">
         <table>
           <h3 class="tableHeader">Perform Reactome enrichment on Vaccine data</h3>
           <tr>
@@ -45,7 +45,8 @@
           </tr>
         </table>
         <v-btn small class="submitButton" @click="handleSubmit" primary>Analyze</v-btn>
-      </form>
+      </form> -->
+      <GeneExpressionControl />
     </v-container>
     <v-container>
       <span
@@ -61,6 +62,7 @@
 <script>
 import ResultList from "./components/ImmportResults/ResultList";
 // import ResultsPanel from "./components/ImmportResults/ResultsPanel";
+import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
 import Docs from "./components/Docs";
 
 export default {
@@ -68,6 +70,7 @@ export default {
   components: {
     ResultList,
     // ResultsPanel,
+    GeneExpressionControl,
     Docs
   },
   data: () => ({
