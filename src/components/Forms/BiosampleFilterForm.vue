@@ -24,7 +24,8 @@
             label="Select All"
             :value="selectAllStudies"
             :input-value="selectAllStudies"
-            v-model="selectAllStudies"></v-checkbox>
+            v-model="selectAllStudies"
+          ></v-checkbox>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -46,7 +47,8 @@
             label="Select All"
             :value="selectAllPlatforms"
             :input-value="selectAllPlatforms"
-            v-model="selectAllPlatforms"></v-checkbox>
+            v-model="selectAllPlatforms"
+          ></v-checkbox>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -66,7 +68,7 @@
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
-            v-if="availableDayDefinitions.length > 0"
+            v-if="availableDayDefinitions.length > 1"
             label="Select All"
             :value="selectAllDay0Defs"
             :input-value="selectAllDay0Defs"
@@ -89,7 +91,7 @@
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
-            v-if="availableGenders.length > 0"
+            v-if="availableGenders.length > 1"
             label="Select All"
             :value="selectAllGenders"
             :input-value="selectAllGenders"
@@ -249,7 +251,7 @@ export default {
     selectAllDay0Defs: false,
     selectAllRaces: false,
     selectAllAges: false,
-    selectAllGenders: false
+    selectAllGenders: false,
   }),
   props: {
     biosampleMetaData: {
@@ -355,10 +357,14 @@ export default {
       }
     },
     selectAllGenders(selected) {
-      if(selected)
-        this.selectedGenders.push(...this.availableGenders.filter(gender => !this.selectedGenders.includes(gender)))
-      else if(this.selectedGenders.length === this.availableGenders.length)
-        this.selectedGenders = []
+      if (selected)
+        this.selectedGenders.push(
+          ...this.availableGenders.filter(
+            (gender) => !this.selectedGenders.includes(gender)
+          )
+        );
+      else if (this.selectedGenders.length === this.availableGenders.length)
+        this.selectedGenders = [];
     },
     availableAgeGroups() {
       this.selectedAges = [];
@@ -367,10 +373,14 @@ export default {
       }
     },
     selectAllAgeGroups(selected) {
-      if(selected)
-        this.selectedAges.push(...this.availableAgeGroups.filter(age => !this.selectedAges.includes(age)))
-      else if(this.selectedAges.length === this.availableAgeGroups.length)
-        this.selectedAges = []
+      if (selected)
+        this.selectedAges.push(
+          ...this.availableAgeGroups.filter(
+            (age) => !this.selectedAges.includes(age)
+          )
+        );
+      else if (this.selectedAges.length === this.availableAgeGroups.length)
+        this.selectedAges = [];
     },
     availableRaces() {
       this.selectedRaces = [];
@@ -379,10 +389,14 @@ export default {
       }
     },
     selectAllRaces(selected) {
-      if(selected)
-        this.selectedRaces.push(...this.availableRaces.filter(race => !this.selectedRaces.includes(race)));
-      else if(this.selectedRaces.length === this.availableRaces.length)
-        this.selectedRaces = []
+      if (selected)
+        this.selectedRaces.push(
+          ...this.availableRaces.filter(
+            (race) => !this.selectedRaces.includes(race)
+          )
+        );
+      else if (this.selectedRaces.length === this.availableRaces.length)
+        this.selectedRaces = [];
     },
     availableDayDefinitions() {
       this.selectedDayDefinitions = [];
@@ -391,10 +405,17 @@ export default {
       }
     },
     selectAllDay0Defs(selected) {
-      if(selected)
-        this.selectedDayDefinitions.push(...this.availableDayDefinitions.filter(def => !this.selectedDayDefinitions.includes(def)))
-      else if (this.selectedDayDefinitions.length === this.availableDayDefinitions.length)
-        this.selectedDayDefinitions = []
+      if (selected)
+        this.selectedDayDefinitions.push(
+          ...this.availableDayDefinitions.filter(
+            (def) => !this.selectedDayDefinitions.includes(def)
+          )
+        );
+      else if (
+        this.selectedDayDefinitions.length ===
+        this.availableDayDefinitions.length
+      )
+        this.selectedDayDefinitions = [];
     },
     availablePlatforms() {
       this.selectedPlatforms = [];
@@ -403,9 +424,13 @@ export default {
       }
     },
     selectAllPlatforms(selected) {
-      if(selected)
-        this.selectedPlatforms.push(...this.availablePlatforms.filter(platform => !this.selectedPlatforms.includes(platform)))
-      else if(this.selectedPlatforms.length === this.availablePlatforms.length)
+      if (selected)
+        this.selectedPlatforms.push(
+          ...this.availablePlatforms.filter(
+            (platform) => !this.selectedPlatforms.includes(platform)
+          )
+        );
+      else if (this.selectedPlatforms.length === this.availablePlatforms.length)
         this.selectedPlatforms = [];
     },
     availableStudies() {
@@ -415,11 +440,15 @@ export default {
       }
     },
     selectAllStudies(selected) {
-      if(selected)
-        this.selectedStudies.push(...this.availableStudies.filter(study => !this.selectedStudies.includes(study)))
-      else if(this.selectedStudies.length === this.availableStudies.length)
-        this.selectedStudies = []
-    }
+      if (selected)
+        this.selectedStudies.push(
+          ...this.availableStudies.filter(
+            (study) => !this.selectedStudies.includes(study)
+          )
+        );
+      else if (this.selectedStudies.length === this.availableStudies.length)
+        this.selectedStudies = [];
+    },
   },
   methods: {
     //effectively clears all selections because they all depend on vaccinesSelected
@@ -443,7 +472,14 @@ export default {
           "No biosamples could be selected based on these options. All Options must have a selection.";
         return;
       }
-      this.$emit("biosamplesFilteredEvent", biosamples);
+      this.$emit("biosamplesFilteredEvent", {
+        filteredBiosamples: biosamples,
+        studyVariables: {
+          genders: this.selectedGenders,
+          ages: this.selectedAges,
+          races: this.selectedRaces,
+        },
+      });
     },
   },
 };
@@ -457,7 +493,7 @@ export default {
   height: 12em;
   overflow: scroll;
 }
-.smallFont >>> label{
+.smallFont >>> label {
   font-size: 14px !important;
 }
 </style>

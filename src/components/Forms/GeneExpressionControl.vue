@@ -8,8 +8,9 @@
     />
     <GeneExpressionOptionsForm 
       v-if="filteredBiosampleMetaData.length > 0"
-      :biosampleMetaData="biosampleMetaData"
-      @backEvent="backEvent"/>
+      :biosampleMetaData="filteredBiosampleMetaData"
+      @backEvent="backEvent"
+      @optionsSelectedEvent="optionsSelectedEvent"/>
   </v-card>
 </template>
 
@@ -26,6 +27,8 @@ export default {
   data: () => ({
     biosampleMetaData: [],
     filteredBiosampleMetaData: [],
+    studyVariables: {},
+    selectedOptions: {}
   }),
   async created() {
     try {
@@ -35,11 +38,21 @@ export default {
     }
   },
   methods: {
-    biosamplesFilteredEvent(filterdBiosamples) {
-      this.filteredBiosampleMetaData = filterdBiosamples;
+    biosamplesFilteredEvent(biosampleFilterRtn) {
+      this.filteredBiosampleMetaData = biosampleFilterRtn.filteredBiosamples;
+      this.studyVariables = biosampleFilterRtn.studyVariables
     },
     backEvent(){
       this.filteredBiosampleMetaData = [];
+    },
+    optionsSelectedEvent(selectedOptions) {
+      this.selectedOptions = selectedOptions
+
+      const data = {};
+      data.GSMids = [...new Set(this.filteredBiosampleMetaData.map(sample => sample.gsm))];
+      data.studyVariables = this.studyVariables;
+      Object.assign(data, selectedOptions)
+
     }
   },
 };

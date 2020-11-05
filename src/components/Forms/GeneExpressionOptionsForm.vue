@@ -1,13 +1,13 @@
 <template>
   <v-card-text>
     <div>
-      <v-radio-group v-model="groupTimes">
+      <v-radio-group v-model="modelTimes">
         <v-radio
-          :value="false"
+          :value="true"
           :label="`Use the time directly in the model`"
         ></v-radio>
         <v-radio
-          :value="true"
+          :value="false"
           :label="`Create two groups for differential analysis`"
         ></v-radio>
       </v-radio-group>
@@ -16,7 +16,7 @@
           <v-col cols="12" md="4" style="height: 100%" class="mt-0 mb-0">
            <p class="text-left mb-0 pb-0">Time(Days)<span class="float-right">Samples</span></p>
             <v-sheet color="grey lighten-2"  class="scrollable fill-height">
-              <v-list :disabled="!groupTimes" dense style="background-color: transparent" height="100%">
+              <v-list :disabled="modelTimes" dense style="background-color: transparent" height="100%">
                 <draggable
                   v-model="timeSamples"
                   :group="'grouping'"
@@ -140,7 +140,7 @@ export default {
     },
   },
   data: () => ({
-    groupTimes: false,
+    modelTimes: true,
     originalTimeSamples: [],
     timeSamples: [],
     groupOne: [],
@@ -197,7 +197,19 @@ export default {
       this.corrected = false;
       this.errormsg = "";
     },
-    analyzeEvent() {},
+    analyzeEvent() {
+      const data = {};
+      data.modelTimes = this.modelTimes;
+      if(!this.modelTimes){
+        data.analysisGroups = {
+          group1: this.groupOne.map(s => s.time),
+          group2: this.groupTwo.map(s => s.time)
+        };
+      }
+      data.adjustingVariables = this.selectedConfoundingVariables;
+      data.platformCorrection = this.corrected;
+      this.$emit('optionsSelectedEvent', data);
+    },
     fireBackEvent() {
       this.$emit("backEvent");
     },
