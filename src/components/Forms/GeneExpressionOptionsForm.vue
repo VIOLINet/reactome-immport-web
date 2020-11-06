@@ -28,7 +28,6 @@
                         <p class="text-left">{{ ts.time }}<span class="float-right">{{ ts.sampleCount }}</span></p>
                       </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-divider :key="ts.time"></v-divider> -->
                   </template>
                 </draggable>
               </v-list>
@@ -52,7 +51,6 @@
                         <p class="text-left">{{ ts2.time }}<span class="float-right">{{ ts2.sampleCount }}</span></p>
                       </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-divider :key="ts2.time"></v-divider> -->
                   </template>
                   </draggable>
                 </v-list>
@@ -74,7 +72,6 @@
                         <p class="text-left">{{ ts3.time }}<span class="float-right">{{ ts3.sampleCount }}</span></p>
                       </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-divider :key="ts3.time"></v-divider> -->
                   </template>
                   </draggable>
                 </v-list>
@@ -169,7 +166,7 @@ export default {
   watch: {
     modelTimes() {
       if(this.modelTimes){
-        this.timeSamples = this.originalTimeSamples
+        this.timeSamples = this.originalTimeSamples;
         this.groupOne = [];
         this.groupTwo = [];
       }
