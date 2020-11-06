@@ -14,7 +14,7 @@
       <div>
         <v-row class="pa-0 ma-0" style="height: 26em">
           <v-col cols="12" md="4" style="height: 100%" class="mt-0 mb-0">
-           <p class="text-left mb-0 pb-0">Time(Days)<span class="float-right">Samples</span></p>
+           <p class="text-left mb-0 pb-0">Time (days)<span class="float-right">Samples</span></p>
             <v-sheet color="grey lighten-2"  class="scrollable fill-height">
               <v-list :disabled="modelTimes" dense style="background-color: transparent" height="100%">
                 <draggable
@@ -35,7 +35,7 @@
             </v-sheet>
           </v-col>
           <v-col cols="12" md="4" style="height: 100%;" class="mt-0 mb-0">
-            <p class="text-left mb-0 pb-0">Time(Days)<span class="float-right">Samples</span></p>
+            <p class="text-left mb-0 pb-0">Time (days)<span class="float-right">Samples</span></p>
             <div style="height: 50%" class="pb-1 pl-1 pr-1">
               <v-sheet color="grey lighten-2" height="100%" class="scrollable">
                   Group 1
@@ -167,8 +167,8 @@ export default {
     this.originalTimeSamples = this.timeSamples; //store on originalTimeSamples for form clear
   },
   watch: {
-    groupTimes() {
-      if(!this.groupTimes){
+    modelTimes() {
+      if(this.modelTimes){
         this.timeSamples = this.originalTimeSamples
         this.groupOne = [];
         this.groupTwo = [];

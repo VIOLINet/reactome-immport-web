@@ -7,7 +7,7 @@
             dense
             open-all
             selectable
-            selection-type="all"
+            selection-type="independent"
             v-model="vaccinesSelected"
             :items="vaccines"
             class="smallFont"
@@ -16,7 +16,10 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          >Studies
+          >
+          <p class="header">
+            Studies
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -39,7 +42,9 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          Platform Description
+          <p class="header">
+            Platform Description
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -64,7 +69,9 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          >Day 0 Definition
+          ><p class="header">
+            Day 0 Definition
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -87,7 +94,9 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          Gender
+          <p class="header">
+            Gender
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -112,7 +121,9 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          >Age
+          ><p class="header">
+            Age
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -135,7 +146,9 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          Race
+          <p class="header">
+            Race
+          </p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -352,6 +365,7 @@ export default {
   watch: {
     availableGenders() {
       this.selectedGenders = [];
+      this.selectAllGenders = false;
       if (this.availableGenders.length === 1) {
         this.selectedGenders.push(...this.availableGenders);
       }
@@ -368,6 +382,7 @@ export default {
     },
     availableAgeGroups() {
       this.selectedAges = [];
+      this.selectAllAges = false;
       if (this.availableAgeGroups.length === 1) {
         this.selectedAges.push(...this.availableAgeGroups);
       }
@@ -384,6 +399,7 @@ export default {
     },
     availableRaces() {
       this.selectedRaces = [];
+      this.selectAllRaces = false;
       if (this.availableRaces.length === 1) {
         this.selectedRaces.push(...this.availableRaces);
       }
@@ -400,6 +416,7 @@ export default {
     },
     availableDayDefinitions() {
       this.selectedDayDefinitions = [];
+      this.selectAllDay0Defs = false;
       if (this.availableDayDefinitions.length === 1) {
         this.selectedDayDefinitions.push(...this.availableDayDefinitions);
       }
@@ -419,6 +436,7 @@ export default {
     },
     availablePlatforms() {
       this.selectedPlatforms = [];
+      this.selectAllPlatforms = false;
       if (this.availablePlatforms.length === 1) {
         this.selectedPlatforms.push(...this.availablePlatforms);
       }
@@ -435,6 +453,7 @@ export default {
     },
     availableStudies() {
       this.selectedStudies = [];
+      this.selectAllStudies = false;
       if (this.availableStudies.length === 1) {
         this.selectedStudies.push(...this.availableStudies);
       }
@@ -495,5 +514,9 @@ export default {
 }
 .smallFont >>> label {
   font-size: 14px !important;
+}
+.header {
+  font-size:17px !important;
+  font-weight: bold;
 }
 </style>
