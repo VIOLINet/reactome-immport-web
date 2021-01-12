@@ -51,8 +51,9 @@ export default {
       const data = {};
       data.GSMids = [...new Set(this.filteredBiosampleMetaData.map(sample => sample.gsm))];
       data.studyVariables = this.studyVariables;
-      Object.assign(data, selectedOptions)
+      Object.assign(data, selectedOptions);
 
+      this.$emit('analyzeData', data);
     }
   },
 };

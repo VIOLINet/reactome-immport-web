@@ -12,10 +12,10 @@
         ></v-radio>
       </v-radio-group>
       <div>
-        <v-row class="pa-0 ma-0" style="height: 26em">
-          <v-col cols="12" md="4" style="height: 100%" class="mt-0 mb-0">
+        <v-row class="text-left">
+          <v-col cols="12" md="4">
            <p class="text-left mb-0 pb-0">Time (days)<span class="float-right">Samples</span></p>
-            <v-sheet color="grey lighten-2"  class="scrollable fill-height">
+            <v-sheet color="grey lighten-2"  class="scrollable" style="height: 24.5em">
               <v-list :disabled="modelTimes" dense style="background-color: transparent" height="100%">
                 <draggable
                   v-model="timeSamples"
@@ -33,10 +33,9 @@
               </v-list>
             </v-sheet>
           </v-col>
-          <v-col cols="12" md="4" style="height: 100%;" class="mt-0 mb-0">
+          <v-col cols="12" md="4">
             <p class="text-left mb-0 pb-0">Time (days)<span class="float-right">Samples</span></p>
-            <div style="height: 50%" class="pb-1 pl-1 pr-1">
-              <v-sheet color="grey lighten-2" height="100%" class="scrollable">
+              <v-sheet color="grey lighten-2" class="inputBox pa-2 ma-1">
                   Group 1
                   <v-divider></v-divider>
                 <v-list dense style="background-color: transparent" height="100%">
@@ -55,9 +54,7 @@
                   </draggable>
                 </v-list>
               </v-sheet>
-            </div>
-            <div style="height: 50%" class="pt-1 pr-1 pl-1">
-              <v-sheet color="grey lighten-2" height="100%" class="scrollable">
+              <v-sheet color="grey lighten-2" class="inputBox pa-2 ma-1">
                   Group 2
                   <v-divider></v-divider>
                 <v-list dense style="background-color: transparent" height="100%">
@@ -76,11 +73,10 @@
                   </draggable>
                 </v-list>
               </v-sheet>
-            </div>
           </v-col>
           <v-col cols="12" md="4" style="height:100%;" class="mt-0 mb-0">
             Other Options
-            <v-sheet color="grey lighten-2" height="100%" class="scrollable pa-1">
+            <v-sheet color="grey lighten-2" class="scrollable pa-2" height="24.5em">
               <p class="text-left">
                 Analysis can be adjusted by choosing the following variables:
               </p>
@@ -216,6 +212,10 @@ export default {
 
 <style scoped>
 .scrollable {
+  overflow: scroll;
+}
+.inputBox{
+  height:12em;
   overflow: scroll;
 }
 </style>
