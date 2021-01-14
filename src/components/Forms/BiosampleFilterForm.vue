@@ -9,7 +9,7 @@
             selectable
             selection-type="independent"
             v-model="vaccinesSelected"
-            :items="vaccines"
+            :items="vaccineHierarchy"
             class="smallFont"
           ></v-treeview
         ></v-sheet>
@@ -186,7 +186,7 @@
 export default {
   name: "BiosampleFilterForm",
   data: () => ({
-    vaccines: [
+    vaccineHierarchy: [
       {
         name: "vaccine",
         id: "VO_0000001",
@@ -249,6 +249,16 @@ export default {
           },
         ],
       },
+    ],
+    vaccineMap: [
+      {id:"VO_0000047", name:"Fluzone"},
+      {id:"VO_0000044", name:"FluMist"},
+      {id:"VO_0000045", name:"Fluarix"},
+      {id:"VO_0004809", name:"2008-2009 trivalent influenza vaccine"},
+      {id:"VO_0000642", name:"Influenze Virus Vaccine"},
+      {id:"VO_0000609", name:"viral vaccine"},
+      {id:"VO_0000315", name:"inactivated vaccine"},
+      {id:"VO_0000001", name:"vaccine"}
     ],
     vaccinesSelected: [],
     selectedGenders: [],
@@ -498,6 +508,15 @@ export default {
           ages: this.selectedAges,
           races: this.selectedRaces,
         },
+        formVariables: {
+          selectedVaccines: this.vaccineMap.filter(vaccine => this.vaccinesSelected.includes(vaccine.id)).map(vaccine => vaccine.name),
+          selectedStudies: this.selectedStudies,
+          selectedPlatforms: this.selectedPlatforms,
+          selectedDayDefinitions: this.selectedDayDefinitions,
+          selectedGenders: this.selectedGenders,
+          selectedAges: this.selectedAges,
+          selectedRaces: this.selectedRaces
+        }
       });
     },
   },

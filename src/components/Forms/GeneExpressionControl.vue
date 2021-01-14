@@ -28,6 +28,7 @@ export default {
     biosampleMetaData: [],
     filteredBiosampleMetaData: [],
     studyVariables: {},
+    formVariables: {},
     selectedOptions: {}
   }),
   async created() {
@@ -41,6 +42,7 @@ export default {
     biosamplesFilteredEvent(biosampleFilterRtn) {
       this.filteredBiosampleMetaData = biosampleFilterRtn.filteredBiosamples;
       this.studyVariables = biosampleFilterRtn.studyVariables
+      this.formVariables = biosampleFilterRtn.formVariables
     },
     backEvent(){
       this.filteredBiosampleMetaData = [];
@@ -53,7 +55,15 @@ export default {
       data.studyVariables = this.studyVariables;
       Object.assign(data, selectedOptions);
 
-      this.$emit('analyzeData', data);
+      const rtn = {}
+      rtn.analysisData = data;
+      rtn.formData = {}
+      Object.assign(rtn.formData, this.formVariables)
+      Object.assign(rtn.formData, selectedOptions);
+
+      this.$emit('analyzeData', rtn);
+
+      this.backEvent();
     }
   },
 };
