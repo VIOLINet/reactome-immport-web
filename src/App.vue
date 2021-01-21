@@ -6,10 +6,10 @@
         @analyzeData="analyzeData"
         class="mb-5"
       />
-      
       <GeneExpResults 
-        v-if="reactomeAnalyses"
-        :reactomeAnalyses="reactomeAnalyses"
+        v-for="(item, index) in formSubmissions"
+        :key="index"
+        :formSubmission="item"
       />
     </v-container>
   </v-app>
@@ -19,8 +19,7 @@
 import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
 import GeneExpResults from "./components/ImmportResults/GeneExpResults";
 import Docs from "./components/Docs";
-import ImmportService from './service/ImmportService'
-
+import _isEqual from "lodash/isEqual"
 export default {
   name: "App",
   components: {
@@ -30,20 +29,13 @@ export default {
   },
   data: () => ({
     geneExpAnalysis: [],
-    reactomeAnalyses: null
+    reactomeAnalyses: null,
+    formSubmissions: []
   }),
   methods: {
-    async analyzeData(data) {
-      try{
-       const analysis = await ImmportService.fetchReactomeAnalyses(data.analysisData);
-        analysis.formData = {};
-        Object.assign(analysis.formData, data.formData)
-
-        this.reactomeAnalyses = analysis
-
-      } catch(err) {
-        console.log(err);
-      }
+    analyzeData(data) {
+      if(this.formSubmissions.some(sub => _isEqual(sub.formData, data.formData))) return;
+        this.formSubmissions.unshift(data)
     },
   }
 };
