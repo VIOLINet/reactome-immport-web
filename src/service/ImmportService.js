@@ -14,12 +14,12 @@ class ImmportService {
     });
   }
 
-  static fetchReactomeAnalyses(data) {
+  static fetchGeneExpressionAnalysis(data) {
     console.log(data);
-    let geneExressionResults;
     return new Promise((resolve, reject) => {
       axios
-        .post("http://localhost:8076/immportws/analysis/geneExpression", {
+        .post("http://localhost:8076/immportws/analysis/geneExpression", 
+        {
           GSMids: [
             "GSM2712782",
             "GSM2712783",
@@ -994,40 +994,17 @@ class ImmportService {
             study: ["SDY400", "SDY404", "SDY520"],
             age_group: ["old", "young"],
           },
-          modelTime: true,
+          modelTime: false,
           analysisGroups: {
             group1: [0],
             group2: [2, 3, 4, 5, 7, 8, 9, 24, 28, 32, 35, 36, 43],
           },
           platformCorrection: true,
-          variableGenes: true,
+          variableGenes: false,
         })
-        .then((res1) => {
-          geneExressionResults = res1.data;
-          const genes = res1.data.map((gene) => gene.gene_name);
-          return (
-            res1,
-            axios.all([
-              axios.post(
-                "http://localhost:8076/immportws/analysis/pathways",
-                genes
-              ),
-              axios.post(
-                "http://localhost:8076/immportws/analysis/fi_network",
-                genes
-              ),
-            ])
-          );
+        .then((res) => {
+          resolve(res.data)
         })
-        .then(
-          axios.spread((res2, res3) => {
-            resolve({
-              geneExpressionResults: geneExressionResults,
-              pathwayEnrichmentResults: res2.data,
-              fiNetwork: res3.data,
-            });
-          })
-        )
         .catch((err) => {
           reject(err);
         });
