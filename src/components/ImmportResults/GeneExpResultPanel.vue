@@ -1,6 +1,10 @@
 <template>
   <v-card outlined>
-    <v-card-title>Gene Expression Results</v-card-title>
+    <v-card-title>Gene Expression Results
+      <v-spacer></v-spacer>
+      <v-btn color="primary" class="ma-1">Compare Results</v-btn>
+      <v-btn icon @click="closeResults"><v-icon>{{"mdi-close"}}</v-icon></v-btn>
+    </v-card-title>
     <v-card-text>
       <ResultsDescriptionPanel
         class="mb-5"
@@ -107,6 +111,9 @@ export default {
       }
       this.loadingReactomeAnalyses = false;
     },
+    closeResults(){
+      this.$emit("closeResults", this.formSubmission.id)
+    }
   },
 };
 </script>
