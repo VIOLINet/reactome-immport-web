@@ -7,9 +7,10 @@
         class="mb-5"
       />
       <GeneExpResultPanel 
-        v-for="(item, index) in formSubmissions"
-        :key="index"
+        v-for="item in formSubmissions"
+        :key="item.id"
         :formSubmission="item"
+        @closeResults="closeResults"
         class="mb-5"
       />
     </v-container>
@@ -36,10 +37,14 @@ export default {
   }),
   methods: {
     analyzeData(data) {
+      //only add if no form submission with same formData entries
       if(this.formSubmissions.some(sub => _isEqual(sub.formData, data.formData))) return;
         data.id = uuidv4();
         this.formSubmissions.unshift(data)
     },
+    closeResults(id) {
+      this.formSubmissions = this.formSubmissions.filter(sub => sub.id !== id)
+    }
   }
 };
 </script>
