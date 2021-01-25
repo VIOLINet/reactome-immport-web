@@ -6,7 +6,7 @@
         @analyzeData="analyzeData"
         class="mb-5"
       />
-      <GeneExpResults 
+      <GeneExpResultPanel 
         v-for="(item, index) in formSubmissions"
         :key="index"
         :formSubmission="item"
@@ -17,14 +17,14 @@
 
 <script>
 import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
-import GeneExpResults from "./components/ImmportResults/GeneExpResults";
+import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 import Docs from "./components/Docs";
 import _isEqual from "lodash/isEqual"
 export default {
   name: "App",
   components: {
     GeneExpressionControl,
-    GeneExpResults,
+    GeneExpResultPanel,
     Docs
   },
   data: () => ({
@@ -81,7 +81,6 @@ table {
 }
 #app canvas {
   /* Fix for cytoscape issue where canvas is placed incorrectly */
-  top: 0;
-  left: 0;
+  left: 0; 
 }
 </style>

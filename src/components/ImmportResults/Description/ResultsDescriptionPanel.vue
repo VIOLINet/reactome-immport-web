@@ -1,7 +1,7 @@
 <template>
   <v-card outlined>
       <v-card-title>
-          Description
+          <h4>Description</h4>
           <v-spacer></v-spacer>
           <v-btn icon @click="show = !show">
             <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
