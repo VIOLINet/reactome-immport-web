@@ -37,17 +37,17 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title><b>Adjusting Variables:</b> {{formData.adjustingVariables.length > 0 ?formData.adjustingVariables.join(", ") : "None"}}</v-list-item-title>
+        <v-list-item-title><b>Study Cohort:</b> {{formData.studyCohort.length > 0 ?formData.studyCohort.join(", ") : "None"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title><b>Platform Correction:</b> {{formData.platformCorrection == true ? "Yes" : "No"}}</v-list-item-title>
+        <v-list-item-title><b>Platform Correction:</b> {{formData.platformCorrection === true ? "Yes" : "No"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title><b>Use time directly in the model?</b> {{formData.modelTimes == true ? "Yes" : "No"}}</v-list-item-title>
+        <v-list-item-title><b>Use time directly in the model?</b> {{formData.modelTime === true ? "Yes" : "No"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </v-sheet>

@@ -10,6 +10,7 @@
         v-for="(item, index) in formSubmissions"
         :key="index"
         :formSubmission="item"
+        class="mb-5"
       />
     </v-container>
   </v-app>
@@ -19,7 +20,8 @@
 import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 import Docs from "./components/Docs";
-import _isEqual from "lodash/isEqual"
+import _isEqual from "lodash/isEqual";
+import { v4 as uuidv4 } from "uuid";
 export default {
   name: "App",
   components: {
@@ -35,6 +37,7 @@ export default {
   methods: {
     analyzeData(data) {
       if(this.formSubmissions.some(sub => _isEqual(sub.formData, data.formData))) return;
+        data.id = uuidv4();
         this.formSubmissions.unshift(data)
     },
   }
