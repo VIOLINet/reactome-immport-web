@@ -26,11 +26,12 @@
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
         >
           <template v-slot:body.append>
-            <tr>
+            <tr >
               <td colspan="1">
                 <v-text-field
                   label="Search"
                   v-model="geneExpressionSearch"
+                  hide-details
                 ></v-text-field>
               </td>
               <td>
@@ -40,6 +41,7 @@
                   type="number"
                   min="0"
                   step="1"
+                  hide-details
                 ></v-text-field>
               </td>
               <td colspan="1"></td>
@@ -53,6 +55,9 @@
                   step="0.01"
                   hide-details
                 ></v-text-field>
+              </td>
+              <td colspan="1">
+                <v-text-field prefix="Absolute logFC ≥" v-model="absLogFCInput"  type="number" min="0" step="0.01" hide-details></v-text-field>
               </td>
             </tr>
           </template>
@@ -76,6 +81,7 @@ export default {
     averageGeneExpressionInput: 0,
     adjustedPValInput: 1,
     geneExpressionSearch: "",
+    absLogFCInput:0
   }),
   computed: {
     geneAnalysisHeaders() {
@@ -98,7 +104,10 @@ export default {
             return value <= this.adjustedPValInput;
           },
         },
-        { text: "logFC", value: "logFC" },
+        { text: "logFC", value: "logFC", filter: (value) => {
+          if(!this.absLogFCInput) return true;
+          return Math.abs(value) >= this.absLogFCInput;
+        } },
         { text: "t", value: "t" },
         { text: "B", value: "B" },
       ];
