@@ -2,24 +2,54 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <GeneExpressionControl 
-        @analyzeData="analyzeData"
-        class="mb-5"
+      <GeneExpressionControl @analyzeData="analyzeData" class="mb-5" />
+      <section>
+      <ComparisonForm
+        v-if="compareFromId"
+        :compareFromId="compareFromId"
+        :resultSets="resultSets"
+        @cancelComparison="compareFromId = undefined"
+        @addComparison="addComparison"
       />
-      <GeneExpResultPanel 
-        v-for="item in formSubmissions"
-        :key="item.id"
-        :formSubmission="item"
-        @closeResults="closeResults"
-        class="mb-5"
+      <CompareResultsPanel 
+        v-for="comparison in comparisonSets"
+        :key="comparison[0]+comparison[1]"
+        :compareFrom="resultSets.find(rs => rs.id ===comparison[0])"
+        :compareTo="resultSets.find(rs => rs.id ===comparison[1])"
+        @closeComparison="closeComparison"
       />
+      </section>
+      <hr v-if="comparisonSets.length > 0" class="my-5">
+      <section>
+        <v-card outlined v-if="loadingReactomeAnalyses">
+          <v-card-text>
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+          </v-card-text>
+        </v-card>
+        <GeneExpResultPanel
+          v-for="item in resultSets"
+          :key="item.id"
+          :resultSet="item"
+          @closeResults="closeResults"
+          @fetchPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
+          @fetchNetworkAnalysis="fetchNetworkAnalysis"
+          @compareResults="compareResults"
+          class="mt-5"
+        />
+      </section>
     </v-container>
   </v-app>
 </template>
 
 <script>
+import ImmportService from "./service/ImmportService";
 import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
+import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
+import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
 import Docs from "./components/Docs";
 import _isEqual from "lodash/isEqual";
 import { v4 as uuidv4 } from "uuid";
@@ -28,24 +58,86 @@ export default {
   components: {
     GeneExpressionControl,
     GeneExpResultPanel,
-    Docs
+    Docs,
+    ComparisonForm,
+    CompareResultsPanel,
   },
   data: () => ({
     geneExpAnalysis: [],
     reactomeAnalyses: null,
-    formSubmissions: []
+    resultSets: [],
+    comparisonSets: [],
+    loadingReactomeAnalyses: false,
+    searchNumber: 1,
+    compareFromId: undefined,
   }),
   methods: {
-    analyzeData(data) {
-      //only add if no form submission with same formData entries
-      if(this.formSubmissions.some(sub => _isEqual(sub.formData, data.formData))) return;
-        data.id = uuidv4();
-        this.formSubmissions.unshift(data)
+    async analyzeData(data) {
+      //return if form submission with same data already exists
+      if (this.resultSets.some((sub) => _isEqual(sub.formData, data.formData)))
+        return;
+
+      //load gene expression analysis before unshifting
+      await this.loadGeneExpressionAnalysis(data);
+      data.id = uuidv4();
+      data.displayId = this.searchNumber++;
+      data.enrichmentResults = {};
+      data.fiNetwork = {};
+      this.resultSets.unshift(data);
+    },
+    async loadGeneExpressionAnalysis(data) {
+      this.loadingReactomeAnalyses = true;
+      try {
+        data.geneExpressionResults = await ImmportService.fetchGeneExpressionAnalysis(
+          data.analysisData
+        );
+      } catch (err) {
+        console.log(err);
+        this.loadingReactomeAnalyses = false;
+      }
+      this.loadingReactomeAnalyses = false;
+    },
+    async fetchPathwayEnrichmentAnalysis(id, genes) {
+      try {
+        this.resultSets.find(
+          (rs) => rs.id === id
+        ).enrichmentResults = await ImmportService.fetchPathwayEnrichmentAnalysis(
+          genes.map((gene) => gene.gene_name)
+        );
+        this.$forceUpdate();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async fetchNetworkAnalysis(id, genes) {
+      try {
+        this.resultSets.find(
+          (rs) => rs.id === id
+        ).fiNetwork = await ImmportService.fetchFINetwork(
+          genes.map((gene) => gene.gene_name)
+        );
+        this.$forceUpdate();
+      } catch (err) {
+        console.log(err);
+      }
     },
     closeResults(id) {
-      this.formSubmissions = this.formSubmissions.filter(sub => sub.id !== id)
+      this.resultSets = this.resultSets.filter((sub) => sub.id !== id);
+    },
+    compareResults(id) {
+      this.compareFromId = id;
+    },
+    addComparison({compareFrom, compareTo}) {
+      const toAdd = [compareFrom, compareTo]
+      if(this.comparisonSets.some(set => _isEqual(set, toAdd))) return;
+
+      this.comparisonSets.push(toAdd);
+      this.compareFromId = undefined;
+    },
+    closeComparison(ids){
+      this.comparisonSets = this.comparisonSets.filter(set => !(set.includes(ids[0]) && set.includes(ids[1])));
     }
-  }
+  },
 };
 </script>
 
@@ -89,6 +181,11 @@ table {
 }
 #app canvas {
   /* Fix for cytoscape issue where canvas is placed incorrectly */
-  left: 0; 
+  left: 0;
+}
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
