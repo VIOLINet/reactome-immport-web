@@ -1,15 +1,15 @@
 <template>
   <v-card outlined>
-      <v-card-title>
+    <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
-      </v-card-title>
-      <v-expand-transition>
-          <v-card-text v-show="show">
-              <v-data-table
+    </v-card-title>
+    <v-expand-transition>
+      <v-card-text v-show="show">
+        <v-data-table
           dense
           :headers="pathwayEnrichmentHeaders"
           :items="pathwayEnrichmentResults.pathways"
@@ -48,27 +48,26 @@
             </tr>
           </template>
         </v-data-table>
-          </v-card-text>
-      </v-expand-transition>
+      </v-card-text>
+    </v-expand-transition>
   </v-card>
 </template>
 
 <script>
 export default {
-    name: "PathwayEnrichmentResults",
-    props: {
-        pathwayEnrichmentResults: {
-            type: Object,
-            default: () => {}
-        }
+  name: "PathwayEnrichmentResults",
+  props: {
+    pathwayEnrichmentResults: {
+      type: Object,
+      default: () => {},
     },
-    data: () => ({
-        show: true,
-        pathwayEnrichmentFDR:1,
-
-    }),
-    computed: {
-        pathwayEnrichmentHeaders() {
+  },
+  data: () => ({
+    show: true,
+    pathwayEnrichmentFDR: 1,
+  }),
+  computed: {
+    pathwayEnrichmentHeaders() {
       return [
         { text: "Stable Identifier", value: "stId" },
         { text: "Pathway Name", value: "name" },
@@ -86,10 +85,9 @@ export default {
         },
       ];
     },
-    }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

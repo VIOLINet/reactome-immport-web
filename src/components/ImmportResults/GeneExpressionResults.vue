@@ -26,7 +26,7 @@
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
         >
           <template v-slot:body.append>
-            <tr >
+            <tr>
               <td colspan="1">
                 <v-text-field
                   label="Search"
@@ -47,7 +47,7 @@
               <td colspan="1"></td>
               <td colspan="1">
                 <v-text-field
-                  prefix="pVal ≤"
+                  prefix="Adjusted pVal ≤"
                   v-model="adjustedPValInput"
                   type="number"
                   min="0"
@@ -57,7 +57,14 @@
                 ></v-text-field>
               </td>
               <td colspan="1">
-                <v-text-field prefix="Absolute logFC ≥" v-model="absLogFCInput"  type="number" min="0" step="0.01" hide-details></v-text-field>
+                <v-text-field
+                  prefix="Absolute logFC ≥"
+                  v-model="absLogFCInput"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  hide-details
+                ></v-text-field>
               </td>
             </tr>
           </template>
@@ -68,6 +75,7 @@
 </template>
 
 <script>
+import _isEqual from "lodash/isEqual";
 export default {
   name: "GeneExpressionResults",
   props: {
@@ -81,7 +89,9 @@ export default {
     averageGeneExpressionInput: 0,
     adjustedPValInput: 1,
     geneExpressionSearch: "",
-    absLogFCInput:0
+    absLogFCInput: 0,
+    filteredPathwayGenes: [],
+    filteredFINetworkGenes: []
   }),
   computed: {
     geneAnalysisHeaders() {
@@ -104,10 +114,14 @@ export default {
             return value <= this.adjustedPValInput;
           },
         },
-        { text: "logFC", value: "logFC", filter: (value) => {
-          if(!this.absLogFCInput) return true;
-          return Math.abs(value) >= this.absLogFCInput;
-        } },
+        {
+          text: "logFC",
+          value: "logFC",
+          filter: (value) => {
+            if (!this.absLogFCInput) return true;
+            return Math.abs(value) >= this.absLogFCInput;
+          },
+        },
         { text: "t", value: "t" },
         { text: "B", value: "B" },
       ];
@@ -116,17 +130,22 @@ export default {
       return this.geneExpressionResults.filter(
         (result) =>
           result.adjPValue <= this.adjustedPValInput &&
-          result.AveExpr >= this.averageGeneExpressionInput
+          result.AveExpr >= this.averageGeneExpressionInput &&
+          Math.abs(result.logFC) >= this.absLogFCInput
       );
     },
   },
   methods: {
     pathwayEnrichmentButtonClicked() {
-      this.$emit("doPathwayEnrichmentAnalysis", this.filteredGenes);
+      if(_isEqual(this.filteredPathwayGenes, this.filteredGenes)) return;
+      this.filteredPathwayGenes = this.filteredGenes;
+      this.$emit("doPathwayEnrichmentAnalysis", this.filteredPathwayGenes);
       this.show = false;
     },
     fiNetowrkButtonClicked() {
-      this.$emit("doFINetworkAnalysis", this.filteredGenes);
+      if(_isEqual(this.filteredFINetworkGenes, this.filteredGenes))return;
+      this.filteredFINetworkGenes = this.filteredGenes;
+      this.$emit("doFINetworkAnalysis", this.filteredFINetworkGenes);
       this.show = false;
     },
   },
