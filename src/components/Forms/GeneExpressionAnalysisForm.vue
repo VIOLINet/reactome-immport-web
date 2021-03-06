@@ -66,11 +66,16 @@ export default {
     },
     optionsSelectedEvent(selectedOptions) {
       this.selectedOptions = selectedOptions;
-
+      var samples = selectedOptions.modelTimes
+        ? this.filteredBiosampleMetaData
+        : this.filteredBiosampleMetaData.filter((sample) =>
+            [
+              ...selectedOptions.analysisGroups.group1,
+              ...selectedOptions.analysisGroups.group2,
+            ].includes(parseInt(sample.immport_vaccination_time))
+          );
       const data = {};
-      data.GSMids = [
-        ...new Set(this.filteredBiosampleMetaData.map((sample) => sample.gsm)),
-      ];
+      data.GSMids = [...new Set(samples.map((sample) => sample.gsm))];
       data.studyVariables = this.studyVariables;
       Object.assign(data, selectedOptions);
 
@@ -81,7 +86,6 @@ export default {
       Object.assign(rtn.formData, selectedOptions);
 
       this.$emit("analyzeData", rtn);
-
     },
   },
 };
