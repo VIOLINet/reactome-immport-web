@@ -323,7 +323,7 @@ export default {
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc)
             )
-            .map((s) => s.day_0_def)
+            .map((s) => s.day_0_def_foreach)
         ),
       ];
     },
@@ -335,7 +335,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def)
+          this.selectedDayDefinitions.includes(sample.day_0_def_foreach)
       );
       return [...new Set(samples.map((s) => s.gender))];
     },
@@ -347,7 +347,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def) &&
+          this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
           this.selectedGenders.includes(sample.gender)
       );
       return [...new Set(samples.map((s) => s.age_group))];
@@ -363,7 +363,7 @@ export default {
                 ) &&
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc) &&
-                this.selectedDayDefinitions.includes(sample.day_0_def) &&
+                this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
                 this.selectedGenders.includes(sample.gender) &&
                 this.selectedAges.includes(sample.age_group)
             )
@@ -492,7 +492,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def) &&
+          this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
           this.selectedGenders.includes(sample.gender) &&
           this.selectedAges.includes(sample.age_group)
       );

@@ -2,7 +2,7 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <GeneExpressionControl @analyzeData="analyzeData" class="mb-5" />
+      <GeneExpressionAnalysisForm @analyzeData="analyzeData" class="mb-5"/>
       <section>
       <ComparisonForm
         v-if="compareFromId"
@@ -46,7 +46,7 @@
 
 <script>
 import ImmportService from "./service/ImmportService";
-import GeneExpressionControl from "./components/Forms/GeneExpressionControl";
+import GeneExpressionAnalysisForm from './components/Forms/GeneExpressionAnalysisForm'
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
 import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
@@ -56,7 +56,7 @@ import { v4 as uuidv4 } from "uuid";
 export default {
   name: "App",
   components: {
-    GeneExpressionControl,
+    GeneExpressionAnalysisForm,
     GeneExpResultPanel,
     Docs,
     ComparisonForm,

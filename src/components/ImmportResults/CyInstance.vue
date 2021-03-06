@@ -50,10 +50,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    showShared: {
-      type: Boolean,
-      default: () => false,
-    },
   },
   data: () => ({
     show: true,
@@ -91,17 +87,15 @@ export default {
           selector: "edge",
           style: {
             "curve-style": "bezier",
-            "line-color": "#bbb",
             width: "1",
             "overlay-padding": "20px",
           },
         },
         {
-          selector: "edge.shared",
+          selector: "edge[lineColor]",
           style: {
-            "line-color": "#00F",
-            width: "1.5",
-          },
+            "line-color":"data(lineColor)"
+          }
         },
         {
           selector: "edge:selected",
@@ -128,13 +122,6 @@ export default {
     showClusters(newVal) {
       if (!this.clustersLoaded) this.loadClustering();
       else this.doClusterToggle(newVal);
-    },
-    showShared(show) {
-      if (show) {
-        this.cy.elements("[?shared]").addClass("shared");
-      } else {
-        this.cy.elements("[?shared]").removeClass("shared");
-      }
     },
   },
   methods: {

@@ -208,6 +208,22 @@ export default {
     this.originalTimeSamples = this.timeSamples; //store on originalTimeSamples for form clear
   },
   watch: {
+    biosampleMetaData() {
+      this.biosampleMetaData.forEach((sample) => {
+      if (sample.immport_vaccination_time === undefined) return;
+      const time = parseInt(sample.immport_vaccination_time);
+      if (!this.timeSamples.some((ts) => ts.time === time)) {
+        this.timeSamples.push({
+          time: time,
+          sampleCount: 0,
+        });
+      }
+      const ts = this.timeSamples.find((ts) => ts.time === time);
+      ts.sampleCount += 1;
+    });
+    this.timeSamples.sort((a, b) => a.time - b.time);
+    this.originalTimeSamples = this.timeSamples; 
+    },
     modelTime() {
       if (this.modelTime) {
         this.timeSamples = this.originalTimeSamples;
