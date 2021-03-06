@@ -82,7 +82,7 @@ export default {
       data.id = uuidv4();
       data.displayId = this.searchNumber++;
       data.enrichmentResults = {};
-      data.fiNetwork = {};
+      data.fiNetwork = [];
       this.resultSets.unshift(data);
     },
     async loadGeneExpressionAnalysis(data) {
