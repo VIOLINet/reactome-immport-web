@@ -121,17 +121,20 @@
                 Analysis can be adjusted by choosing the following variables:
               </p>
               <v-row>
-                <v-col cols="6" v-for="variable in confoundingVariables"
-                :key="variable.value">
-              <v-checkbox
-                dense
-                class="shrink ma-0 pa-0"
-                v-model="selectedConfoundingVariables"
-                :value="variable.value"
-                :label="variable.displayName"
-              >
-              </v-checkbox>
-              </v-col>
+                <v-col
+                  cols="6"
+                  v-for="variable in confoundingVariables"
+                  :key="variable.value"
+                >
+                  <v-checkbox
+                    dense
+                    class="shrink ma-0 pa-0"
+                    v-model="selectedConfoundingVariables"
+                    :value="variable.value"
+                    :label="variable.displayName"
+                  >
+                  </v-checkbox>
+                </v-col>
               </v-row>
               <p class="text-left">
                 The expression data can be corrected for the platform
@@ -177,7 +180,6 @@ export default {
   },
   data: () => ({
     modelTime: true,
-    originalTimeSamples: [],
     timeSamples: [],
     groupOne: [],
     groupTwo: [],
@@ -191,48 +193,37 @@ export default {
     corrected: true,
     errormsg: "",
   }),
-  created() {
-    this.biosampleMetaData.forEach((sample) => {
-      if (sample.immport_vaccination_time === undefined) return;
-      const time = parseInt(sample.immport_vaccination_time);
-      if (!this.timeSamples.some((ts) => ts.time === time)) {
-        this.timeSamples.push({
-          time: time,
-          sampleCount: 0,
-        });
-      }
-      const ts = this.timeSamples.find((ts) => ts.time === time);
-      ts.sampleCount += 1;
-    });
-    this.timeSamples.sort((a, b) => a.time - b.time);
-    this.originalTimeSamples = this.timeSamples; //store on originalTimeSamples for form clear
-  },
   watch: {
     biosampleMetaData() {
-      this.biosampleMetaData.forEach((sample) => {
-      if (sample.immport_vaccination_time === undefined) return;
-      const time = parseInt(sample.immport_vaccination_time);
-      if (!this.timeSamples.some((ts) => ts.time === time)) {
-        this.timeSamples.push({
-          time: time,
-          sampleCount: 0,
-        });
-      }
-      const ts = this.timeSamples.find((ts) => ts.time === time);
-      ts.sampleCount += 1;
-    });
-    this.timeSamples.sort((a, b) => a.time - b.time);
-    this.originalTimeSamples = this.timeSamples; 
+       this.updatedAvailableTimes();
     },
     modelTime() {
       if (this.modelTime) {
-        this.timeSamples = this.originalTimeSamples;
-        this.groupOne = [];
-        this.groupTwo = [];
+        this.resetTimes();
       }
     },
   },
   methods: {
+    updatedAvailableTimes() {
+      //called every time next is hit from filtering biosamples so want to ensure this is cleared to reset additions
+      this.timeSamples = [];
+      this.groupOne = [];
+      this.groupTwo = [];
+
+      this.biosampleMetaData.forEach((sample) => {
+        if (sample.immport_vaccination_time === undefined) return;
+        const time = parseInt(sample.immport_vaccination_time);
+        if (!this.timeSamples.some((ts) => ts.time === time)) {
+          this.timeSamples.push({
+            time: time,
+            sampleCount: 0,
+          });
+        }
+        const ts = this.timeSamples.find((ts) => ts.time === time);
+        ts.sampleCount += 1;
+      });
+      this.timeSamples.sort((a, b) => a.time - b.time);
+    },
     moveTime(startingCol, ts) {
       if (startingCol === 0) {
         this.timeSamples2.push(ts);
@@ -247,12 +238,20 @@ export default {
       }
     },
     clearForm() {
-      this.timeSamples = this.originalTimeSamples;
-      this.timeSamples2 = [];
-      this.timeSamples3 = [];
+      this.resetTimes();
       this.selectedConfoundingVariables = [];
       this.corrected = false;
       this.errormsg = "";
+    },
+    resetTimes() {
+      this.timeSamples = [
+        ...this.timeSamples,
+        ...this.groupOne,
+        ...this.groupTwo,
+      ];
+      this.timeSamples.sort((a, b) => a.time - b.time);
+      this.groupOne = [];
+      this.groupTwo = [];
     },
     analyzeEvent() {
       const data = {};
@@ -265,7 +264,7 @@ export default {
       }
       data.studyCohort = this.selectedConfoundingVariables;
       data.platformCorrection = this.corrected;
-      data.variableGenes = false //set as default. Could be added to form later
+      data.variableGenes = false; //set as default. Could be added to form later
       this.$emit("optionsSelectedEvent", data);
     },
     fireBackEvent() {
