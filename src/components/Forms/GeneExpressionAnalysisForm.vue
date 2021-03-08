@@ -66,7 +66,7 @@ export default {
     },
     optionsSelectedEvent(selectedOptions) {
       this.selectedOptions = selectedOptions;
-      var samples = selectedOptions.modelTimes
+      var samples = selectedOptions.modelTime
         ? this.filteredBiosampleMetaData
         : this.filteredBiosampleMetaData.filter((sample) =>
             [
