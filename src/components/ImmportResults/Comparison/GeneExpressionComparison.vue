@@ -90,11 +90,14 @@ export default {
     },
     items() {
       const items = [];
+      const secondaryGenes = this.geneExpressionTwo
       //loop over initial set and add each
       this.geneExpressionOne.forEach((row) => {
-        const compItem = this.geneExpressionTwo.find(
+        const compItem = secondaryGenes.find(
           (item) => row.gene_name === item.gene_name
         );
+        if(compItem) secondaryGenes.filter(gene => gene.gene_name !== row.gene_name)
+
         items.push({
           gene_name: row.gene_name,
           AveExpr1: row.AveExpr,
@@ -105,16 +108,7 @@ export default {
           logFC2: compItem ? compItem.logFC : undefined,
         });
       });
-
-      //loop over second set after filtering out everything from first set
-      const secondGenes = this.geneExpressionTwo
-        .filter(
-          ({ gene_name }) =>
-            !this.geneExpressionOne
-              .map((row) => row.gene_name)
-              .includes(gene_name)
-        )
-        secondGenes.forEach((row) => {
+        secondaryGenes.forEach((row) => {
           items.push({
             gene_name: row.gene_name,
             AveExpr1: undefined,

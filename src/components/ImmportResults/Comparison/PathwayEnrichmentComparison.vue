@@ -91,6 +91,7 @@ export default {
       //add all primary pathways
       pathwaysOne.forEach((pathway) => {
         const secondaryPW = pathwaysTwo.find((pw) => pw.stId === pathway.stId);
+        if(secondaryPW) pathwaysTwo.filter(pw => pw.stId !== pathway.stId)
         items.push({
           stId: pathway.stId,
           name: pathway.name,
@@ -101,7 +102,6 @@ export default {
 
       //add secondary pathways not part of primary pathways
       pathwaysTwo
-        .filter((pw) => !pathwaysOne.map((pw1) => pw1.stId).includes(pw.stId))
         .forEach((pathway) => {
           items.push({
             stId: pathway.stId,

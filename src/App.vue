@@ -131,8 +131,8 @@ export default {
       const toAdd = [compareFrom, compareTo]
       if(this.comparisonSets.some(set => _isEqual(set, toAdd))) return;
 
-      this.comparisonSets.push(toAdd);
       this.compareFromId = undefined;
+      this.comparisonSets.push(toAdd);
     },
     closeComparison(ids){
       this.comparisonSets = this.comparisonSets.filter(set => !(set.includes(ids[0]) && set.includes(ids[1])));
