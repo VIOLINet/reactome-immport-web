@@ -40,7 +40,7 @@ export default {
         { text: "Gene Name", value: "gene_name" },
         {
           text: "Ave Expr" + "1".sup(),
-          value: "AveExpr1",
+          value: "AveExpr",
           filter: (value) => {
             if (!this.aveExpr1Input || value === undefined) return true;
             return value >= this.aveExpr1Input;
@@ -56,7 +56,7 @@ export default {
         },
         {
           text: "Adj Pval" + "1".sup(),
-          value: "adjPValue1",
+          value: "adjPValue",
           filter: (value) => {
             if (!this.adjPVal1Input || value === undefined) return true;
             return value <= this.adjPVal1Input;
@@ -72,7 +72,7 @@ export default {
         },
         {
           text: "LogFC" + "1".sup(),
-          value: "logFC1",
+          value: "logFC",
           filter: (value) => {
             if (!this.logFC1Input || value === undefined) return true;
             return Math.abs(value) >= this.absLogFC1Input;
@@ -89,37 +89,31 @@ export default {
       ];
     },
     items() {
-      const items = [];
-      const secondaryGenes = this.geneExpressionTwo
-      //loop over initial set and add each
-      this.geneExpressionOne.forEach((row) => {
-        const compItem = secondaryGenes.find(
-          (item) => row.gene_name === item.gene_name
-        );
-        if(compItem) secondaryGenes.filter(gene => gene.gene_name !== row.gene_name)
+      console.time("Gene Expression")
+      const items = [...this.geneExpressionOne]
+      const secondaryGenes = [...this.geneExpressionTwo]
 
-        items.push({
-          gene_name: row.gene_name,
-          AveExpr1: row.AveExpr,
-          AveExpr2: compItem ? compItem.AveExpr : undefined,
-          adjPValue1: row.adjPValue,
-          adjPValue2: compItem ? compItem.adjPValue : undefined,
-          logFC1: row.logFC,
-          logFC2: compItem ? compItem.logFC : undefined,
-        });
-      });
-        secondaryGenes.forEach((row) => {
-          items.push({
-            gene_name: row.gene_name,
-            AveExpr1: undefined,
-            AveExpr2: row.AveExpr,
-            adjPValue1: undefined,
-            adjPValue2: row.adjPValue,
-            logFC1: undefined,
-            logFC2: row.logFC,
-          });
-        });
-      return items;
+      items.forEach(row => {
+        const compareItem = secondaryGenes.find(sg => sg.gene_name === row.gene_name)
+        if(!compareItem) return;
+        secondaryGenes.filter(sg => sg.gene_name !== row.gene_name); //filter row from second gene set
+        row.AveExpr2 = compareItem.AveExpr;
+        row.adjPValue2 = compareItem.adjPValue;
+        row.logFC2 = compareItem.logFC
+      })
+
+      secondaryGenes.forEach(row => {
+        row.AveExpr2 = row.AveExpr
+        delete row.AveExpr
+        row.adjPValue2 = row.adjPValue
+        delete row.adjPValue
+        row.logFC2 = row.logFC
+        delete row.logFC
+      })
+      items.push(...secondaryGenes)
+      console.timeEnd("Gene Expression")
+
+      return items
     },
   },
   data: () => ({

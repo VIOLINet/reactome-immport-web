@@ -62,6 +62,7 @@ export default {
   },
   computed: {
     fiNetwork() {
+      console.time("FI Combine")
       const rtn = [];
         const network1 = [...this.compareFrom.fiNetwork]; //network1 won't be mutated
         var network2 = [...this.compareTo.fiNetwork]; //network2 will be mutated by network1's loop
@@ -101,6 +102,7 @@ export default {
           }
           rtn.push(obj);
         })
+      console.timeEnd("FI Combine")
 
       return rtn;
     }

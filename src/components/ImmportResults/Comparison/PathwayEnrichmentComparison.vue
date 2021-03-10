@@ -83,6 +83,7 @@ export default {
       ];
     },
     items() {
+      console.time("Pathway Enrichment")
       const pathwaysOne = this.pathwayEnrichmentOne.pathways;
       const pathwaysTwo = this.pathwayEnrichmentTwo.pathways;
 
@@ -110,6 +111,8 @@ export default {
             entities2: pathway.entities,
           });
         });
+
+      console.timeEnd("Pathway Enrichment")
 
       return items;
     },

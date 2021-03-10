@@ -5,7 +5,7 @@
       <v-select :items="compareToNames" item-text="title" item-value="id" label="Comarison Options" v-model="selectedId"></v-select>
       <div class="flex">
           <v-btn small color="secondary" @click="$emit('cancelComparison')">Cancel</v-btn>
-        <v-btn color="primary" @click="selectedId !== undefined && $emit('addComparison', {compareFrom: compareFromId, compareTo: selectedId})">Compare!</v-btn>
+        <v-btn color="primary" @click="selectedId !== null && $emit('addComparison', {compareFrom: compareFromId, compareTo: selectedId})">Compare!</v-btn>
       </div>
       </v-card-text>
   </v-card>
