@@ -18,7 +18,7 @@
               Time (days)<span class="float-right">Samples</span>
             </p>
             <v-sheet
-              color="grey lighten-2"
+              color="#ddd"
               class="scrollable"
               style="height: 24.5em"
             >
@@ -34,7 +34,7 @@
                   style="height: 100%"
                 >
                   <template v-for="ts in timeSamples">
-                    <v-list-item dense :key="ts.time">
+                    <v-list-item dense :key="ts.time" class="listItem">
                       <v-list-item-content>
                         <p class="text-left">
                           {{ ts.time
@@ -53,7 +53,7 @@
             <p class="text-left mb-0 pb-0">
               Time (days)<span class="float-right">Samples</span>
             </p>
-            <v-sheet color="grey lighten-2" class="inputBox pa-2 ma-1">
+            <v-sheet color="#ddd" class="inputBox pa-2 ma-1">
               Group 1
               <v-divider></v-divider>
               <v-list dense style="background-color: transparent" height="100%">
@@ -67,7 +67,7 @@
                       .slice()
                       .sort((a, b) => a.time - b.time)"
                   >
-                    <v-list-item :key="ts2.time">
+                    <v-list-item :key="ts2.time" class="listItem">
                       <v-list-item-content>
                         <p class="text-left">
                           {{ ts2.time
@@ -81,7 +81,7 @@
                 </draggable>
               </v-list>
             </v-sheet>
-            <v-sheet color="grey lighten-2" class="inputBox pa-2 ma-1">
+            <v-sheet color="#ddd" class="inputBox pa-2 ma-1">
               Group 2
               <v-divider></v-divider>
               <v-list dense style="background-color: transparent" height="100%">
@@ -95,7 +95,7 @@
                       .slice()
                       .sort((a, b) => a.time - b.time)"
                   >
-                    <v-list-item :key="ts3.time">
+                    <v-list-item :key="ts3.time" class="listItem">
                       <v-list-item-content>
                         <p class="text-left">
                           {{ ts3.time
@@ -113,7 +113,7 @@
           <v-col cols="12" md="4" style="height: 100%" class="mt-0 mb-0">
             Other Options
             <v-sheet
-              color="grey lighten-2"
+              color="#ddd"
               class="scrollable pa-2"
               height="24.5em"
             >
@@ -281,5 +281,12 @@ export default {
 .inputBox {
   height: 12em;
   overflow: scroll;
+}
+.listItem {
+  margin:0;
+  background-color: #aaa;
+}
+.listItem:nth-child(odd) {
+  background-color: #ddd;
 }
 </style>
