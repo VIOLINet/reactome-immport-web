@@ -127,6 +127,8 @@ export default {
       }
     },
     closeResults(id) {
+      //must close any comparison set that closed results is part of before removing to avoid error
+      this.comparisonSets = this.comparisonSets.filter(set => !(set.includes(id)))
       this.resultSets = this.resultSets.filter((sub) => sub.id !== id);
     },
     compareResults(id) {
