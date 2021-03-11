@@ -2,24 +2,17 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <GeneExpressionAnalysisForm @analyzeData="analyzeData" class="mb-5"/>
+      <GeneExpressionAnalysisForm @analyzeData="analyzeData" class="mb-5" />
       <section>
-      <ComparisonForm
-        v-if="compareFromId"
-        :compareFromId="compareFromId"
-        :resultSets="resultSets"
-        @cancelComparison="compareFromId = undefined"
-        @addComparison="addComparison"
-      />
-      <CompareResultsPanel 
-        v-for="comparison in comparisonSets"
-        :key="comparison[0]+comparison[1]"
-        :compareFrom="resultSets.find(rs => rs.id ===comparison[0])"
-        :compareTo="resultSets.find(rs => rs.id ===comparison[1])"
-        @closeComparison="closeComparison"
-      />
+        <CompareResultsPanel
+          v-for="comparison in comparisonSets"
+          :key="comparison[0] + comparison[1]"
+          :compareFrom="resultSets.find((rs) => rs.id === comparison[0])"
+          :compareTo="resultSets.find((rs) => rs.id === comparison[1])"
+          @closeComparison="closeComparison"
+        />
       </section>
-      <hr v-if="comparisonSets.length > 0" class="my-5">
+      <hr v-if="comparisonSets.length > 0" class="my-5" />
       <section>
         <v-card outlined v-if="loadingReactomeAnalyses">
           <v-card-text>
@@ -38,7 +31,18 @@
           @fetchNetworkAnalysis="fetchNetworkAnalysis"
           @compareResults="compareResults"
           class="mt-5"
-        />
+        >
+          <template v-slot:[`${compareFromId}`]>
+            <v-overlay absolute :value="showCompareFromForm"
+              ><ComparisonForm
+              :dark="false"
+                :compareFromId="compareFromId"
+                :resultSets="resultSets"
+                @cancelComparison="showCompareFromForm = false"
+                @addComparison="addComparison"
+            /></v-overlay>
+          </template>
+        </GeneExpResultPanel>
       </section>
     </v-container>
   </v-app>
@@ -46,7 +50,7 @@
 
 <script>
 import ImmportService from "./service/ImmportService";
-import GeneExpressionAnalysisForm from './components/Forms/GeneExpressionAnalysisForm'
+import GeneExpressionAnalysisForm from "./components/Forms/GeneExpressionAnalysisForm";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
 import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
@@ -69,6 +73,7 @@ export default {
     comparisonSets: [],
     loadingReactomeAnalyses: false,
     searchNumber: 1,
+    showCompareFromForm: false,
     compareFromId: undefined,
   }),
   methods: {
@@ -125,18 +130,22 @@ export default {
       this.resultSets = this.resultSets.filter((sub) => sub.id !== id);
     },
     compareResults(id) {
+      if(this.resultSets.length < 2) return;
       this.compareFromId = id;
+      this.showCompareFromForm = true;
     },
-    addComparison({compareFrom, compareTo}) {
-      const toAdd = [compareFrom, compareTo]
-      if(this.comparisonSets.some(set => _isEqual(set, toAdd))) return;
+    addComparison({ compareFrom, compareTo }) {
+      const toAdd = [compareFrom, compareTo];
+      if (this.comparisonSets.some((set) => _isEqual(set, toAdd))) return;
 
       this.compareFromId = undefined;
       this.comparisonSets.push(toAdd);
     },
-    closeComparison(ids){
-      this.comparisonSets = this.comparisonSets.filter(set => !(set.includes(ids[0]) && set.includes(ids[1])));
-    }
+    closeComparison(ids) {
+      this.comparisonSets = this.comparisonSets.filter(
+        (set) => !(set.includes(ids[0]) && set.includes(ids[1]))
+      );
+    },
   },
 };
 </script>

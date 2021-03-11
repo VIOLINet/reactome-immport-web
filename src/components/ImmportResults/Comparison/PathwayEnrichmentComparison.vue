@@ -72,49 +72,38 @@ export default {
       return [
         { text: "Stable Identifier", value: "stId" },
         { text: "Pahtway Name", value: "name" },
-        { text: "Entities Found" + "1".sup(), value: "entities1.found" },
+        { text: "Entities Found" + "1".sup(), value: "entities.found" },
         { text: "Entities Found" + "2".sup(), value: "entities2.found" },
-        { text: "Entities Ratio" + "1".sup(), value: "entities1.ratio" },
+        { text: "Entities Ratio" + "1".sup(), value: "entities.ratio" },
         { text: "Entities Ratio" + "2".sup(), value: "entities2.ratio" },
-        { text: "PVal" + "1".sup(), value: "entities1.pValue" },
+        { text: "PVal" + "1".sup(), value: "entities.pValue" },
         { text: "PVal" + "2".sup(), value: "entities2.pValue" },
-        { text: "FDR" + "1".sup(), value: "entities1.fdr" },
+        { text: "FDR" + "1".sup(), value: "entities.fdr" },
         { text: "FDR" + "2".sup(), value: "entities2.fdr" },
       ];
     },
     items() {
-      console.time("Pathway Enrichment")
-      const pathwaysOne = this.pathwayEnrichmentOne.pathways;
-      const pathwaysTwo = this.pathwayEnrichmentTwo.pathways;
+      const pathwaysOne = [...this.pathwayEnrichmentOne.pathways];
+      const secondaryPathways = new Map();
+      this.pathwayEnrichmentTwo.pathways.forEach(pw => secondaryPathways.set(pw.stId, pw))
 
-      const items = [];
-
-      //add all primary pathways
+      //loop over primary pathways and add secondary entities if available
       pathwaysOne.forEach((pathway) => {
-        const secondaryPW = pathwaysTwo.find((pw) => pw.stId === pathway.stId);
-        if(secondaryPW) pathwaysTwo.filter(pw => pw.stId !== pathway.stId)
-        items.push({
-          stId: pathway.stId,
-          name: pathway.name,
-          entities1: pathway.entities,
-          entities2: secondaryPW ? secondaryPW.entities : undefined,
-        });
+        const secondaryPW = {...secondaryPathways.get(pathway.stId)}
+        if(!secondaryPW) return;
+        // pathway.entities1 = pathway.entities;
+        // delete pathway.entities;
+        pathway.entities2 = secondaryPW.entities;
+        secondaryPathways.delete(pathway.stId);
       });
 
       //add secondary pathways not part of primary pathways
-      pathwaysTwo
-        .forEach((pathway) => {
-          items.push({
-            stId: pathway.stId,
-            name: pathway.name,
-            entities1: undefined,
-            entities2: pathway.entities,
-          });
-        });
-
-      console.timeEnd("Pathway Enrichment")
-
-      return items;
+      secondaryPathways.forEach((value) => {
+        value.entities2 = value.entities
+        delete value.entities
+      })
+      pathwaysOne.push(...secondaryPathways.values())
+      return pathwaysOne;
     },
   },
 };

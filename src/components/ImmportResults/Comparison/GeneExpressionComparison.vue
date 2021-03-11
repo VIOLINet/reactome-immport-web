@@ -89,29 +89,31 @@ export default {
       ];
     },
     items() {
-      console.time("Gene Expression")
       const items = [...this.geneExpressionOne]
-      const secondaryGenes = [...this.geneExpressionTwo]
+      const secondaryGenes = new Map();
+      this.geneExpressionTwo.forEach(gene => secondaryGenes.set(gene.gene_name, gene))
 
+      //loop over  items and add values from second set of genes if available
       items.forEach(row => {
-        const compareItem = secondaryGenes.find(sg => sg.gene_name === row.gene_name)
+        const compareItem = {...secondaryGenes.get(row.gene_name)}
         if(!compareItem) return;
-        secondaryGenes.filter(sg => sg.gene_name !== row.gene_name); //filter row from second gene set
+          
         row.AveExpr2 = compareItem.AveExpr;
         row.adjPValue2 = compareItem.adjPValue;
         row.logFC2 = compareItem.logFC
+        secondaryGenes.delete(row.gene_name)
       })
 
-      secondaryGenes.forEach(row => {
-        row.AveExpr2 = row.AveExpr
-        delete row.AveExpr
-        row.adjPValue2 = row.adjPValue
-        delete row.adjPValue
-        row.logFC2 = row.logFC
-        delete row.logFC
+      //for any missed values, change key names and add
+      secondaryGenes.forEach((value) => {
+       value.AveExpr2 = value.AveExpr
+        delete value.AveExpr
+       value.adjPValue2 = value.adjPValue
+        delete value.adjPValue
+       value.logFC2 = value.logFC
+        delete value.logFC
       })
-      items.push(...secondaryGenes)
-      console.timeEnd("Gene Expression")
+      items.push(...secondaryGenes.values())
 
       return items
     },

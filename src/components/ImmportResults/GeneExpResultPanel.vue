@@ -30,6 +30,7 @@
         :cyElementsProp="resultSet.fiNetwork"
       />
     </v-card-text>
+    <slot :name="resultSet.id"></slot>
   </v-card>
 </template>
 
