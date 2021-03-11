@@ -123,6 +123,11 @@ export default {
       if (!this.clustersLoaded) this.loadClustering();
       else this.doClusterToggle(newVal);
     },
+    cyElementsProp(newVal) {
+      this.cyElements = newVal
+      this.cy.add(this.cyElements/*.filter(ele => !this.cyElements.map(element => element.data.id).includes(ele.data.id))*/);
+      this.cy.elements().layout({ name: "cose" }).run();
+    }
   },
   methods: {
     afterCreated(cy) {
