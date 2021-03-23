@@ -87,15 +87,80 @@ export default {
           selector: "edge",
           style: {
             "curve-style": "bezier",
+            color:"#bbb",
             width: "1",
             "overlay-padding": "20px",
           },
         },
         {
+          selector: 'edge[direction="->"]',
+          style: {
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#bbb",
+          },
+        },
+        {
+          selector: 'edge[direction="<-"]',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#bbb",
+          },
+        },
+        {
+          selector: 'edge[direction="<->"]',
+          style: {
+            "source-arrow-shape":"vee",
+            "source-arrow-color":"#bbb",
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#bbb",
+          }
+        },
+        {
+          selector: 'edge[direction="-|"]',
+          style: {
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#bbb",
+          },
+        },
+        {
+          selector: 'edge[direction="|-"]',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#bbb",
+          },
+        },
+        {
+          selector: 'edge[direction="|--|"]',
+          style: {
+            "source-arrow-shape":"tee",
+            "source-arrow-color":"#bbb",
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#bbb",
+          }
+        },
+        {
+          selector: 'edge[direction="|->"]',
+          style: {
+            "source-arrow-shape": "tee",
+            "source-arrow-color": "#bbb",
+            "target-arrow-shape": "vee",
+            "target-arrow-color": "#bbb",
+          },
+        },
+        {
+          selector: 'edge[direction="<-|"]',
+          style: {
+            "source-arrow-shape": "vee",
+            "source-arrow-color": "#bbb",
+            "target-arrow-shape": "tee",
+            "target-arrow-color": "#bbb",
+          },
+        },
+        {
           selector: "edge[lineColor]",
           style: {
-            "line-color":"data(lineColor)"
-          }
+            "line-color": "data(lineColor)",
+          },
         },
         {
           selector: "edge:selected",
@@ -124,10 +189,13 @@ export default {
       else this.doClusterToggle(newVal);
     },
     cyElementsProp(newVal) {
-      this.cyElements = newVal
-      this.cy.add(this.cyElements/*.filter(ele => !this.cyElements.map(element => element.data.id).includes(ele.data.id))*/);
+      this.cyElements = newVal;
+      this.cy.add(
+        this
+          .cyElements /*.filter(ele => !this.cyElements.map(element => element.data.id).includes(ele.data.id))*/
+      );
       this.cy.elements().layout({ name: "cose" }).run();
-    }
+    },
   },
   methods: {
     afterCreated(cy) {
