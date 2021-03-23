@@ -35,7 +35,7 @@
               <td colspan="6"></td>
               <td colspan="1">
                 <v-text-field
-                  prefix="pVal ≤"
+                  prefix="FDR ≤"
                   v-model="pathwayEnrichmentFDR"
                   type="number"
                   min="0"

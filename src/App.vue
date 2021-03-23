@@ -121,7 +121,6 @@ export default {
         ).fiNetwork = await ImmportService.fetchFINetwork(
           genes.map((gene) => gene.gene_name)
         );
-        this.$forceUpdate();
       } catch (err) {
         console.log(err);
       }

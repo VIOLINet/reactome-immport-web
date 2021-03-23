@@ -15,9 +15,9 @@
           >
             <span :key="index" v-html="header.text"></span>
           </template>
-          <template v-slot:item.entities1.ratio="{ item }">
-            <p :title="item.entities1 && item.entities1.ratio">
-              {{ item.entities1 && item.entities1.ratio.toExponential(2) }}
+          <template v-slot:item.entities.ratio="{ item }">
+            <p :title="item.entities && item.entities.ratio">
+              {{ item.entities && item.entities.ratio.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.entities2.ratio="{ item }">
@@ -25,9 +25,9 @@
               {{ item.entities2 && item.entities2.ratio.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.entities1.pValue="{ item }">
-            <p :title="item.entities1 && item.entities1.pValue">
-              {{ item.entities1 && item.entities1.pValue.toExponential(2) }}
+          <template v-slot:item.entities.pValue="{ item }">
+            <p :title="item.entities && item.entities.pValue">
+              {{ item.entities && item.entities.pValue.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.entities2.pValue="{ item }">
@@ -35,14 +35,24 @@
               {{ item.entities2 && item.entities2.pValue.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.entities1.fdr="{ item }">
-            <p :title="item.entities1 && item.entities1.fdr">
-              {{ item.entities1 && item.entities1.fdr.toExponential(2) }}
+          <template v-slot:item.entitiesRatioDiff="{item}">
+            <p :title="item.entitiesRatioDiff">
+              {{ item.entitiesRatioDiff && item.entitiesRatioDiff.toExponential(2) }}
+            </p>
+          </template>
+          <template v-slot:item.entities.fdr="{ item }">
+            <p :title="item.entities && item.entities.fdr">
+              {{ item.entities && item.entities.fdr.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.entities2.fdr="{ item }">
             <p :title="item.entities2 && item.entities2.fdr">
               {{ item.entities2 && item.entities2.fdr.toExponential(2) }}
+            </p>
+          </template>
+          <template v-slot:item.logFdr1Over2="{item}">
+            <p :title="item.logFdr1Over2">
+              {{ item.logFdr1Over2 && Math.round((item.logFdr1Over2 + Number.EPSILON) * 100) / 100 }}
             </p>
           </template>
         </v-data-table>
@@ -74,12 +84,13 @@ export default {
         { text: "Pahtway Name", value: "name" },
         { text: "Entities Found" + "1".sup(), value: "entities.found" },
         { text: "Entities Found" + "2".sup(), value: "entities2.found" },
+        { text: "Δ Entities Found", value: "entitiesFoundDiff"},
         { text: "Entities Ratio" + "1".sup(), value: "entities.ratio" },
         { text: "Entities Ratio" + "2".sup(), value: "entities2.ratio" },
-        { text: "PVal" + "1".sup(), value: "entities.pValue" },
-        { text: "PVal" + "2".sup(), value: "entities2.pValue" },
+        { text: "Δ Entites Ratio", value: "entitiesRatioDiff"},
         { text: "FDR" + "1".sup(), value: "entities.fdr" },
         { text: "FDR" + "2".sup(), value: "entities2.fdr" },
+        {text: "log(FDR" +"1".sub() + "/"+"FDR" + "2".sub() +")", value: "logFdr1Over2"}
       ];
     },
     items() {
@@ -91,9 +102,10 @@ export default {
       pathwaysOne.forEach((pathway) => {
         const secondaryPW = {...secondaryPathways.get(pathway.stId)}
         if(!secondaryPW) return;
-        // pathway.entities1 = pathway.entities;
-        // delete pathway.entities;
         pathway.entities2 = secondaryPW.entities;
+        pathway.entitiesFoundDiff = (pathway.entities2 ? pathway.entities2.found : 0) - (pathway.entities ? pathway.entities.found:0)
+        pathway.entitiesRatioDiff = (pathway.entities2 ? pathway.entities2.ratio : 0) - (pathway.entities ? pathway.entities.ratio : 0)
+        pathway.logFdr1Over2 = (pathway.entities2 && pathway.entities) && Math.log(pathway.entities.fdr / pathway.entities2.fdr)
         secondaryPathways.delete(pathway.stId);
       });
 

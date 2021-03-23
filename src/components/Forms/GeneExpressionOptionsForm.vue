@@ -17,11 +17,7 @@
             <p class="text-left mb-0 pb-0">
               Time (days)<span class="float-right">Samples</span>
             </p>
-            <v-sheet
-              color="#ddd"
-              class="scrollable"
-              style="height: 24.5em"
-            >
+            <v-sheet color="#ddd" class="scrollable" style="height: 24.5em">
               <v-list
                 :disabled="modelTime"
                 dense
@@ -35,14 +31,14 @@
                 >
                   <template v-for="ts in timeSamples">
                     <v-list-item dense :key="ts.time" class="listItem">
-                      <v-list-item-content>
-                        <p class="text-left">
-                          {{ ts.time
-                          }}<span class="float-right">{{
-                            ts.sampleCount
-                          }}</span>
-                        </p>
-                      </v-list-item-content>
+                      <div class="flex">
+                      <div>
+                        {{ ts.time }}
+                      </div>
+                      <div>
+                        {{ ts.sampleCount }}
+                      </div>
+                      </div>
                     </v-list-item>
                   </template>
                 </draggable>
@@ -67,15 +63,15 @@
                       .slice()
                       .sort((a, b) => a.time - b.time)"
                   >
-                    <v-list-item :key="ts2.time" class="listItem">
-                      <v-list-item-content>
-                        <p class="text-left">
-                          {{ ts2.time
-                          }}<span class="float-right">{{
-                            ts2.sampleCount
-                          }}</span>
-                        </p>
-                      </v-list-item-content>
+                    <v-list-item dense :key="ts2.time" class="listItem">
+                      <div class="flex">
+                      <div>
+                        {{ ts2.time }}
+                      </div>
+                      <div>
+                        {{ ts2.sampleCount }}
+                      </div>
+                      </div>
                     </v-list-item>
                   </template>
                 </draggable>
@@ -95,15 +91,15 @@
                       .slice()
                       .sort((a, b) => a.time - b.time)"
                   >
-                    <v-list-item :key="ts3.time" class="listItem">
-                      <v-list-item-content>
-                        <p class="text-left">
-                          {{ ts3.time
-                          }}<span class="float-right">{{
-                            ts3.sampleCount
-                          }}</span>
-                        </p>
-                      </v-list-item-content>
+                    <v-list-item dense :key="ts3.time" class="listItem">
+                      <div class="flex">
+                      <div>
+                        {{ ts3.time }}
+                      </div>
+                      <div>
+                        {{ ts3.sampleCount }}
+                      </div>
+                      </div>
                     </v-list-item>
                   </template>
                 </draggable>
@@ -112,11 +108,7 @@
           </v-col>
           <v-col cols="12" md="4" style="height: 100%" class="mt-0 mb-0">
             Other Options
-            <v-sheet
-              color="#ddd"
-              class="scrollable pa-2"
-              height="24.5em"
-            >
+            <v-sheet color="#ddd" class="scrollable pa-2" height="24.5em">
               <p class="text-left">
                 Analysis can be adjusted by choosing the following variables:
               </p>
@@ -195,7 +187,7 @@ export default {
   }),
   watch: {
     biosampleMetaData() {
-       this.updatedAvailableTimes();
+      this.updatedAvailableTimes();
     },
     modelTime() {
       if (this.modelTime) {
@@ -275,6 +267,11 @@ export default {
 </script>
 
 <style scoped>
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .scrollable {
   overflow: scroll;
 }
@@ -283,10 +280,12 @@ export default {
   overflow: scroll;
 }
 .listItem {
-  margin:0;
-  background-color: #aaa;
+  margin: 0 1em;
+  border: 1px solid gray;
+  background-color: white;
+  border-radius: 5px;
 }
-.listItem:nth-child(odd) {
-  background-color: #ddd;
+.multi-drag {
+  border: 1px dotted red;
 }
 </style>
