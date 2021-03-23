@@ -33,7 +33,7 @@
           class="mt-5"
         >
           <template v-slot:[`${compareFromId}`]>
-            <v-overlay absolute :value="showCompareFromForm"
+            <v-overlay :value="showCompareFromForm"
               ><ComparisonForm
               :dark="false"
                 :compareFromId="compareFromId"
