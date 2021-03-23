@@ -189,10 +189,11 @@ export default {
       else this.doClusterToggle(newVal);
     },
     cyElementsProp(newVal) {
+      this.cy.elements().remove()
       this.cyElements = newVal;
       this.cy.add(
         this
-          .cyElements /*.filter(ele => !this.cyElements.map(element => element.data.id).includes(ele.data.id))*/
+          .cyElements
       );
       this.cy.elements().layout({ name: "cose" }).run();
     },
