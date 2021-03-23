@@ -96,10 +96,10 @@ export default {
     items() {
       const pathwaysOne = [...this.pathwayEnrichmentOne.pathways];
       const secondaryPathways = new Map();
-      this.pathwayEnrichmentTwo.pathways.forEach(pw => secondaryPathways.set(pw.stId, pw))
+       this.pathwayEnrichmentTwo.pathways && this.pathwayEnrichmentTwo.pathways.forEach(pw => secondaryPathways.set(pw.stId, pw))
 
       //loop over primary pathways and add secondary entities if available
-      pathwaysOne.forEach((pathway) => {
+      pathwaysOne && pathwaysOne.forEach((pathway) => {
         const secondaryPW = {...secondaryPathways.get(pathway.stId)}
         if(!secondaryPW) return;
         pathway.entities2 = secondaryPW.entities;
@@ -110,7 +110,7 @@ export default {
       });
 
       //add secondary pathways not part of primary pathways
-      secondaryPathways.forEach((value) => {
+      secondaryPathways && secondaryPathways.forEach((value) => {
         value.entities2 = value.entities
         delete value.entities
       })

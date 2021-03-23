@@ -25,7 +25,7 @@
       <PathwayEnrichmentComparison
         class="mt-5"
         v-if="
-          compareFrom.enrichmentResults.pathways &&
+          compareFrom.enrichmentResults.pathways ||
           compareTo.enrichmentResults.pathways
         "
         :pathwayEnrichmentOne="compareFrom.enrichmentResults"
