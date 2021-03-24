@@ -15,6 +15,9 @@
           :items="pathwayEnrichmentResults.pathways"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
         >
+          <template v-slot:item.stId="{item}">
+            <a target="_blank" :href="`${reactomeLink}${item.stId}&DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`">{{item.stId}}</a>
+          </template>
           <template v-slot:item.entities.ratio="{ item }">
             <p :title="item.entities.ratio">
               {{ item.entities.ratio.toExponential(2) }}
@@ -32,7 +35,10 @@
           >
           <template v-slot:body.append>
             <tr>
-              <td colspan="6"></td>
+              <td colspan="1">
+                <a target="_blank" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn>Open in Reactome</v-btn></a>
+              </td>
+              <td colspan="5"></td>
               <td colspan="1">
                 <v-text-field
                   prefix="FDR ≤"
@@ -42,7 +48,6 @@
                   max="1"
                   step="0.01"
                   hide-details=""
-                  class="mb-3"
                 ></v-text-field>
               </td>
             </tr>
@@ -65,6 +70,7 @@ export default {
   data: () => ({
     show: true,
     pathwayEnrichmentFDR: 1,
+    reactomeLink:process.env.VUE_APP_REACTOME_LINK
   }),
   computed: {
     pathwayEnrichmentHeaders() {
@@ -90,4 +96,7 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+}
 </style>
