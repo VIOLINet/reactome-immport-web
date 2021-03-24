@@ -17,6 +17,14 @@
       <DescriptionComparisonPanel
         class="mb-5"
         :formDatas="[compareFrom.formData, compareTo.formData]"
+        :compareFrom="{
+          displayId: compareFrom.displayId,
+          ...compareFrom.formData,
+        }"
+        :compareTo="{
+          displayId: compareTo.displayId,
+          ...compareTo.formData
+        }"
       />
       <GeneExpressionComparison
         :geneExpressionOne="compareFrom.geneExpressionResults"

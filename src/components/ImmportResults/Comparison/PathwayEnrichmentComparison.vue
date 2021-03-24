@@ -55,6 +55,32 @@
               {{ item.logFdr1Over2 && Math.round((item.logFdr1Over2 + Number.EPSILON) * 100) / 100 }}
             </p>
           </template>
+          <template v-slot:body.append>
+            <tr>
+              <td colspan="4"></td>
+              <td colspan="1">
+                <v-text-field
+                  prefix="Δ ≥ abs("
+                  suffix=")"
+                  v-model="deltaEntitiesFoundInput"
+                  type="number"
+                  min=0
+                  hide-details
+                ></v-text-field>
+              </td>
+              <td colspan="5"></td>
+              <td colspan="1">
+                <v-text-field
+                  prefix="value ≥ abs("
+                  suffix=")"
+                  v-model="logFDR1FDR2Input"
+                  type="number"
+                  min="0"
+                  hide-details
+                ></v-text-field>
+              </td>
+            </tr>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-expand-transition>
@@ -76,6 +102,8 @@ export default {
   },
   data: () => ({
     show: false,
+    deltaEntitiesFoundInput: 0,
+    logFDR1FDR2Input: 0
   }),
   computed: {
     pathwayEnrichmentHeaders() {
@@ -84,13 +112,21 @@ export default {
         { text: "Pahtway Name", value: "name" },
         { text: "Entities Found" + "1".sup(), value: "entities.found" },
         { text: "Entities Found" + "2".sup(), value: "entities2.found" },
-        { text: "Δ Entities Found", value: "entitiesFoundDiff"},
+        { text: "Δ Entities Found", value: "entitiesFoundDiff",
+        filter: (value) => {
+          if(!this.deltaEntitiesFoundInput) return true;
+          return Math.abs(value) >= this.deltaEntitiesFoundInput
+        }},
         { text: "Entities Ratio" + "1".sup(), value: "entities.ratio" },
         { text: "Entities Ratio" + "2".sup(), value: "entities2.ratio" },
         { text: "Δ Entites Ratio", value: "entitiesRatioDiff"},
         { text: "FDR" + "1".sup(), value: "entities.fdr" },
         { text: "FDR" + "2".sup(), value: "entities2.fdr" },
-        {text: "log(FDR" +"1".sub() + "/"+"FDR" + "2".sub() +")", value: "logFdr1Over2"}
+        {text: "log(FDR" +"1".sub() + "/"+"FDR" + "2".sub() +")", value: "logFdr1Over2",
+        filter: (value) => {
+          if(!this.logFDR1FDR2Input) return true;
+          return Math.abs(value) >= this.logFDR1FDR2Input
+        }}
       ];
     },
     items() {

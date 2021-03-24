@@ -12,10 +12,13 @@
           <v-col
             cols="12"
             md="6"
-            v-for="(item, index) in formDatas"
-            :key="index"
           >
-            <ResultsDescription :formData="item" />
+            <h2>Result Set {{compareFrom.displayId}}</h2>
+            <ResultsDescription :formData="compareFrom" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <h2>Result Set {{compareTo.displayId}}</h2>
+            <ResultsDescription :formData="compareTo"/>
           </v-col>
         </v-row>
       </v-card-text>
@@ -35,6 +38,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    compareFrom: {
+      type: Object,
+      default: () => {}
+    },
+    compareTo: {
+      type: Object,
+      default: () => {}
+    }
   },
   data: () => ({
     show: false,

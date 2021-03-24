@@ -22,7 +22,6 @@
           dense
           :headers="geneAnalysisHeaders"
           :items="geneExpressionResults"
-          :search="geneExpressionSearch"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
         >
           <template v-slot:body.append>
@@ -96,7 +95,11 @@ export default {
   computed: {
     geneAnalysisHeaders() {
       return [
-        { text: "Gene Name", value: "gene_name" },
+        { text: "Gene Name", value: "gene_name",
+        filter: (value) => {
+          if(!this.geneExpressionSearch) return true;
+          return value.includes(this.geneExpressionSearch)
+        } },
         {
           text: "Average Expression",
           value: "AveExpr",
