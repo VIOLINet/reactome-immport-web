@@ -1,5 +1,5 @@
-<template :dark="false">
-  <v-card outlined :dark="false" class="full-width">
+<template light>
+  <v-card light outlined class="full-width">
       <v-card-text>
       <p class="text-left">Compare from: <strong>{{compareFromName}}</strong></p>
       <v-select :items="compareToNames" item-text="title" item-value="id" label="Comarison Options" v-model="selectedId"></v-select>
