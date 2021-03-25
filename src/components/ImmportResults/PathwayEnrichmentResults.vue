@@ -3,6 +3,8 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
+                      <a target="_blank" color="primary" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn>Open in Reactome</v-btn></a>
+
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
@@ -36,7 +38,6 @@
           <template v-slot:body.append>
             <tr>
               <td colspan="1">
-                <a target="_blank" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn>Open in Reactome</v-btn></a>
               </td>
               <td colspan="5"></td>
               <td colspan="1">

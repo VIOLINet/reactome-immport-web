@@ -108,6 +108,14 @@ export default {
             return value >= this.averageGeneExpressionInput;
           },
         },
+        {
+          text: "logFC",
+          value: "logFC",
+          filter: (value) => {
+            if (!this.absLogFCInput) return true;
+            return Math.abs(value) >= this.absLogFCInput;
+          },
+        },
         { text: "pVal", value: "pValue" },
         {
           text: "Adjusted pVal",
@@ -117,16 +125,6 @@ export default {
             return value <= this.adjustedPValInput;
           },
         },
-        {
-          text: "logFC",
-          value: "logFC",
-          filter: (value) => {
-            if (!this.absLogFCInput) return true;
-            return Math.abs(value) >= this.absLogFCInput;
-          },
-        },
-        { text: "t", value: "t" },
-        { text: "B", value: "B" },
       ];
     },
     filteredGenes() {
