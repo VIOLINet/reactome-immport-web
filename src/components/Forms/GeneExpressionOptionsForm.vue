@@ -267,7 +267,7 @@ export default {
     clearForm() {
       this.resetTimes();
       this.selectedConfoundingVariables = [];
-      this.corrected = false;
+      this.corrected = true;
       this.errormsg = "";
     },
     resetTimes() {
@@ -288,10 +288,15 @@ export default {
           group1: this.groupOne.map((s) => s.time),
           group2: this.groupTwo.map((s) => s.time),
         };
+        if(data.analysisGroups.group1.length < 1 || data.analysisGroups.group2.length < 1){
+          this.errormsg = "Use time directly in model or select at least 1 time per group."
+          return 
+        }
       }
       data.studyCohort = this.selectedConfoundingVariables;
       data.platformCorrection = this.corrected;
       data.variableGenes = false; //set as default. Could be added to form later
+      this.errormsg = ""
       this.$emit("optionsSelectedEvent", data);
     },
     fireBackEvent() {
