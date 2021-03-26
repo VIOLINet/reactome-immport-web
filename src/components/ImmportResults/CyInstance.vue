@@ -24,7 +24,7 @@
           <v-icon>{{ "mdi-restore" }}</v-icon>
         </v-btn>
         <v-btn
-          v-show="show"
+          v-show="show && !comparisonSet"
           icon
           @click="showClusters = !showClusters"
           class="clusterToggle"
@@ -50,6 +50,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    comparisonSet: {
+      type:Boolean,
+      default: () => false
+    }
   },
   data: () => ({
     show: true,

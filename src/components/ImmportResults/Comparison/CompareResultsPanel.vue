@@ -43,6 +43,7 @@
         v-if="fiNetwork.length > 0"
         class="mt-5"
         :cyElementsProp="fiNetwork"
+        :comparisonSet="true"
       />
     </v-card-text>
   </v-card>
