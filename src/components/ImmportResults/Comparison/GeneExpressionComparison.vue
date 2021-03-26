@@ -20,9 +20,39 @@
           >
             <span :key="index" v-html="header.text"></span>
           </template>
+          <template v-slot:item.AveExpr="{item}">
+            <p :title="item.AveExpr && item.AveExpr">
+              {{item.AveExpr && item.AveExpr.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.AveExpr2="{item}">
+            <p :title="item.AveExpr2 && item.AveExpr2">
+              {{item.AveExpr2 && item.AveExpr2.toExponential(2)}}
+            </p>
+          </template>
           <template v-slot:item.deltaAveExpr="{ item }">
             <p :title="item.deltaAveExpr && item.deltaAveExpr">
               {{ item.deltaAveExpr && item.deltaAveExpr.toExponential(2) }}
+            </p>
+          </template>
+          <template v-slot:item.adjPValue="{item}">
+            <p :title="item.adjPValue && item.adjPValue">
+              {{item.adjPValue && item.adjPValue.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.adjPValue2="{item}">
+            <p :title="item.adjPValue2 && item.adjPValue2">
+              {{item.adjPValue2 && item.adjPValue2.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.logFC="{item}">
+            <p :title="item.logFC && item.logFC">
+              {{item.logFC && item.logFC.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.logFC2="{item}">
+            <p :title="item.logFC2 && item.logFC2">
+              {{item.logFC2 && item.logFC2.toExponential(2)}}
             </p>
           </template>
           <template v-slot:body.append>

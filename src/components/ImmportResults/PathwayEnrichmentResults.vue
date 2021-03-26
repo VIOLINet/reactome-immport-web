@@ -3,7 +3,7 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-                      <a target="_blank" color="primary" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn>Open in Reactome</v-btn></a>
+                      <a target="_blank" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn color="secondary">Open in Reactome</v-btn></a>
 
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
@@ -39,7 +39,23 @@
             <tr>
               <td colspan="1">
               </td>
-              <td colspan="5"></td>
+              <td>
+                <v-text-field
+                  placeholder="Search"
+                  v-model="pathwaySearchInput"
+                  hide-details
+                ></v-text-field>
+              </td>
+              <td colspan="3"></td>
+              <td>
+                <v-text-field
+                  prefix="≤"
+                  v-model="pValInput"
+                  type="number"
+                  min="0"
+                  hide-details
+                ></v-text-field>
+              </td>
               <td colspan="1">
                 <v-text-field
                   prefix="FDR ≤"
@@ -71,17 +87,27 @@ export default {
   data: () => ({
     show: true,
     pathwayEnrichmentFDR: 1,
-    reactomeLink:process.env.VUE_APP_REACTOME_LINK
+    reactomeLink:process.env.VUE_APP_REACTOME_LINK,
+    pathwaySearchInput: "",
+    pValInput: 1
   }),
   computed: {
     pathwayEnrichmentHeaders() {
       return [
         { text: "Stable Identifier", value: "stId" },
-        { text: "Pathway Name", value: "name" },
+        { text: "Pathway Name", value: "name",
+        filter: (value) => {
+          if(!this.pathwaySearchInput) return true;
+          return value.includes(this.pathwaySearchInput)
+        } },
         { text: "Entities Found", value: "entities.found" },
         { text: "Entities Total", value: "entities.total" },
         { text: "Entities Ratio", value: "entities.ratio" },
-        { text: "Entities pValue", value: "entities.pValue" },
+        { text: "Entities pValue", value: "entities.pValue",
+        filter: (value) => {
+          if(!this.pValInput) return true;
+          return value <= this.pValInput;
+        } },
         {
           text: "Entities FDR",
           value: "entities.fdr",

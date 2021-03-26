@@ -24,6 +24,26 @@
           :items="geneExpressionResults"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
         >
+          <template v-slot:item.AveExpr="{item}">
+            <p :title="item.AveExpr">
+              {{item.AveExpr.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.logFC="{item}">
+            <p :title="item.logFC">
+              {{item.logFC.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.pValue="{item}">
+            <p :title="item.pValue">
+              {{item.pValue.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.adjPValue="{item}">
+            <p :title="item.adjPValue">
+              {{item.adjPValue.toExponential(2)}}
+            </p>
+          </template>
           <template v-slot:body.append>
             <tr>
               <td colspan="1">
@@ -35,7 +55,7 @@
               </td>
               <td>
                 <v-text-field
-                  prefix="Expr ≥"
+                  prefix="≥"
                   v-model="averageGeneExpressionInput"
                   type="number"
                   min="0"
@@ -43,24 +63,24 @@
                   hide-details
                 ></v-text-field>
               </td>
-              <td colspan="1"></td>
+              <td colspan="1"><v-text-field
+                  prefix="abs(logFC)≥"
+                  v-model="absLogFCInput"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  hide-details
+                ></v-text-field></td>
               <td colspan="1">
+                
+              </td>
+              <td>
                 <v-text-field
-                  prefix="Adjusted pVal ≤"
+                  prefix="≤"
                   v-model="adjustedPValInput"
                   type="number"
                   min="0"
                   max="1"
-                  step="0.01"
-                  hide-details
-                ></v-text-field>
-              </td>
-              <td colspan="1">
-                <v-text-field
-                  prefix="Absolute logFC ≥"
-                  v-model="absLogFCInput"
-                  type="number"
-                  min="0"
                   step="0.01"
                   hide-details
                 ></v-text-field>
