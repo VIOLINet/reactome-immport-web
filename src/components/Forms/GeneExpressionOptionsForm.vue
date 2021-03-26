@@ -32,12 +32,12 @@
                   <template v-for="ts in timeSamples">
                     <v-list-item dense :key="ts.time" class="listItem">
                       <div class="flex">
-                      <div>
-                        {{ ts.time }}
-                      </div>
-                      <div>
-                        {{ ts.sampleCount }}
-                      </div>
+                        <div>
+                          {{ ts.time }}
+                        </div>
+                        <div>
+                          {{ ts.sampleCount }}
+                        </div>
                       </div>
                     </v-list-item>
                   </template>
@@ -65,12 +65,12 @@
                   >
                     <v-list-item dense :key="ts2.time" class="listItem">
                       <div class="flex">
-                      <div>
-                        {{ ts2.time }}
-                      </div>
-                      <div>
-                        {{ ts2.sampleCount }}
-                      </div>
+                        <div>
+                          {{ ts2.time }}
+                        </div>
+                        <div>
+                          {{ ts2.sampleCount }}
+                        </div>
                       </div>
                     </v-list-item>
                   </template>
@@ -93,12 +93,12 @@
                   >
                     <v-list-item dense :key="ts3.time" class="listItem">
                       <div class="flex">
-                      <div>
-                        {{ ts3.time }}
-                      </div>
-                      <div>
-                        {{ ts3.sampleCount }}
-                      </div>
+                        <div>
+                          {{ ts3.time }}
+                        </div>
+                        <div>
+                          {{ ts3.sampleCount }}
+                        </div>
                       </div>
                     </v-list-item>
                   </template>
@@ -187,7 +187,7 @@ export default {
   }),
   watch: {
     biosampleMetaData() {
-      this.updatedAvailableTimes();
+      this.updatedAvailableTimesTwo();
     },
     modelTime() {
       if (this.modelTime) {
@@ -214,6 +214,41 @@ export default {
         const ts = this.timeSamples.find((ts) => ts.time === time);
         ts.sampleCount += 1;
       });
+      this.timeSamples.sort((a, b) => a.time - b.time);
+    },
+    updatedAvailableTimesTwo() {
+      let timesArray = [];
+      this.biosampleMetaData.forEach((sample) => {
+        if (sample.immport_vaccination_time === undefined) return;
+        const time = parseInt(sample.immport_vaccination_time);
+        if (!timesArray.some((ts) => ts.time === time)) {
+          timesArray.push({
+            time: time,
+            sampleCount: 0,
+          });
+        }
+        timesArray.find((ts) => ts.time === time).sampleCount += 1;
+      });
+
+      this.groupOne = this.groupOne.filter(ts => timesArray.some( ta => ta.time === ts.time))
+      this.groupOne.forEach(ts => {
+        ts.sampleCount = timesArray.find(ta => ta.time === ts.time).sampleCount
+        timesArray = timesArray.filter(ta => ta.time !== ts.time)
+      });
+
+      this.groupTwo = this.groupTwo.filter(ts => timesArray.some(ta => ta.time === ts.time));
+      this.groupTwo.forEach(ts => {
+        ts.sampleCount = timesArray.find(ta => ta.time === ts.time).sampleCount
+        timesArray = timesArray.filter(ta => ta.time !== ts.time)
+      });
+
+      this.timeSamples = this.timeSamples.filter(ts => timesArray.includes(ts.time))
+      timesArray.forEach(ta => {
+        if(this.timeSamples.some(ts => ts.time === ta.time))
+          this.timeSamples.find(ts => ts.time === ta.time).sampleCount = ta.sampleCount
+        else
+          this.timeSamples.push(ta)
+      })
       this.timeSamples.sort((a, b) => a.time - b.time);
     },
     moveTime(startingCol, ts) {
