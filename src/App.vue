@@ -117,12 +117,22 @@ export default {
       try {
         this.resultSets.find(
           (rs) => rs.id === id
-        ).fiNetwork = await ImmportService.fetchFINetwork(
+        ).fiNetwork = this.addExpressionToNodes(id, await ImmportService.fetchFINetwork(
           genes.map((gene) => gene.gene_name)
-        );
+        ));
       } catch (err) {
         console.log(err);
       }
+    },
+    addExpressionToNodes(id, network){
+      const genes = this.resultSets.find(rs => rs.id === id).geneExpressionResults;
+      network.filter(obj => obj.group === "nodes").forEach(node => {
+        const gene = genes.find(gene => gene.gene_name === node.data.id);
+        node.data.AveExpr = gene.AveExpr
+        node.data.pValue = gene.pValue
+        node.data.adjPValue = gene.adjPValue
+      })
+      return network
     },
     closeResults(id) {
       //must close any comparison set that closed results is part of before removing to avoid error
