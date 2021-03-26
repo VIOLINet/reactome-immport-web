@@ -23,7 +23,7 @@
         }"
         :compareTo="{
           displayId: compareTo.displayId,
-          ...compareTo.formData
+          ...compareTo.formData,
         }"
       />
       <GeneExpressionComparison
@@ -80,17 +80,20 @@ export default {
       network1.forEach((obj) => {
         //if group is node, filter out any same node from network2
         if (obj.group === "nodes") {
-          network2 = network2.filter((item) => item.data.id !== obj.data.id);
+          if (network2.some((item) => item.data.id === obj.data.id)) {
+            network2 = network2.filter((item) => item.data.id !== obj.data.id);
+            obj.data.nodeColor = "#058ED9";
+          }else
+            obj.data.nodeColor = "#848FA2";
           rtn.push(obj);
         }
-        //if group is edge, check if exists in network2. If it does, remove and set background color to purple
-        //if doesn't exist in network2, set background color to red
+        //if group is edge, check if exists in network2
         else if (obj.group === "edges") {
           if (network2.some((item) => item.data.id === obj.data.id)) {
             network2 = network2.filter((item) => item.data.id !== obj.data.id);
-            obj.data.lineColor = "#F00";
+            obj.data.lineColor = "#CC2D35";
           } else {
-            obj.data.lineColor = "#FFA500";
+            obj.data.lineColor = "#E1DAAE";
           }
           rtn.push(obj);
         }
@@ -102,11 +105,13 @@ export default {
       //compareFrom.fiNetwork should have filtred out all of network2 that we dont want
       //loop over network2 and add all nodes. if edge, set color to blue.
       network2.forEach((obj) => {
-        //only need to mutate obj if it is an edge. otherwise just push as is
         if (obj.group === "edges") {
-          obj.data.lineColor = "#800080";
+          obj.data.lineColor = "#FF934F";
+          rtn.push(obj);
+        } else if (obj.group === "nodes") {
+          obj.data.nodeColor = "#2D3142";
+          rtn.push(obj);
         }
-        rtn.push(obj);
       });
 
       return rtn;

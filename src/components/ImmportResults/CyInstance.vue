@@ -65,7 +65,7 @@ export default {
             shape: "ellipse",
             "background-color": "#00CC00",
             "border-color": "#00CC00",
-            "background-opacity": ".4",
+            "background-opacity": ".7",
           },
         },
         {
@@ -87,7 +87,6 @@ export default {
           selector: "edge",
           style: {
             "curve-style": "bezier",
-            color:"#bbb",
             width: "1",
             "overlay-padding": "20px",
           },
@@ -96,71 +95,67 @@ export default {
           selector: 'edge[direction="->"]',
           style: {
             "target-arrow-shape": "vee",
-            "target-arrow-color": "#bbb",
           },
         },
         {
           selector: 'edge[direction="<-"]',
           style: {
             "source-arrow-shape": "vee",
-            "source-arrow-color": "#bbb",
           },
         },
         {
           selector: 'edge[direction="<->"]',
           style: {
             "source-arrow-shape":"vee",
-            "source-arrow-color":"#bbb",
             "target-arrow-shape": "vee",
-            "target-arrow-color": "#bbb",
           }
         },
         {
           selector: 'edge[direction="-|"]',
           style: {
             "target-arrow-shape": "tee",
-            "target-arrow-color": "#bbb",
           },
         },
         {
           selector: 'edge[direction="|-"]',
           style: {
             "source-arrow-shape": "tee",
-            "source-arrow-color": "#bbb",
           },
         },
         {
           selector: 'edge[direction="|--|"]',
           style: {
             "source-arrow-shape":"tee",
-            "source-arrow-color":"#bbb",
             "target-arrow-shape": "tee",
-            "target-arrow-color": "#bbb",
           }
         },
         {
           selector: 'edge[direction="|->"]',
           style: {
             "source-arrow-shape": "tee",
-            "source-arrow-color": "#bbb",
             "target-arrow-shape": "vee",
-            "target-arrow-color": "#bbb",
           },
         },
         {
           selector: 'edge[direction="<-|"]',
           style: {
             "source-arrow-shape": "vee",
-            "source-arrow-color": "#bbb",
             "target-arrow-shape": "tee",
-            "target-arrow-color": "#bbb",
           },
         },
         {
           selector: "edge[lineColor]",
           style: {
             "line-color": "data(lineColor)",
+            "source-arrow-color":"data(lineColor)",
+            "target-arrow-color":"data(lineColor)"
           },
+        },
+        {
+          selector: "node[nodeColor]",
+          style: {
+            "background-color": "data(nodeColor)"
+          }
         },
         {
           selector: "edge:selected",
