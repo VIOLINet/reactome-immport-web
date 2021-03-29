@@ -36,12 +36,32 @@
               : "mdi-checkbox-blank-outline"
           }}</v-icon>
         </v-btn>
+        <v-card v-show="show && !comparisonSet" raised class="filterCard pa-3">
+          <v-text-field
+            class="mr-3"
+            prefix="Expression≥"
+            v-model="expressionInput"
+            type="number"
+            min="0"
+            dense
+          ></v-text-field>
+          <v-text-field
+            class="mr-3"
+            prefix="adjPValue≤"
+            v-model="pValueInput"
+            type="number"
+            min="0"
+            dense
+          ></v-text-field>
+          <v-btn small color="secondary" @click="filterOutNodes">upadate</v-btn>
+        </v-card>
       </v-card-text>
     </v-expand-transition>
   </v-card>
 </template>
 
 <script>
+// import Vue from 'vue';
 import axios from "axios";
 export default {
   name: "CyInstance",
@@ -51,9 +71,9 @@ export default {
       default: () => [],
     },
     comparisonSet: {
-      type:Boolean,
-      default: () => false
-    }
+      type: Boolean,
+      default: () => false,
+    },
   },
   data: () => ({
     show: true,
@@ -110,9 +130,9 @@ export default {
         {
           selector: 'edge[direction="<->"]',
           style: {
-            "source-arrow-shape":"vee",
+            "source-arrow-shape": "vee",
             "target-arrow-shape": "vee",
-          }
+          },
         },
         {
           selector: 'edge[direction="-|"]',
@@ -129,9 +149,9 @@ export default {
         {
           selector: 'edge[direction="|--|"]',
           style: {
-            "source-arrow-shape":"tee",
+            "source-arrow-shape": "tee",
             "target-arrow-shape": "tee",
-          }
+          },
         },
         {
           selector: 'edge[direction="|->"]',
@@ -151,15 +171,15 @@ export default {
           selector: "edge[lineColor]",
           style: {
             "line-color": "data(lineColor)",
-            "source-arrow-color":"data(lineColor)",
-            "target-arrow-color":"data(lineColor)"
+            "source-arrow-color": "data(lineColor)",
+            "target-arrow-color": "data(lineColor)",
           },
         },
         {
           selector: "node[nodeColor]",
           style: {
-            "background-color": "data(nodeColor)"
-          }
+            "background-color": "data(nodeColor)",
+          },
         },
         {
           selector: "edge:selected",
@@ -176,8 +196,11 @@ export default {
       minZoom: 0.2,
     },
     cyElements: [],
+    filteredOutCyElements: {},
     showClusters: false,
     clustersLoaded: false,
+    expressionInput: 0,
+    pValueInput: 1,
   }),
   created() {
     this.cyElements = this.cyElementsProp;
@@ -188,12 +211,11 @@ export default {
       else this.doClusterToggle(newVal);
     },
     cyElementsProp(newVal) {
-      this.cy.elements().remove()
+      this.expressionInput = 0;
+      this.pValueInput = 0;
+      this.cy.elements().remove();
       this.cyElements = newVal;
-      this.cy.add(
-        this
-          .cyElements
-      );
+      this.cy.add(this.cyElements);
       this.cy.elements().layout({ name: "cose" }).run();
     },
   },
@@ -221,11 +243,17 @@ export default {
         });
     },
     addClusteringToFIData(map) {
+      //first restore all filtered nodes to cytoscape so that all get cluster data added
+      if(this.filteredOutCyElements.elementsForCy) this.filteredOutCyElements.elementsForCy.restore()
       for (const [key, value] of Object.entries(map)) {
         if (value === null) continue;
         this.cy.$(`#${key}`).data("clusterColor", value);
       }
       this.clustersLoaded = true;
+
+      //refilter out nodes that do not meet expression and pValue filter criteria
+      if(this.filteredOutCyElements.elementsForCy)
+        this.cy.remove(this.filteredOutCyElements.elementsForCy)
     },
     doClusterToggle(show) {
       if (show) {
@@ -233,6 +261,15 @@ export default {
       } else {
         this.cy.elements("[clusterColor]").removeClass("showClusters");
       }
+    },
+    filterOutNodes() {
+      //restore previously removed nodes
+      if(this.filteredOutCyElements.elementsForCy) this.filteredOutCyElements.elementsForCy.restore()
+      //remove nodes and add return to object for restore later
+      this.filteredOutCyElements.elementsForCy = this.cy.remove("node[AveExpr <= " + this.expressionInput + "], node[adjPValue >= " + this.pValueInput + "]" );
+      //if not a comparison set, want to make sure clusters are shown when nodes are restored
+      if(!this.comparisonSet)
+        this.doClusterToggle(this.showClusters);
     },
   },
 };
@@ -250,5 +287,14 @@ export default {
   top: 100px;
   left: 5px;
   width: 10px;
+}
+.filterCard {
+  position: absolute;
+  align-items: center;
+  width: 400px;
+  display: flex;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
 </style>
