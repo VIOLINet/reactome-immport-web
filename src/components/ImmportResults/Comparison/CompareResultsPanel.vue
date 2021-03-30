@@ -8,9 +8,14 @@
         </p>
       </div>
       <div>
+        <div>
+          <v-btn icon @click="show = !show">
+            <v-icon>{{show ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
+          </v-btn>
         <v-btn icon @click="closeComparison"
           ><v-icon>{{ "mdi-close" }}</v-icon></v-btn
         >
+        </div>
       </div>
     </v-card-title>
     <v-card-text>
@@ -72,6 +77,9 @@ export default {
       default: () => {},
     },
   },
+  data: () => ({
+    show: true
+  }),
   computed: {
     fiNetwork() {
       const rtn = [];

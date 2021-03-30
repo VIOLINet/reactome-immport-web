@@ -7,12 +7,16 @@
         </div>
       <div>
         <v-btn color="primary" class="ma-1" @click="$emit('compareResults', resultSet.id)">Compare Results</v-btn>
+        <v-btn icon @click="show = !show">
+          <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
+        </v-btn>
         <v-btn icon @click="closeResults"
           ><v-icon>{{ "mdi-close" }}</v-icon></v-btn
         >
       </div>
     </v-card-title>
-    <v-card-text>
+    <v-expand-transition>
+    <v-card-text v-show="show">
       <ResultsDescriptionPanel class="mb-5" :formData="resultSet.formData" />
       <GeneExpressionResults
         :geneExpressionResults="resultSet.geneExpressionResults"
@@ -30,6 +34,7 @@
         :cyElementsProp="resultSet.fiNetwork"
       />
     </v-card-text>
+    </v-expand-transition>
     <slot :name="resultSet.id"></slot>
   </v-card>
 </template>
@@ -53,7 +58,9 @@ export default {
       default: () => {},
     },
   },
-  data: () => ({}),
+  data: () => ({
+    show: true,
+  }),
   computed: {
     showEnrichmentResults() {
       const obj = this.resultSet.enrichmentResults;
