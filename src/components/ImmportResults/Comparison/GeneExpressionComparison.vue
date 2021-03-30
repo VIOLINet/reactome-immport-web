@@ -86,7 +86,7 @@
               <td colspan="2"></td>
               <td>
                 <v-text-field
-                  prefix="abs(value)≥"
+                  prefix="abs(Ratio)≥"
                   v-model="logPVal1Over2Input"
                   type="number"
                   min="0"
