@@ -157,10 +157,10 @@ export default {
             return value.includes(this.pathwaySearchInput);
           },
         },
-        { text: "Entities Found" + "1".sup(), value: "entities.found" },
-        { text: "Entities Found" + "2".sup(), value: "entities2.found" },
+        { text: "Entities Found" + "a".sup(), value: "entities.found" },
+        { text: "Entities Found" + "b".sup(), value: "entities2.found" },
         {
-          text: "Found" + "1".sup() + "/ Found" + "2".sup(),
+          text: "Found" + "a".sup() + "/ Found" + "b".sup(),
           value: "entitiesFoundRatio",
           filter: (value) => {
             if (!this.ratioComparisonInput) return true;
@@ -168,7 +168,7 @@ export default {
           },
         },
         {
-          text: "pValue" + "1".sup(),
+          text: "pValue" + "a".sup(),
           value: "entities.pValue",
           filter: (value) => {
             if (!this.pValue1Input) return true;
@@ -176,7 +176,7 @@ export default {
           },
         },
         {
-          text: "pValue" + "2".sup(),
+          text: "pValue" + "b".sup(),
           value: "entities2.pValue",
           filter: (value) => {
             if (!this.pValue2Input) return true;
@@ -184,17 +184,17 @@ export default {
           },
         },
         {
-          text: "log(pVal" + "1".sup() + "/pVal" + "2".sup() + ")",
+          text: "log(pVal" + "a".sup() + "/pVal" + "b".sup() + ")",
           value: "logPVal1Over2",
           filter: (value) => {
             if (!this.logPval1Over2Input) return true;
             return Math.abs(value) >= this.logPval1Over2Input;
           },
         },
-        { text: "FDR" + "1".sup(), value: "entities.fdr" },
-        { text: "FDR" + "2".sup(), value: "entities2.fdr" },
+        { text: "FDR" + "a".sup(), value: "entities.fdr" },
+        { text: "FDR" + "b".sup(), value: "entities2.fdr" },
         {
-          text: "log(FDR" + "1".sup() + "/" + "FDR" + "2".sup() + ")",
+          text: "log(FDR" + "a".sup() + "/" + "FDR" + "b".sup() + ")",
           value: "logFdr1Over2",
           filter: (value) => {
             if (!this.logFDR1FDR2Input) return true;

@@ -133,7 +133,7 @@ export default {
           },
         },
         {
-          text: "Ave Expr" + "1".sup(),
+          text: "Ave Expr" + "a".sup(),
           value: "AveExpr",
           filter: (value) => {
             if (!this.aveExpr1Input || value === undefined) return true;
@@ -141,7 +141,7 @@ export default {
           },
         },
         {
-          text: "Ave Expr" + "2".sup(),
+          text: "Ave Expr" + "b".sup(),
           value: "AveExpr2",
           filter: (value) => {
             if (!this.aveExpr2Input || value === undefined) return true;
@@ -157,7 +157,7 @@ export default {
           },
         },
         {
-          text: "Adj Pval" + "1".sup(),
+          text: "Adj Pval" + "a".sup(),
           value: "adjPValue",
           filter: (value) => {
             if (!this.adjPVal1Input || value === undefined) return true;
@@ -165,7 +165,7 @@ export default {
           },
         },
         {
-          text: "Adj Pval" + "2".sup(),
+          text: "Adj Pval" + "b".sup(),
           value: "adjPValue2",
           filter: (value) => {
             if (!this.adjPVal2Input || value === undefined) return true;
@@ -173,7 +173,7 @@ export default {
           },
         },
         {
-          text: "log(AdjPVal" + "1".sup() + "/AdjPVal" + "2".sup() + ")",
+          text: "log(AdjPVal" + "a".sup() + "/AdjPVal" + "b".sup() + ")",
           value: "logPVal1Over2",
           filter: (value) => {
             if(!this.logPVal1Over2Input || value === undefined) return true;
@@ -181,7 +181,7 @@ export default {
           }
         },
         {
-          text: "LogFC" + "1".sup(),
+          text: "LogFC" + "a".sup(),
           value: "logFC",
           filter: (value) => {
             if (!this.logFC1Input || value === undefined) return true;
@@ -189,7 +189,7 @@ export default {
           },
         },
         {
-          text: "LogFC" + "2".sup(),
+          text: "LogFC" + "b".sup(),
           value: "logFC2",
           filter: (value) => {
             if (!this.logFC2Input || value === undefined) return true;
@@ -197,7 +197,7 @@ export default {
           },
         },
         {
-          text: "(LogFC" + "1".sup() + "/LogFC" + "2".sup() + ")",
+          text: "(LogFC" + "a".sup() + "/LogFC" + "b".sup() + ")",
           value: "logFCRatio",
           filter: (value) => {
             if(!this.logFCRatioInput || value === undefined) return true;
