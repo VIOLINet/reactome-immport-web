@@ -23,6 +23,7 @@
                 dense
                 style="background-color: transparent"
                 height="100%"
+                class="disableable"
               >
                 <draggable
                   v-model="timeSamples"
@@ -30,7 +31,7 @@
                   style="height: 100%"
                 >
                   <template v-for="ts in timeSamples">
-                    <v-list-item dense :key="ts.time" class="listItem">
+                    <v-list-item dense :key="ts.time" :disabled="modelTime" class="listItem">
                       <div class="flex">
                         <div>
                           {{ ts.time }}
@@ -171,7 +172,7 @@ export default {
     },
   },
   data: () => ({
-    modelTime: true,
+    modelTime: false,
     timeSamples: [],
     groupOne: [],
     groupTwo: [],
