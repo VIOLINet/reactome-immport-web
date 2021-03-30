@@ -8,7 +8,12 @@
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-if="show">
-        <v-data-table dense :headers="pathwayEnrichmentHeaders" :items="items">
+        <v-data-table
+          dense
+          :headers="pathwayEnrichmentHeaders"
+          :items="items"
+          :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+        >
           <template
             v-for="(h, index) in pathwayEnrichmentHeaders"
             v-slot:[`header.${h.value}`]="{ header }"
@@ -35,17 +40,21 @@
               {{ item.entities2 && item.entities2.pValue.toExponential(2) }}
             </p>
           </template>
-                    <template v-slot:item.entitiesFoundRatio="{ item }">
+          <template v-slot:item.entitiesFoundRatio="{ item }">
             <p :title="item.entitiesFoundRatio">
               {{
                 item.entitiesFoundRatio &&
-                Math.round((item.entitiesFoundRatio + Number.EPSILON) * 100) / 100
+                Math.round((item.entitiesFoundRatio + Number.EPSILON) * 100) /
+                  100
               }}
             </p>
           </template>
           <template v-slot:item.logPVal1Over2="{ item }">
             <p :title="item.logPVal1Over2 && item.logPVal1Over2">
-              {{ item.logPVal1Over2 && Math.round((item.logPVal1Over2 + Number.EPSILON) * 100)/100 }}
+              {{
+                item.logPVal1Over2 &&
+                Math.round((item.logPVal1Over2 + Number.EPSILON) * 100) / 100
+              }}
             </p>
           </template>
           <template v-slot:item.entities.fdr="{ item }">
@@ -60,7 +69,10 @@
           </template>
           <template v-slot:item.logFdr1Over2="{ item }">
             <p :title="item.logFdr1Over2">
-              {{ item.logFdr1Over2 && Math.round((item.logFdr1Over2 + Number.EPSILON) * 100)/100 }}
+              {{
+                item.logFdr1Over2 &&
+                Math.round((item.logFdr1Over2 + Number.EPSILON) * 100) / 100
+              }}
             </p>
           </template>
           <template v-slot:body.append>
