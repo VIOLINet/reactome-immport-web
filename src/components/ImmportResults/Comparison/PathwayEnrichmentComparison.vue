@@ -35,17 +35,17 @@
               {{ item.entities2 && item.entities2.pValue.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.logPVal1Over2="{ item }">
-            <p :title="item.logPVal1Over2 && item.logPVal1Over2">
-              {{ item.logPVal1Over2 && item.logPVal1Over2.toExponential(2) }}
+                    <template v-slot:item.entitiesFoundRatio="{ item }">
+            <p :title="item.entitiesFoundRatio">
+              {{
+                item.entitiesFoundRatio &&
+                Math.round((item.entitiesFoundRatio + Number.EPSILON) * 100) / 100
+              }}
             </p>
           </template>
-          <template v-slot:item.entitiesRatioDiff="{ item }">
-            <p :title="item.entitiesRatioDiff">
-              {{
-                item.entitiesRatioDiff &&
-                item.entitiesRatioDiff.toExponential(2)
-              }}
+          <template v-slot:item.logPVal1Over2="{ item }">
+            <p :title="item.logPVal1Over2 && item.logPVal1Over2">
+              {{ item.logPVal1Over2 && Math.round((item.logPVal1Over2 + Number.EPSILON) * 100)/100 }}
             </p>
           </template>
           <template v-slot:item.entities.fdr="{ item }">
@@ -60,7 +60,7 @@
           </template>
           <template v-slot:item.logFdr1Over2="{ item }">
             <p :title="item.logFdr1Over2">
-              {{ item.logFdr1Over2 && item.logFdr1Over2.toExponential(2) }}
+              {{ item.logFdr1Over2 && Math.round((item.logFdr1Over2 + Number.EPSILON) * 100)/100 }}
             </p>
           </template>
           <template v-slot:body.append>
@@ -145,11 +145,11 @@ export default {
             return value.includes(this.pathwaySearchInput);
           },
         },
-        { text: "Entities Ratio" + "1".sup(), value: "entities.ratio" },
-        { text: "Entities Ratio" + "2".sup(), value: "entities2.ratio" },
+        { text: "Entities Found" + "1".sup(), value: "entities.found" },
+        { text: "Entities Found" + "2".sup(), value: "entities2.found" },
         {
-          text: "Ratio" + "1".sup() + "/ Ratio" + "2".sup(),
-          value: "entitiesRatioDiff",
+          text: "Found" + "1".sup() + "/ Found" + "2".sup(),
+          value: "entitiesFoundRatio",
           filter: (value) => {
             if (!this.ratioComparisonInput) return true;
             return value > this.ratioComparisonInput;
@@ -205,9 +205,9 @@ export default {
           const secondaryPW = { ...secondaryPathways.get(pathway.stId) };
           if (!secondaryPW) return;
           pathway.entities2 = secondaryPW.entities;
-          pathway.entitiesRatioDiff =
-            (pathway.entities2 ? pathway.entities2.ratio : 0) /
-            (pathway.entities ? pathway.entities.ratio : 1);
+          pathway.entitiesFoundRatio =
+            (pathway.entities ? pathway.entities.found : 0) /
+            (pathway.entities2 ? pathway.entities2.found : 1);
           pathway.logPVal1Over2 = Math.log(
             (pathway.entities ? pathway.entities.pValue : 0) /
               (pathway.entities2 ? pathway.entities2.pValue : 1)
