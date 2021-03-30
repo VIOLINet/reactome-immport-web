@@ -45,6 +45,11 @@
               {{item.adjPValue2 && item.adjPValue2.toExponential(2)}}
             </p>
           </template>
+          <template v-slot:item.logPVal1Over2="{item}">
+            <p :title="item.logPVal1Over2 && item.logPVal1Over2">
+              {{item.logPVal1Over2 && Math.round((item.logPVal1Over2 + Number.EPSILON)*100)/100}}
+            </p>
+          </template>
           <template v-slot:item.logFC="{item}">
             <p :title="item.logFC && item.logFC">
               {{item.logFC && item.logFC.toExponential(2)}}
@@ -53,6 +58,11 @@
           <template v-slot:item.logFC2="{item}">
             <p :title="item.logFC2 && item.logFC2">
               {{item.logFC2 && item.logFC2.toExponential(2)}}
+            </p>
+          </template>
+          <template v-slot:item.logFCRatio="{item}">
+            <p :title="item.logFCRatio && item.logFCRatio">
+              {{item.logFCRatio && Math.round((item.logFCRatio + Number.EPSILON)*100)/100}}
             </p>
           </template>
           <template v-slot:body.append>
@@ -68,6 +78,26 @@
                 <v-text-field
                   prefix="abs(Δ AveExpr) ≥"
                   v-model="deltaAveExprInput"
+                  type="number"
+                  min="0"
+                  hide-details
+                ></v-text-field>
+              </td>
+              <td colspan="2"></td>
+              <td>
+                <v-text-field
+                  prefix="abs(value)≥"
+                  v-model="logPVal1Over2Input"
+                  type="number"
+                  min="0"
+                  hide-details
+                ></v-text-field>
+              </td>
+              <td colspan="2"></td>
+              <td>
+                <v-text-field
+                  prefix="≥"
+                  v-model="logFCRatioInput"
                   type="number"
                   min="0"
                   hide-details
@@ -143,6 +173,14 @@ export default {
           },
         },
         {
+          text: "log(AdjPVal" + "1".sup() + "/AdjPVal" + "2".sup() + ")",
+          value: "logPVal1Over2",
+          filter: (value) => {
+            if(!this.logPVal1Over2Input || value === undefined) return true;
+            return Math.abs(value) >= this.logPVal1Over2Input;
+          }
+        },
+        {
           text: "LogFC" + "1".sup(),
           value: "logFC",
           filter: (value) => {
@@ -157,6 +195,14 @@ export default {
             if (!this.logFC2Input || value === undefined) return true;
             return Math.abs(value) >= this.absLogFC2Input;
           },
+        },
+        {
+          text: "(LogFC" + "1".sup() + "/LogFC" + "2".sup() + ")",
+          value: "logFCRatio",
+          filter: (value) => {
+            if(!this.logFCRatioInput || value === undefined) return true;
+            return Math.abs(value) >= this.logFCRatioInput
+          }
         },
       ];
     },
@@ -175,7 +221,12 @@ export default {
         row.AveExpr2 = compareItem.AveExpr;
         row.deltaAveExpr = compareItem.AveExpr - row.AveExpr;
         row.adjPValue2 = compareItem.adjPValue;
+        row.logPVal1Over2 = Math.log(
+          (row.adjPValue ? row.adjPValue : 0) /
+          (row.adjPValue2)
+        )
         row.logFC2 = compareItem.logFC;
+        row.logFCRatio = (row.logFC ? row.logFC : 0) / (row.logFC2)
         secondaryGenes.delete(row.gene_name);
       });
 
@@ -200,8 +251,10 @@ export default {
     deltaAveExprInput: 0,
     adjPVal1Input: 1,
     adjPVal2Input: 1,
+    logPVal1Over2Input: 0,
     absLogFC1Input: 0,
     absLogFC2Input: 0,
+    logFCRatioInput: 0,
     geneExpressionComparisonSearch: "",
   }),
 };
