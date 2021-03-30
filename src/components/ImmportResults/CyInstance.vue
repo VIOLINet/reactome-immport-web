@@ -44,6 +44,8 @@
             type="number"
             min="0"
             dense
+            hide-details
+            @keyup.enter="filterOutNodes"
           ></v-text-field>
           <v-text-field
             class="mr-3"
@@ -52,6 +54,8 @@
             type="number"
             min="0"
             dense
+            hide-details
+            @keyup.enter="filterOutNodes"
           ></v-text-field>
           <v-btn small color="secondary" @click="filterOutNodes">upadate</v-btn>
         </v-card>
