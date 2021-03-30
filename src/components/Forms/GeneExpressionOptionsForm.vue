@@ -23,7 +23,7 @@
                 dense
                 style="background-color: transparent"
                 height="100%"
-                class="disableable"
+                :class="(modelTime) && 'disableable'"
               >
                 <draggable
                   v-model="timeSamples"
@@ -328,5 +328,12 @@ export default {
 }
 .multi-drag {
   border: 1px dotted red;
+}
+.disableable {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
 }
 </style>
