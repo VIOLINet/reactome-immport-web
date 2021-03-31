@@ -7,6 +7,7 @@
         <CompareResultsPanel
           v-for="comparison in comparisonSets"
           :key="comparison[0] + comparison[1]"
+          :id="comparison[0] + comparison[1]"
           :compareFrom="resultSets.find((rs) => rs.id === comparison[0])"
           :compareTo="resultSets.find((rs) => rs.id === comparison[1])"
           @closeComparison="closeComparison"
@@ -25,6 +26,7 @@
         <GeneExpResultPanel
           v-for="item in resultSets"
           :key="item.id"
+          :id="item.id"
           :resultSet="item"
           @closeResults="closeResults"
           @fetchPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
@@ -75,6 +77,20 @@ export default {
     showCompareFromForm: false,
     compareFromId: undefined,
   }),
+  watch: {
+    resultSets() {
+      setTimeout(() => {
+      document.getElementById(this.resultSets[0].id).scrollIntoView()
+      }, 250);
+    },
+    comparisonSets() {
+      setTimeout(() => {
+        const set = this.comparisonSets[this.comparisonSets.length-1]
+        const str = (`${set[0]}${set[1]}`)
+        document.getElementById(str).scrollIntoView()
+      }, 250)
+    }
+  },
   methods: {
     async analyzeData(data) {
       //return if form submission with same data already exists
