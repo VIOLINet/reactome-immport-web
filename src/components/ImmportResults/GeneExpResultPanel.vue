@@ -3,7 +3,7 @@
     <v-card-title class="flex">
       <div>
         <div v-if="!editText">
-          <span class="mb-0">{{panelTitle}}</span>
+          <span class="mb-0">{{ panelTitle }}</span>
           <button icon @click="editText = true">
             <v-icon small>{{ "mdi-pencil-outline" }}</v-icon>
           </button>
@@ -45,11 +45,13 @@
         />
         <PathwayEnrichmentResults
           class="mt-5"
+          :id="resultSet.id + 'pathwayEnrichment'"
           v-if="resultSet.enrichmentResults.pathways"
           :pathwayEnrichmentResults="resultSet.enrichmentResults"
         />
         <CyInstance
           class="mt-5"
+          :id="resultSet.id + 'fiNetwork'"
           v-if="resultSet.fiNetwork.length > 0"
           :cyElementsProp="resultSet.fiNetwork"
         />
@@ -64,6 +66,7 @@ import CyInstance from "./Cytoscape/CyInstance";
 import ResultsDescriptionPanel from "./Description/ResultsDescriptionPanel";
 import GeneExpressionResults from "./GeneExpressionResults";
 import PathwayEnrichmentResults from "./PathwayEnrichmentResults";
+import _isEqual from "lodash/isEqual";
 export default {
   name: "GeneExpResults",
   components: {
@@ -87,6 +90,25 @@ export default {
   created() {
     this.updateTitleText();
   },
+  watch: {
+    "resultSet.enrichmentResults": {
+      handler(newVal, oldVal) {
+        newVal.pathways && (!oldVal || !_isEqual(newVal, oldVal)) &&
+          setTimeout(() => {
+            document.getElementById(this.resultSet.id + "pathwayEnrichment").scrollIntoView();
+          }, 250);
+      },
+      deep: true,
+    },
+    "resultSet.fiNetwork": {
+      handler(newVal, oldVal) {
+        newVal && (!oldVal || !_isEqual(newVal, oldVal)) &&
+        setTimeout(() => {
+          document.getElementById(this.resultSet.id + "fiNetwork").scrollIntoView()
+        }, 250)
+      }
+    }
+  },
   computed: {
     showEnrichmentResults() {
       const obj = this.resultSet.enrichmentResults;
@@ -94,7 +116,7 @@ export default {
     },
     defaultPanelTitle() {
       return "Gene Set Analysis " + this.resultSet.displayId;
-    }
+    },
   },
   methods: {
     fetchPathwayEnrichmentAnalysis(genes) {
@@ -103,12 +125,11 @@ export default {
     async fetchNetworkAnalysis(genes) {
       this.$emit("fetchNetworkAnalysis", this.resultSet.id, genes);
     },
-    updateTitleText(){
-      if(this.editTextInput === "")
-        this.panelTitle = this.defaultPanelTitle
-      else{
+    updateTitleText() {
+      if (this.editTextInput === "") this.panelTitle = this.defaultPanelTitle;
+      else {
         this.panelTitle = this.editTextInput;
-        this.editTextInput = ""
+        this.editTextInput = "";
       }
       this.editText = false;
     },
