@@ -58,7 +58,7 @@
 import DescriptionComparisonPanel from "./DescriptionComparisonPanel";
 import GeneExpressionComparison from "./GeneExpressionComparison";
 import PathwayEnrichmentComparison from "./PathwayEnrichmentComparison";
-import CyInstance from "../CyInstance";
+import CyInstance from "../Cytoscape/CyInstance";
 export default {
   name: "CompareResultsPanel",
   components: {
@@ -91,18 +91,18 @@ export default {
         if (obj.group === "nodes") {
           if (network2.some((item) => item.data.id === obj.data.id)) {
             network2 = network2.filter((item) => item.data.id !== obj.data.id);
-            obj.data.nodeColor = "#058ED9";
+            obj.data.nodeColor = getComputedStyle(document.documentElement).getPropertyValue('--node-a-b-color');
           }else
-            obj.data.nodeColor = "#848FA2";
+            obj.data.nodeColor = getComputedStyle(document.documentElement).getPropertyValue('--node-a-color');
           rtn.push(obj);
         }
         //if group is edge, check if exists in network2
         else if (obj.group === "edges") {
           if (network2.some((item) => item.data.id === obj.data.id)) {
             network2 = network2.filter((item) => item.data.id !== obj.data.id);
-            obj.data.lineColor = "#CC2D35";
+            obj.data.lineColor = getComputedStyle(document.documentElement).getPropertyValue('--edge-a-b-color');
           } else {
-            obj.data.lineColor = "#E1DAAE";
+            obj.data.lineColor = getComputedStyle(document.documentElement).getPropertyValue('--edge-a-color');
           }
           rtn.push(obj);
         }
@@ -115,10 +115,10 @@ export default {
       //loop over network2 and add all nodes. if edge, set color to blue.
       network2.forEach((obj) => {
         if (obj.group === "edges") {
-          obj.data.lineColor = "#FF934F";
+          obj.data.lineColor = getComputedStyle(document.documentElement).getPropertyValue('--edge-b-color');
           rtn.push(obj);
         } else if (obj.group === "nodes") {
-          obj.data.nodeColor = "#2D3142";
+          obj.data.nodeColor = getComputedStyle(document.documentElement).getPropertyValue('--node-b-color');
           rtn.push(obj);
         }
       });
