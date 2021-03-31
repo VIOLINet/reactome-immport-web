@@ -36,7 +36,7 @@
               : "mdi-checkbox-blank-outline"
           }}</v-icon>
         </v-btn>
-        <v-card v-show="show && !comparisonSet" raised class="filterCard pa-3">
+        <v-card v-show="show && !comparisonSet" raised elevation="5" class="filterCard pa-3">
           <v-text-field
             class="mr-3"
             prefix="Expression≥"
@@ -59,6 +59,9 @@
           ></v-text-field>
           <v-btn small color="secondary" @click="filterOutNodes">upadate</v-btn>
         </v-card>
+        <v-card v-show="show && comparisonSet" raised elevation="5" class="legendCard pa-3">
+          <ComparisonLegend />
+        </v-card>
       </v-card-text>
     </v-expand-transition>
   </v-card>
@@ -67,8 +70,12 @@
 <script>
 // import Vue from 'vue';
 import axios from "axios";
+import ComparisonLegend from "./ComparisonLegend"
 export default {
   name: "CyInstance",
+  components: {
+    ComparisonLegend
+  },
   props: {
     cyElementsProp: {
       type: Array,
@@ -189,6 +196,8 @@ export default {
           selector: "edge:selected",
           style: {
             "line-color": "#FF0000",
+            "source-arrow-color": "#F00",
+            "target-arrow-color": "#FF0000",
             width: "2",
           },
         },
@@ -300,5 +309,11 @@ export default {
   bottom: 10px;
   left: 50%;
   transform: translate(-50%, 0%);
+}
+.legendCard {
+  position: absolute;
+  bottom:50%;
+  right: 10px;
+  transform: translate(0, 50%);
 }
 </style>
