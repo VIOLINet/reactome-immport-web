@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import CyInstance from "./CyInstance";
+import CyInstance from "./Cytoscape/CyInstance";
 import ResultsDescriptionPanel from "./Description/ResultsDescriptionPanel";
 import GeneExpressionResults from "./GeneExpressionResults";
 import PathwayEnrichmentResults from "./PathwayEnrichmentResults";
