@@ -117,30 +117,38 @@ export default {
       try {
         this.resultSets.find(
           (rs) => rs.id === id
-        ).fiNetwork = this.addExpressionToNodes(id, await ImmportService.fetchFINetwork(
-          genes.map((gene) => gene.gene_name)
-        ));
+        ).fiNetwork = this.addExpressionToNodes(
+          id,
+          await ImmportService.fetchFINetwork(
+            genes.map((gene) => gene.gene_name)
+          )
+        );
       } catch (err) {
         console.log(err);
       }
     },
-    addExpressionToNodes(id, network){
-      const genes = this.resultSets.find(rs => rs.id === id).geneExpressionResults;
-      network.filter(obj => obj.group === "nodes").forEach(node => {
-        const gene = genes.find(gene => gene.gene_name === node.data.id);
-        node.data.AveExpr = gene.AveExpr
-        node.data.pValue = gene.pValue
-        node.data.adjPValue = gene.adjPValue
-      })
-      return network
+    addExpressionToNodes(id, network) {
+      const genes = this.resultSets.find((rs) => rs.id === id)
+        .geneExpressionResults;
+      network
+        .filter((obj) => obj.group === "nodes")
+        .forEach((node) => {
+          const gene = genes.find((gene) => gene.gene_name === node.data.id);
+          node.data.AveExpr = gene.AveExpr;
+          node.data.pValue = gene.pValue;
+          node.data.adjPValue = gene.adjPValue;
+        });
+      return network;
     },
     closeResults(id) {
       //must close any comparison set that closed results is part of before removing to avoid error
-      this.comparisonSets = this.comparisonSets.filter(set => !(set.includes(id)))
+      this.comparisonSets = this.comparisonSets.filter(
+        (set) => !set.includes(id)
+      );
       this.resultSets = this.resultSets.filter((sub) => sub.id !== id);
     },
     compareResults(id) {
-      if(this.resultSets.length < 2) return;
+      if (this.resultSets.length < 2) return;
       this.compareFromId = id;
       this.showCompareFromForm = true;
     },
@@ -161,6 +169,16 @@ export default {
 </script>
 
 <style>
+:root {
+  /* Cyotoscape comparison node & line colors */
+  --node-a-color: #848fa2;
+  --node-b-color: #2d3142;
+  --node-a-b-color: #058ed9;
+  --edge-a-color: #e1daae;
+  --edge-b-color: #ff934f;
+  --edge-a-b-color: #910f0f;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -217,7 +235,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 /* END REMOVE SPINNERS STYLES */
