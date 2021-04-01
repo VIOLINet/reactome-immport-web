@@ -53,11 +53,10 @@
             <v-sheet color="#ddd" class="inputBox pa-2 ma-1">
               Group 1
               <v-divider></v-divider>
-              <v-list dense style="background-color: transparent" height="100%">
+              <v-list dense class="inputBoxList scrollable" height="90%">
                 <draggable
                   v-model="groupOne"
                   :group="'grouping'"
-                  style="height: 100%"
                 >
                   <template
                     v-for="ts2 in groupOne
@@ -81,7 +80,7 @@
             <v-sheet color="#ddd" class="inputBox pa-2 ma-1">
               Group 2
               <v-divider></v-divider>
-              <v-list dense style="background-color: transparent" height="100%">
+              <v-list dense class="inputBoxList scrollable" height="90%">
                 <draggable
                   v-model="groupTwo"
                   :group="'grouping'"
@@ -318,7 +317,9 @@ export default {
 }
 .inputBox {
   height: 12em;
-  overflow: scroll;
+}
+.inputBoxList {
+  background-color: transparent !important;
 }
 .listItem {
   margin: 0 1em;
@@ -330,10 +331,10 @@ export default {
   border: 1px dotted red;
 }
 .disableable {
-  -webkit-filter: blur(2px);
-  -moz-filter: blur(2px);
-  -o-filter: blur(2px);
-  -ms-filter: blur(2px);
-  filter: blur(2px);
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+  -ms-filter: blur(1px);
+  filter: blur(1px);
 }
 </style>
