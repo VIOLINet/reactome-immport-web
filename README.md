@@ -30,6 +30,13 @@ npm run serve
 npm run build
 ```
 
+### Compiles and minifies for production with extra steps
+```
+npm run build-deploy
+```
+builds project and copies to new output directory. Please adjust output 
+directory if you plan to use this build process for yourself
+
 ### Lints and fixes files
 ```
 npm run lint
