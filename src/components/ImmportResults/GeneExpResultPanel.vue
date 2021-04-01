@@ -12,8 +12,8 @@
           <v-text-field
             v-model="editTextInput"
             :placeholder="defaultPanelTitle"
-            hide-details="true"
             @keyup.enter="updateTitleText"
+            :rules="[v => (v).length <= 25 || 'Description must be 25 characters or less']"
           ></v-text-field>
         </div>
         <p class="small">
@@ -107,6 +107,10 @@ export default {
           document.getElementById(this.resultSet.id + "fiNetwork").scrollIntoView()
         }, 250)
       }
+    },
+    editTextInput(val) {
+      if(val.length > 10) 
+        this.editTextInput = this.editTextInput.slice(0, -1)
     }
   },
   computed: {

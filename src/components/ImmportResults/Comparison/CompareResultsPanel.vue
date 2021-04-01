@@ -12,8 +12,8 @@
           <v-text-field
             v-model="editTextInput"
             :placeholder="defaultPanelTitle"
-            hide-details="true"
             @keyup.enter="updateTitleText"
+            :rules="[v => (v).length <= 75 || 'Description must be 100 characters or less']"
           ></v-text-field>
         </div>
       </div>
