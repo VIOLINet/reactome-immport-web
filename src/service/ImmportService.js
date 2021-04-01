@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const url  = process.env.VUE_APP_IMMPORT_SERVICE;
+
 class ImmportService {
   static fetchBiosampleMetadata() {
     return new Promise((resolve, reject) => {
       axios
-        .get("http://localhost:8076/immportws/metadata/biosamples")
+        .get(`${url}metadata/biosamples`)
         .then((res) => {
           resolve(this.structureJSON(res.data));
         })
@@ -17,7 +19,7 @@ class ImmportService {
   static fetchGeneExpressionAnalysis(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post("http://localhost:8076/immportws/analysis/geneExpression", data)
+        .post(`${url}analysis/geneExpression`, data)
         .then((res) => {
           resolve(res.data)
         })
@@ -30,7 +32,7 @@ class ImmportService {
   static fetchPathwayEnrichmentAnalysis(genes) {
     return new Promise((resolve, reject) => {
       axios
-        .post("http://localhost:8076/immportws/analysis/pathways", genes)
+        .post(`${url}analysis/pathways`, genes)
         .then((res) => {
           resolve(res.data);
         })
@@ -43,7 +45,7 @@ class ImmportService {
   static fetchFINetwork(genes) {
     return new Promise((resolve, reject) => {
       axios
-        .post("http://localhost:8076/immportws/analysis/fi_network", genes)
+        .post(`${url}analysis/fi_network`, genes)
         .then((res) => {
           resolve(res.data);
         })
