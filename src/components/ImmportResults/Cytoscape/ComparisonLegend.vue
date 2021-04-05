@@ -1,27 +1,27 @@
 <template>
   <div style="">
       <div class="flex">
-          <p>Result a node</p>
+          <p>a node</p>
           <div class="nodeCircle" style="background-color:var(--node-a-color)"></div>
       </div>
       <div class="flex">
-          <p>Result b node</p>
+          <p>b node</p>
           <div class="nodeCircle" style="background-color:var(--node-b-color)"></div>
       </div>
       <div class="flex">
-          <p>Result a & b node</p>
+          <p>a & b node</p>
           <div class="nodeCircle" style="background-color:var(--node-a-b-color)"></div>
       </div>
       <div class="flex">
-          <p>Result a edge</p>
+          <p>a edge</p>
           <div class="edge" style="background-color:var(--edge-a-color)"></div>
       </div>
       <div class="flex">
-          <p>Result b edge</p>
+          <p>b edge</p>
           <div class="edge" style="background-color:var(--edge-b-color)"></div>
       </div>
       <div class="flex">
-          <p>Result a & b edge</p>
+          <p>a & b edge</p>
           <div class="edge" style="background-color:var(--edge-a-b-color)"></div>
       </div>
   </div>
