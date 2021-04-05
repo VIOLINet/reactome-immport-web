@@ -21,6 +21,7 @@
       <v-stepper-content step="2">
         <GeneExpressionOptionsForm
           :biosampleMetaData="filteredBiosampleMetaData"
+          :currentResultNames="currentResultNames"
           @backEvent="backEvent"
           @optionsSelectedEvent="optionsSelectedEvent"
         />
@@ -38,6 +39,12 @@ export default {
   components: {
     BiosampleFilterForm,
     GeneExpressionOptionsForm,
+  },
+  props:{
+    currentResultNames: {
+      type: Array,
+      default: () => []
+    }
   },
   data: () => ({
     stepper: 1,

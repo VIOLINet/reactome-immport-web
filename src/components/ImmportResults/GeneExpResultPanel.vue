@@ -2,19 +2,8 @@
   <v-card outlined>
     <v-card-title class="flex">
       <div>
-        <div v-if="!editText">
-          <span class="mb-0">{{ panelTitle }}</span>
-          <button icon @click="editText = true">
-            <v-icon small>{{ "mdi-pencil-outline" }}</v-icon>
-          </button>
-        </div>
-        <div v-if="editText">
-          <v-text-field
-            v-model="editTextInput"
-            :placeholder="defaultPanelTitle"
-            @keyup.enter="updateTitleText"
-            :rules="[v => (v).length <= 25 || 'Description must be 25 characters or less']"
-          ></v-text-field>
+        <div>
+          <p class="mb-0">{{ resultSet.formData.resultSetName }}</p>
         </div>
         <p class="small">
           {{ resultSet.formData.selectedVaccines.join(", ") }}
@@ -83,13 +72,7 @@ export default {
   },
   data: () => ({
     show: true,
-    panelTitle: "",
-    editText: false,
-    editTextInput: "",
   }),
-  created() {
-    this.updateTitleText();
-  },
   watch: {
     "resultSet.enrichmentResults": {
       handler(newVal, oldVal) {
@@ -118,9 +101,6 @@ export default {
       const obj = this.resultSet.enrichmentResults;
       return obj && obj.pathways ? true : false;
     },
-    defaultPanelTitle() {
-      return "Gene Set Analysis " + this.resultSet.displayId;
-    },
   },
   methods: {
     fetchPathwayEnrichmentAnalysis(genes) {
@@ -128,14 +108,6 @@ export default {
     },
     async fetchNetworkAnalysis(genes) {
       this.$emit("fetchNetworkAnalysis", this.resultSet.id, genes);
-    },
-    updateTitleText() {
-      if (this.editTextInput === "") this.panelTitle = this.defaultPanelTitle;
-      else {
-        this.panelTitle = this.editTextInput;
-        this.editTextInput = "";
-      }
-      this.editText = false;
     },
     closeResults() {
       this.$emit("closeResults", this.resultSet.id);

@@ -1,7 +1,7 @@
 <template light>
   <v-card light outlined class="full-width">
       <v-card-text>
-      <p class="text-left">Compare from: <strong>{{compareFromName}}</strong></p>
+      <p class="text-left">Compare from: <strong>{{this.resultSets.find(rs => rs.id === this.compareFromId).formData.resultSetName}}</strong></p>
       <v-select :items="compareToNames" item-text="title" item-value="id" label="Comarison Options" v-model="selectedId"></v-select>
       <div class="flex">
           <v-btn small color="secondary" @click="$emit('cancelComparison')">Cancel</v-btn>
@@ -28,11 +28,8 @@ export default {
         selectedId: null
     }),
     computed: {
-        compareFromName() {
-            return "Result Set " + this.resultSets.find(rs => rs.id === this.compareFromId).displayId
-        },
         compareToNames() {
-            return this.resultSets.filter(rs => rs.id !== this.compareFromId).map(rs => ({title: `Result Set ${rs.displayId}`,
+            return this.resultSets.filter(rs => rs.id !== this.compareFromId).map(rs => ({title: `${rs.formData.resultSetName}`,
             id: rs.id}))
         }
     }

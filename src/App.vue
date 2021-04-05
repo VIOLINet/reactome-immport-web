@@ -2,7 +2,7 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <GeneExpressionAnalysisForm @analyzeData="analyzeData" class="mb-5" />
+      <GeneExpressionAnalysisForm :currentResultNames="resultSets.map(set => set.displayName)" @analyzeData="analyzeData" class="mb-5" />
       <section>
         <CompareResultsPanel
           v-for="comparison in comparisonSets"
@@ -73,17 +73,20 @@ export default {
     resultSets: [],
     comparisonSets: [],
     loadingReactomeAnalyses: false,
-    searchNumber: 1,
     showCompareFromForm: false,
     compareFromId: undefined,
   }),
   watch: {
-    resultSets() {
+    resultSets(newVal, oldVal) {
+      //return if result set was removed instead of added
+      if(newVal.length < oldVal.length) return;
       setTimeout(() => {
       document.getElementById(this.resultSets[0].id).scrollIntoView()
       }, 250);
     },
-    comparisonSets() {
+    comparisonSets(newVal, oldVal) {
+      //return if comparison set was removed instead of added
+      if(newVal.length < oldVal.length) return;
       setTimeout(() => {
         const set = this.comparisonSets[this.comparisonSets.length-1]
         const str = (`${set[0]}${set[1]}`)
@@ -100,7 +103,6 @@ export default {
       //load gene expression analysis before unshifting
       await this.loadGeneExpressionAnalysis(data);
       data.id = uuidv4();
-      data.displayId = this.searchNumber++;
       data.enrichmentResults = {};
       data.fiNetwork = [];
       this.resultSets.unshift(data);

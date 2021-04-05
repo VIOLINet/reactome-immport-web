@@ -2,19 +2,8 @@
   <v-card outlined>
     <v-card-title class="flex">
       <div>
-        <div v-if="!editText">
-          <span class="mb-0">{{panelTitle}}</span>
-          <button icon @click="editText = true">
-            <v-icon small>{{ "mdi-pencil-outline" }}</v-icon>
-          </button>
-        </div>
-        <div v-if="editText">
-          <v-text-field
-            v-model="editTextInput"
-            :placeholder="defaultPanelTitle"
-            @keyup.enter="updateTitleText"
-            :rules="[v => (v).length <= 75 || 'Description must be 100 characters or less']"
-          ></v-text-field>
+        <div>
+          <p class="mb-0">{{compareFrom.formData.resultSetName}} & {{compareTo.formData.resultSetName}}</p>
         </div>
       </div>
       <div>
@@ -89,13 +78,7 @@ export default {
   },
   data: () => ({
     show: true,
-    panelTitle: "",
-    editText: false,
-    editTextInput: ""
   }),
-  created() {
-    this.updateTitleText()
-  },
   computed: {
     fiNetwork() {
       const rtn = [];
@@ -141,20 +124,8 @@ export default {
 
       return rtn;
     },
-    defaultPanelTitle() {
-      return "Comparing Results " + this.compareFrom.displayId + " & " + this.compareTo.displayId;
-    }
   },
   methods: {
-    updateTitleText(){
-      if(this.editTextInput === "")
-        this.panelTitle = this.defaultPanelTitle
-      else{
-        this.panelTitle = this.editTextInput;
-        this.editTextInput = ""
-      }
-      this.editText = false;
-    },
     closeComparison() {
       this.$emit("closeComparison", [this.compareFrom.id, this.compareTo.id]);
     },

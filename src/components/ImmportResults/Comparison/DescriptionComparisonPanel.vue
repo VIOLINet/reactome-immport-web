@@ -13,11 +13,11 @@
             cols="12"
             md="6"
           >
-            <h2>Result Set a</h2>
+            <h2>{{compareFrom.resultSetName}} (a)</h2>
             <ResultsDescription :formData="compareFrom" />
           </v-col>
           <v-col cols="12" md="6">
-            <h2>Result Set b</h2>
+            <h2>{{compareTo.resultSetName}} (b)</h2>
             <ResultsDescription :formData="compareTo"/>
           </v-col>
         </v-row>

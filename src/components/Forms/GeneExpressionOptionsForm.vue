@@ -129,7 +129,7 @@
                 </v-col>
               </v-row>
               <p class="text-left">
-                The expression data can be corrected for the platform
+                The results can be corrected for the platform
               </p>
               <v-checkbox
                 dense
@@ -139,6 +139,15 @@
                 :input-value="corrected"
                 label="Corrected"
               ></v-checkbox>
+              <p class="text-left" style="margin-bottom:0;">
+                Name this Result Set
+              </p>
+              <v-text-field
+              placeholder="Name"
+              v-model="resultSetNameInput"
+              dense
+              :rules="[v => (v).length <= 25 || 'Description must be 25 characters or less']"
+              ></v-text-field>
             </v-sheet>
           </v-col>
         </v-row>
@@ -169,6 +178,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    currentResultNames: {
+      type: Array,
+      default: () => []
+    }
   },
   data: () => ({
     modelTime: false,
@@ -183,6 +196,7 @@ export default {
     ],
     selectedConfoundingVariables: [],
     corrected: true,
+    resultSetNameInput: "",
     errormsg: "",
   }),
   watch: {
@@ -282,6 +296,15 @@ export default {
     },
     analyzeEvent() {
       const data = {};
+      if(!this.resultSetNameInput || this.resultSetNameInput.length === 0){
+        this.errormsg = "Please name result set before analyzing.";
+        return;
+      }
+      if(this.currentResultNames.includes(this.resultSetNameInput)){
+        this.errormsg = "Please choose a unique name for each result set.";
+        return;
+      }
+      data.resultSetName = this.resultSetNameInput;
       data.modelTime = this.modelTime;
       if (!this.modelTime) {
         data.analysisGroups = {
@@ -289,14 +312,15 @@ export default {
           group2: this.groupTwo.map((s) => s.time),
         };
         if(data.analysisGroups.group1.length < 1 || data.analysisGroups.group2.length < 1){
-          this.errormsg = "Use time directly in model or select at least 1 time per group."
-          return 
+          this.errormsg = "Use time directly in model or select at least 1 time per group.";
+          return;
         }
       }
       data.studyCohort = this.selectedConfoundingVariables;
       data.platformCorrection = this.corrected;
       data.variableGenes = false; //set as default. Could be added to form later
-      this.errormsg = ""
+      this.errormsg = "";
+      this.resultSetNameInput = "";
       this.$emit("optionsSelectedEvent", data);
     },
     fireBackEvent() {
