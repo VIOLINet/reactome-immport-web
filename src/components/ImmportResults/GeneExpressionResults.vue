@@ -53,16 +53,7 @@
                   hide-details
                 ></v-text-field>
               </td>
-              <td>
-                <v-text-field
-                  prefix="≥"
-                  v-model="averageGeneExpressionInput"
-                  type="number"
-                  min="0"
-                  step="1"
-                  hide-details
-                ></v-text-field>
-              </td>
+              <td colspan="1"></td>
               <td colspan="1"><v-text-field
                   prefix="abs(logFC)≥"
                   v-model="absLogFCInput"
@@ -72,7 +63,6 @@
                   hide-details
                 ></v-text-field></td>
               <td colspan="1">
-                
               </td>
               <td>
                 <v-text-field
@@ -105,7 +95,6 @@ export default {
   },
   data: () => ({
     show: true,
-    averageGeneExpressionInput: 0,
     adjustedPValInput: 1,
     geneExpressionSearch: "",
     absLogFCInput: 0,
@@ -123,10 +112,7 @@ export default {
         {
           text: "Average Expression",
           value: "AveExpr",
-          filter: (value) => {
-            if (!this.averageGeneExpressionInput) return true;
-            return value >= this.averageGeneExpressionInput;
-          },
+
         },
         {
           text: "logFC",
@@ -151,7 +137,6 @@ export default {
       return this.geneExpressionResults.filter(
         (result) =>
           result.adjPValue <= this.adjustedPValInput &&
-          result.AveExpr >= this.averageGeneExpressionInput &&
           Math.abs(result.logFC) >= this.absLogFCInput
       );
     },
@@ -166,7 +151,7 @@ export default {
     fiNetowrkButtonClicked() {
       if(_isEqual(this.filteredFINetworkGenes, this.filteredGenes))return;
       this.filteredFINetworkGenes = this.filteredGenes;
-      this.$emit("doFINetworkAnalysis", this.filteredFINetworkGenes.slice(0,450));
+      this.$emit("doFINetworkAnalysis", this.filteredFINetworkGenes.slice(0,225));
       this.show = false;
     },
   },
