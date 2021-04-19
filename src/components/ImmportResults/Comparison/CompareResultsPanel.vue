@@ -82,8 +82,8 @@ export default {
   computed: {
     fiNetwork() {
       const rtn = [];
-      const network1 = JSON.parse(JSON.stringify(this.compareFrom.fiNetwork)); //network1 won't be mutated
-      var network2 = JSON.parse(JSON.stringify(this.compareTo.fiNetwork)); //network2 will be mutated by network1's loop
+      const network1 = JSON.parse(JSON.stringify(this.compareFrom.fiNetwork.network)); //network1 won't be mutated
+      var network2 = JSON.parse(JSON.stringify(this.compareTo.fiNetwork.network)); //network2 will be mutated by network1's loop
 
       network1.forEach((obj) => {
         //if group is node, filter out any same node from network2
