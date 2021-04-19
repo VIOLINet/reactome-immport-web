@@ -55,6 +55,19 @@ class ImmportService {
     });
   }
 
+  static fetchClusteredFINework(cyElements){
+    return new Promise((resolve, reject) => {
+      axios.post(
+        "http://localhost:8076/immportws/analysis/clustered_fi_network",
+        cyElements
+      ).then((res) => {
+        resolve(res.data)
+      }).catch(err => {
+        reject(err);
+      })
+    })
+  }
+
   static structureJSON(data) {
     var rtn = [];
     const lines = data.split(/\r?\n/);
