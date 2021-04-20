@@ -41,8 +41,13 @@
         <CyInstance
           class="mt-5"
           :id="resultSet.id + 'fiNetwork'"
-          v-if="resultSet.fiNetwork.length > 0"
-          :cyElementsProp="resultSet.fiNetwork"
+          v-if="resultSet.fiNetwork.network.length > 0"
+          :cyElementsProp="resultSet.fiNetwork.network"
+          :filterProps="{
+            absLogFC: resultSet.fiNetwork.absLogFC,
+            adjPValue: resultSet.fiNetwork.adjPValue,
+          }"
+          @updateTotalNodes="updateTotalNodes"
         />
       </v-card-text>
     </v-expand-transition>
@@ -76,25 +81,30 @@ export default {
   watch: {
     "resultSet.enrichmentResults": {
       handler(newVal, oldVal) {
-        newVal.pathways && (!oldVal || !_isEqual(newVal, oldVal)) &&
+        newVal.pathways &&
+          (!oldVal || !_isEqual(newVal, oldVal)) &&
           setTimeout(() => {
-            document.getElementById(this.resultSet.id + "pathwayEnrichment").scrollIntoView();
+            document
+              .getElementById(this.resultSet.id + "pathwayEnrichment")
+              .scrollIntoView();
           }, 250);
       },
       deep: true,
     },
     "resultSet.fiNetwork": {
       handler(newVal, oldVal) {
-        newVal && (!oldVal || !_isEqual(newVal, oldVal)) &&
-        setTimeout(() => {
-          document.getElementById(this.resultSet.id + "fiNetwork").scrollIntoView()
-        }, 250)
-      }
+        newVal &&
+          (!oldVal || !_isEqual(newVal, oldVal)) &&
+          setTimeout(() => {
+            document
+              .getElementById(this.resultSet.id + "fiNetwork")
+              .scrollIntoView();
+          }, 250);
+      },
     },
     editTextInput(val) {
-      if(val.length > 10) 
-        this.editTextInput = this.editTextInput.slice(0, -1)
-    }
+      if (val.length > 10) this.editTextInput = this.editTextInput.slice(0, -1);
+    },
   },
   computed: {
     showEnrichmentResults() {
@@ -106,8 +116,51 @@ export default {
     fetchPathwayEnrichmentAnalysis(genes) {
       this.$emit("fetchPathwayEnrichmentAnalysis", this.resultSet.id, genes);
     },
-    async fetchNetworkAnalysis(genes) {
-      this.$emit("fetchNetworkAnalysis", this.resultSet.id, genes);
+    fetchNetworkAnalysis(props) {
+      this.$emit("fetchNetworkAnalysis", this.resultSet.id, props);
+    },
+    updateTotalNodes({ totalNodes, absLogFC, adjPValue }) {
+      //get initial set of genes based on absLogFC and adjPValue
+      const genes = this.resultSet.geneExpressionResults
+        .filter(
+          (result) =>
+            result.adjPValue <= adjPValue && Math.abs(result.logFC) >= absLogFC
+        )
+        .sort((a, b) => {
+          a.adjPValue <= b.adjPValue;
+        })
+
+      //check to ensure the filter isn't larger than totalNodes
+      if (genes.length > totalNodes) {
+        this.$emit("fetchNetworkAnalysis", this.resultSet.id, {
+          absLogFC: absLogFC,
+          adjPValue: adjPValue,
+          genes: genes.slice(0, totalNodes < 225 ? totalNodes : 225),
+        });
+        return;
+      }
+
+      //if less genes than totalNodes, need to increase by sorted list of genes
+      //1. filter out all genes already existing in genes variable
+      //2. sort genes by adjPValue
+      //3. slice to remainder of space up to totalGenes
+      //4. map to gene name
+      const extraGenes = this.resultSet.geneExpressionResults
+        .filter((gene) => 
+          !genes.map(gene => gene.gene_name).includes(gene.gene_name)
+        )
+        .sort((a, b) => {
+          a.adjPValue <= b.adjPValue;
+        })
+        .slice(0, totalNodes - genes.length)
+
+      genes.push(...extraGenes);
+
+      this.$emit("fetchNetworkAnalysis", this.resultSet.id, {
+          absLogFC: Math.min(...genes.map(gene => Math.abs(gene.logFC))),
+          adjPValue: Math.max(...genes.map(gene => gene.adjPValue)),
+          genes
+        });
     },
     closeResults() {
       this.$emit("closeResults", this.resultSet.id);

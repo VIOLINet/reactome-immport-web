@@ -36,13 +36,30 @@
               : "mdi-checkbox-blank-outline"
           }}</v-icon>
         </v-btn>
-        <v-card v-show="show && !comparisonSet" raised elevation="5" class="filterCard pa-3">
+        <v-card
+          v-show="show && !comparisonSet"
+          raised
+          elevation="5"
+          class="filterCard pa-3"
+        >
           <v-text-field
             class="mr-3"
-            prefix="Expression≥"
-            v-model="expressionInput"
+            prefix="Total Genes"
+            v-model="totalNodesInput"
             type="number"
             min="0"
+            max="225"
+            dense
+            hide-details
+            @keyup.enter="updateTotalNodes"
+          ></v-text-field>
+          <v-text-field
+            class="mr-3"
+            prefix="logFC≤"
+            v-model="absLogFCInput"
+            type="number"
+            min="0"
+            max="1"
             dense
             hide-details
             @keyup.enter="filterOutNodes"
@@ -53,13 +70,18 @@
             v-model="pValueInput"
             type="number"
             min="0"
+            max="1"
             dense
             hide-details
             @keyup.enter="filterOutNodes"
           ></v-text-field>
-          <v-btn small color="secondary" @click="filterOutNodes">upadate</v-btn>
         </v-card>
-        <v-card v-show="show && comparisonSet" raised elevation="5" class="legendCard pa-3">
+        <v-card
+          v-show="show && comparisonSet"
+          raised
+          elevation="5"
+          class="legendCard pa-3"
+        >
           <ComparisonLegend />
         </v-card>
       </v-card-text>
@@ -69,12 +91,12 @@
 
 <script>
 // import Vue from 'vue';
-import axios from "axios";
-import ComparisonLegend from "./ComparisonLegend"
+import ComparisonLegend from "./ComparisonLegend";
+import ImmportService from "../../../service/ImmportService";
 export default {
   name: "CyInstance",
   components: {
-    ComparisonLegend
+    ComparisonLegend,
   },
   props: {
     cyElementsProp: {
@@ -84,6 +106,13 @@ export default {
     comparisonSet: {
       type: Boolean,
       default: () => false,
+    },
+    filterProps: {
+      type: Object,
+      default: () => ({
+        absLogFC: 0,
+        adjPValue: 1,
+      }),
     },
   },
   data: () => ({
@@ -213,10 +242,15 @@ export default {
     showClusters: false,
     clustersLoaded: false,
     expressionInput: 0,
+    absLogFCInput: 1,
     pValueInput: 1,
+    totalNodesInput: 0,
   }),
   created() {
+    this.absLogFCInput = this.filterProps.absLogFC;
+    this.pValueInput = this.filterProps.adjPValue;
     this.cyElements = this.cyElementsProp;
+    this.totalNodesInput = this.totalNodes;
   },
   watch: {
     showClusters(newVal) {
@@ -224,12 +258,20 @@ export default {
       else this.doClusterToggle(newVal);
     },
     cyElementsProp(newVal) {
-      this.expressionInput = 0;
-      this.pValueInput = 0;
+      this.absLogFCInput = this.filterProps.absLogFC;
+      this.pValueInput = this.filterProps.adjPValue;
+      this.filteredOutCyElements = {}
       this.cy.elements().remove();
       this.cyElements = newVal;
       this.cy.add(this.cyElements);
+      this.totalNodesInput = this.totalNodes;
       this.cy.elements().layout({ name: "cose" }).run();
+      this.totalNodesInput = this.totalNodes
+    },
+  },
+  computed: {
+    totalNodes() {
+      return this.cyElementsProp.filter((ele) => ele.group === "nodes").length;
     },
   },
   methods: {
@@ -241,23 +283,21 @@ export default {
     resetCytoscape() {
       this.cy.fit();
     },
-    loadClustering() {
-      axios
-        .post(
-          "http://localhost:8076/immportws/analysis/clustered_fi_network",
+    async loadClustering() {
+      try {
+        const data = await ImmportService.fetchClusteredFINework(
           this.cyElements
-        )
-        .then(({ data }) => {
-          this.addClusteringToFIData(data);
-          this.doClusterToggle(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        );
+        this.addClusteringToFIData(data);
+        this.doClusterToggle(true);
+      } catch (err) {
+        console.log(err);
+      }
     },
     addClusteringToFIData(map) {
       //first restore all filtered nodes to cytoscape so that all get cluster data added
-      if(this.filteredOutCyElements.elementsForCy) this.filteredOutCyElements.elementsForCy.restore()
+      if (this.filteredOutCyElements.elementsForCy)
+        this.filteredOutCyElements.elementsForCy.restore();
       for (const [key, value] of Object.entries(map)) {
         if (value === null) continue;
         this.cy.$(`#${key}`).data("clusterColor", value);
@@ -265,8 +305,8 @@ export default {
       this.clustersLoaded = true;
 
       //refilter out nodes that do not meet expression and pValue filter criteria
-      if(this.filteredOutCyElements.elementsForCy)
-        this.cy.remove(this.filteredOutCyElements.elementsForCy)
+      if (this.filteredOutCyElements.elementsForCy)
+        this.cy.remove(this.filteredOutCyElements.elementsForCy);
     },
     doClusterToggle(show) {
       if (show) {
@@ -276,13 +316,44 @@ export default {
       }
     },
     filterOutNodes() {
+      //if user changes limit for total nodes to something higher than available, load new network
+      if (this.totalNodesInput > this.totalNodes) {
+        this.updateTotalNodes();
+        return;
+      }
+
       //restore previously removed nodes
-      if(this.filteredOutCyElements.elementsForCy) this.filteredOutCyElements.elementsForCy.restore()
+      if (this.filteredOutCyElements.elementsForCy) {
+        this.filteredOutCyElements.elementsForCy.restore();
+        // this.filteredOutCyElements.edgesForCy.restore();
+      }
+
       //remove nodes and add return to object for restore later
-      this.filteredOutCyElements.elementsForCy = this.cy.remove("node[AveExpr <= " + this.expressionInput + "], node[adjPValue >= " + this.pValueInput + "]" );
+      this.filteredOutCyElements.elementsForCy = this.cy.remove(
+        "node[absLogFC  <=" +
+          this.absLogFCInput +
+          "], node[adjPValue >= " +
+          this.pValueInput +
+          "]"
+      );
+      // this.filteredOutCyElements.edgesForCy = this.cy.filter(
+      //   "node[absLogFC  <=" +
+      //     this.absLogFCInput +"], node[adjPValue >= " +
+      //     this.pValueInput +
+      //     "]"
+      // ).connectedEdges()
+
+      // this.cy.remove(this.filteredOutCyElements.elementsForCy)
+
       //if not a comparison set, want to make sure clusters are shown when nodes are restored
-      if(!this.comparisonSet)
-        this.doClusterToggle(this.showClusters);
+      if (!this.comparisonSet) this.doClusterToggle(this.showClusters);
+    },
+    updateTotalNodes() {
+      this.$emit("updateTotalNodes", {
+        totalNodes: this.totalNodesInput,
+        absLogFC: this.absLogFCInput,
+        adjPValue: this.pValueInput,
+      });
     },
   },
 };
@@ -312,7 +383,7 @@ export default {
 }
 .legendCard {
   position: absolute;
-  bottom:50%;
+  bottom: 50%;
   right: 10px;
   transform: translate(0, 50%);
 }

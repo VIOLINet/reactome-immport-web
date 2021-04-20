@@ -2,7 +2,11 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
-      <GeneExpressionAnalysisForm :currentResultNames="resultSets.map(set => set.displayName)" @analyzeData="analyzeData" class="mb-5" />
+      <GeneExpressionAnalysisForm
+        :currentResultNames="resultSets.map((set) => set.displayName)"
+        @analyzeData="analyzeData"
+        class="mb-5"
+      />
       <section>
         <CompareResultsPanel
           v-for="comparison in comparisonSets"
@@ -79,20 +83,20 @@ export default {
   watch: {
     resultSets(newVal, oldVal) {
       //return if result set was removed instead of added
-      if(newVal.length < oldVal.length) return;
+      if (newVal.length < oldVal.length) return;
       setTimeout(() => {
-      document.getElementById(this.resultSets[0].id).scrollIntoView()
+        document.getElementById(this.resultSets[0].id).scrollIntoView();
       }, 250);
     },
     comparisonSets(newVal, oldVal) {
       //return if comparison set was removed instead of added
-      if(newVal.length < oldVal.length) return;
+      if (newVal.length < oldVal.length) return;
       setTimeout(() => {
-        const set = this.comparisonSets[this.comparisonSets.length-1]
-        const str = (`${set[0]}${set[1]}`)
-        document.getElementById(str).scrollIntoView()
-      }, 250)
-    }
+        const set = this.comparisonSets[this.comparisonSets.length - 1];
+        const str = `${set[0]}${set[1]}`;
+        document.getElementById(str).scrollIntoView();
+      }, 250);
+    },
   },
   methods: {
     async analyzeData(data) {
@@ -104,7 +108,7 @@ export default {
       await this.loadGeneExpressionAnalysis(data);
       data.id = uuidv4();
       data.enrichmentResults = {};
-      data.fiNetwork = [];
+      data.fiNetwork = { network: [], absLogFC:0, adjPValue:1 };
       this.resultSets.unshift(data);
     },
     async loadGeneExpressionAnalysis(data) {
@@ -131,16 +135,20 @@ export default {
         console.log(err);
       }
     },
-    async fetchNetworkAnalysis(id, genes) {
+    async fetchNetworkAnalysis(id, props) {
+      console.log(props.absLogFC)
+      console.log(props.adjPValue)
       try {
-        this.resultSets.find(
-          (rs) => rs.id === id
-        ).fiNetwork = this.addExpressionToNodes(
-          id,
-          await ImmportService.fetchFINetwork(
-            genes.map((gene) => gene.gene_name)
-          )
-        );
+        this.resultSets.find((rs) => rs.id === id).fiNetwork = {
+          network: this.addExpressionToNodes(
+            id,
+            await ImmportService.fetchFINetwork(
+              props.genes.map((gene) => gene.gene_name)
+            )
+          ),
+          absLogFC: props.absLogFC,
+          adjPValue: props.adjPValue,
+        };
       } catch (err) {
         console.log(err);
       }
@@ -152,7 +160,8 @@ export default {
         .filter((obj) => obj.group === "nodes")
         .forEach((node) => {
           const gene = genes.find((gene) => gene.gene_name === node.data.id);
-          node.data.AveExpr = gene.AveExpr;
+          node.data.logFC = gene.logFC;
+          node.data.absLogFC = Math.abs(gene.logFC)
           node.data.pValue = gene.pValue;
           node.data.adjPValue = gene.adjPValue;
         });

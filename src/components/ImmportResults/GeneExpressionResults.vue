@@ -151,7 +151,11 @@ export default {
     fiNetowrkButtonClicked() {
       if(_isEqual(this.filteredFINetworkGenes, this.filteredGenes))return;
       this.filteredFINetworkGenes = this.filteredGenes;
-      this.$emit("doFINetworkAnalysis", this.filteredFINetworkGenes.slice(0,225));
+      this.$emit("doFINetworkAnalysis", {
+        absLogFC: this.absLogFCInput,
+        adjPValue: this.adjustedPValInput,
+        genes: this.filteredFINetworkGenes.slice(0,225)
+      });
       this.show = false;
     },
   },
