@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-deploy": "vue-cli-service build && cp -r dist/* /Users/brunsont/git/immport-ws/src/main/webapp/reactome-immport-web",
+    "build-deploy": "vue-cli-service build && cp -r dist/* tomcat/src/main/webapp",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "test": "jest"
