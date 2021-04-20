@@ -50,7 +50,8 @@
             min="0"
             max="225"
             dense
-            hide-details
+            :rules="[v => v <= 225 || '225 max genes']"
+            :hide-details="totalNodesInput <= 225"
             @keyup.enter="updateTotalNodes"
           ></v-text-field>
           <v-text-field
@@ -65,7 +66,6 @@
             @keyup.enter="filterOutNodes"
           ></v-text-field>
           <v-text-field
-            class="mr-3"
             prefix="adjPValue≤"
             v-model="pValueInput"
             type="number"
@@ -375,7 +375,7 @@ export default {
 .filterCard {
   position: absolute;
   align-items: center;
-  width: 400px;
+  width: 450px;
   display: flex;
   bottom: 10px;
   left: 50%;
