@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /dist
-tomcat/src/main/webapp
+tomcat/target
+tomcat/src/main/webapp/*
 
 # local env files
 .env.local

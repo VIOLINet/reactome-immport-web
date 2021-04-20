@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build-deploy": "vue-cli-service build && cp -r dist/* tomcat/src/main/webapp",
+    "build-nursa-deploy": "vue-cli-service build && cp -r dist/* tomcat/src/main/webapp && cd tomcat && mvn clean package && scp target/reactome-immport-web-1.0.0.war nursa:reactome-immport-web.war && rm -rf src/main/webapp/*",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "test": "jest"
