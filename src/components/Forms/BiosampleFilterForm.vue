@@ -397,7 +397,7 @@ export default {
         this.selectedAges.push(...this.availableAgeGroups);
       }
     },
-    selectAllAgeGroups(selected) {
+    selectAllAges(selected) {
       if (selected)
         this.selectedAges.push(
           ...this.availableAgeGroups.filter(
