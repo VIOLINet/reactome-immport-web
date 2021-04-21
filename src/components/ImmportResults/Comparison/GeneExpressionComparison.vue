@@ -166,15 +166,15 @@ export default {
           }
         },
         {
-          text: "LogFC" + "a".sup(),
+          text: "Log" + "2".sub() + "FC" + "a".sup(),
           value: "logFC",
         },
         {
-          text: "LogFC" + "b".sup(),
+          text: "Log" + "2".sub() + "FC" + "b".sup(),
           value: "logFC2",
         },
         {
-          text: "(LogFC" + "a".sup() + "/LogFC" + "b".sup() + ")",
+          text: "(Log" + "2".sub() + "FC" + "a".sup() + "/Log" + "2".sub() + "FC" + "b".sup() + ")",
           value: "logFCRatio",
           filter: (value) => {
             if(!this.logFCRatioInput || value === undefined) return true;

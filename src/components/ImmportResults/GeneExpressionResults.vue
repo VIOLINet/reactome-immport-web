@@ -25,6 +25,12 @@
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
           no-results-text="No genes. Try a less strict filter thresholds."
         >
+        <template
+            v-for="(h, index) in geneAnalysisHeaders"
+            v-slot:[`header.${h.value}`]="{ header }"
+          >
+            <span :key="index" v-html="header.text"></span>
+          </template>
           <template v-slot:item.AveExpr="{item}">
             <p :title="item.AveExpr">
               {{item.AveExpr.toExponential(2)}}
@@ -116,7 +122,7 @@ export default {
 
         },
         {
-          text: "logFC",
+          text: "log" + "2".sub() + "FC",
           value: "logFC",
           filter: (value) => {
             if (!this.absLogFCInput) return true;
