@@ -3,7 +3,7 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-                      <a target="_blank" :href="`${reactomeLink}DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`"><v-btn color="secondary">Open in Reactome</v-btn></a>
+                      <a target="_blank" :href="reactomeFireworksURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
 
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
@@ -19,7 +19,7 @@
           no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template v-slot:item.stId="{item}">
-            <a target="_blank" :href="`${reactomeLink}${item.stId}&DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`">{{item.stId}}</a>
+            <a target="_blank" :href="getReactomeDiagramURL(item)">{{item.stId}}</a>
           </template>
           <template v-slot:item.entities.ratio="{ item }">
             <p :title="item.entities.ratio">
@@ -119,7 +119,15 @@ export default {
         },
       ];
     },
+    reactomeFireworksURL(){
+      return `${process.env.VUE_APP_REACTOME_LINK}DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    }
   },
+  methods:{
+    getReactomeDiagramURL(item){
+      return `${process.env.VUE_APP_REACTOME_LINK}${item.stId}&DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    }
+  }
 };
 </script>
 
