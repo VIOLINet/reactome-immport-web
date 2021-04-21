@@ -88,7 +88,6 @@ export default {
   data: () => ({
     show: true,
     pathwayEnrichmentFDR: 1,
-    reactomeLink:process.env.VUE_APP_REACTOME_LINK,
     pathwaySearchInput: "",
     pValInput: 0.05
   }),
