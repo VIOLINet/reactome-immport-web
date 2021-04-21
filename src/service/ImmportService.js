@@ -58,7 +58,7 @@ class ImmportService {
   static fetchClusteredFINework(cyElements){
     return new Promise((resolve, reject) => {
       axios.post(
-        "http://localhost:8076/immportws/analysis/clustered_fi_network",
+        `${url}analysis/clustered_fi_network`,
         cyElements
       ).then((res) => {
         resolve(res.data)
