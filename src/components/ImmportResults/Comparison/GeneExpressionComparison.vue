@@ -13,6 +13,7 @@
           :headers="geneAnalysisHeaders"
           :items="items"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          no-results-text="No genes. Try a less strict filter thresholds."
         >
           <template
             v-for="(h, index) in geneAnalysisHeaders"
@@ -135,18 +136,10 @@ export default {
         {
           text: "Ave Expr" + "a".sup(),
           value: "AveExpr",
-          filter: (value) => {
-            if (!this.aveExpr1Input || value === undefined) return true;
-            return value >= Math.abs(this.aveExpr1Input);
-          },
         },
         {
           text: "Ave Expr" + "b".sup(),
           value: "AveExpr2",
-          filter: (value) => {
-            if (!this.aveExpr2Input || value === undefined) return true;
-            return value >= this.aveExpr2Input;
-          },
         },
         {
           text: "Δ Ave Expr",
@@ -159,18 +152,10 @@ export default {
         {
           text: "Adj Pval" + "a".sup(),
           value: "adjPValue",
-          filter: (value) => {
-            if (!this.adjPVal1Input || value === undefined) return true;
-            return value <= this.adjPVal1Input;
-          },
         },
         {
           text: "Adj Pval" + "b".sup(),
           value: "adjPValue2",
-          filter: (value) => {
-            if (!this.adjPVal2Input || value === undefined) return true;
-            return value <= this.adjPVal2Input;
-          },
         },
         {
           text: "log(AdjPVal" + "a".sup() + "/AdjPVal" + "b".sup() + ")",
@@ -183,18 +168,10 @@ export default {
         {
           text: "LogFC" + "a".sup(),
           value: "logFC",
-          filter: (value) => {
-            if (!this.logFC1Input || value === undefined) return true;
-            return Math.abs(value) >= this.absLogFC1Input;
-          },
         },
         {
           text: "LogFC" + "b".sup(),
           value: "logFC2",
-          filter: (value) => {
-            if (!this.logFC2Input || value === undefined) return true;
-            return Math.abs(value) >= this.absLogFC2Input;
-          },
         },
         {
           text: "(LogFC" + "a".sup() + "/LogFC" + "b".sup() + ")",
@@ -246,14 +223,8 @@ export default {
   },
   data: () => ({
     show: false,
-    aveExpr1Input: 0,
-    aveExpr2Input: 0,
     deltaAveExprInput: 0,
-    adjPVal1Input: 1,
-    adjPVal2Input: 1,
     logPVal1Over2Input: 0,
-    absLogFC1Input: 0,
-    absLogFC2Input: 0,
     logFCRatioInput: 0,
     geneExpressionComparisonSearch: "",
   }),

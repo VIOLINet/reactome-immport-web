@@ -23,6 +23,7 @@
           :headers="geneAnalysisHeaders"
           :items="geneExpressionResults"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          no-results-text="No genes. Try a less strict filter thresholds."
         >
           <template v-slot:item.AveExpr="{item}">
             <p :title="item.AveExpr">
@@ -95,7 +96,7 @@ export default {
   },
   data: () => ({
     show: true,
-    adjustedPValInput: 1,
+    adjustedPValInput: 0.05,
     geneExpressionSearch: "",
     absLogFCInput: 0,
     filteredPathwayGenes: [],

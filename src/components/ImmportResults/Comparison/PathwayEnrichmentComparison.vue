@@ -13,6 +13,7 @@
           :headers="pathwayEnrichmentHeaders"
           :items="items"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template
             v-for="(h, index) in pathwayEnrichmentHeaders"
@@ -141,8 +142,6 @@ export default {
     pathwaySearchInput: "",
     logFDR1FDR2Input: 0,
     logPval1Over2Input: 0,
-    pValue1Input: 1,
-    pValue2Input: 1,
     ratioComparisonInput: 0,
   }),
   computed: {
@@ -170,18 +169,10 @@ export default {
         {
           text: "pValue" + "a".sup(),
           value: "entities.pValue",
-          filter: (value) => {
-            if (!this.pValue1Input) return true;
-            return value <= this.pValue1Input;
-          },
         },
         {
           text: "pValue" + "b".sup(),
           value: "entities2.pValue",
-          filter: (value) => {
-            if (!this.pValue2Input) return true;
-            return value <= this.pValue2Input;
-          },
         },
         {
           text: "log(pVal" + "a".sup() + "/pVal" + "b".sup() + ")",

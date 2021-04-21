@@ -16,6 +16,7 @@
           :headers="pathwayEnrichmentHeaders"
           :items="pathwayEnrichmentResults.pathways"
           :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template v-slot:item.stId="{item}">
             <a target="_blank" :href="`${reactomeLink}${item.stId}&DTAB=AN&ANALYSIS=${pathwayEnrichmentResults.summary.token}`">{{item.stId}}</a>
@@ -89,7 +90,7 @@ export default {
     pathwayEnrichmentFDR: 1,
     reactomeLink:process.env.VUE_APP_REACTOME_LINK,
     pathwaySearchInput: "",
-    pValInput: 1
+    pValInput: 0.05
   }),
   computed: {
     pathwayEnrichmentHeaders() {
