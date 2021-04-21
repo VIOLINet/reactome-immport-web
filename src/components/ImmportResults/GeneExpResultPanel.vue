@@ -1,9 +1,9 @@
 <template>
   <v-card outlined>
     <v-card-title class="flex">
-      <div>
+      <div style="max-width:80%;">
         <div>
-          <p class="mb-0">{{ resultSet.formData.resultSetName }}</p>
+          <p class="mb-0 panel-name" :title="resultSet.formData.resultSetName">{{ resultSet.formData.resultSetName }}</p>
         </div>
         <p class="small">
           {{ resultSet.formData.selectedVaccines.join(", ") }}
@@ -184,4 +184,11 @@ td {
   text-align: left;
   font-size: small;
 }
+.panel-name {
+  display: inline-block;
+  white-space: nowrap;
+  overflow:hidden;
+  width:100%;
+  text-overflow:ellipsis;
+  }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <v-card outlined>
     <v-card-title class="flex">
-      <div>
+      <div style="max-width:80%;">
         <div>
-          <p class="mb-0">{{compareFrom.formData.resultSetName}} & {{compareTo.formData.resultSetName}}</p>
+          <p class="mb-0 panel-name">{{compareFrom.formData.resultSetName}} & {{compareTo.formData.resultSetName}}</p>
         </div>
       </div>
       <div>
@@ -137,5 +137,10 @@ export default {
 .flex {
   display: flex;
   justify-content: space-between;
+  align-items:flex-start;
+}
+.panel-name {
+  text-align: left;
+  width: 100%;
 }
 </style>

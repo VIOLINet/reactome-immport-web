@@ -1,7 +1,7 @@
 <template light>
   <v-card light outlined class="full-width">
       <v-card-text>
-      <p class="text-left">Compare from: <strong>{{this.resultSets.find(rs => rs.id === this.compareFromId).formData.resultSetName}}</strong></p>
+      <p class="text-left from-text">Compare from: <strong>{{this.resultSets.find(rs => rs.id === this.compareFromId).formData.resultSetName}}</strong></p>
       <v-select :items="compareToNames" item-text="title" item-value="id" label="Comarison Options" v-model="selectedId"></v-select>
       <div class="flex">
           <v-btn small color="secondary" @click="$emit('cancelComparison')">Cancel</v-btn>
@@ -46,6 +46,13 @@ export default {
     margin-left: 10px;
 }
 .full-width {
+    width: 600px;
+}
+.from-text {
+    display: block;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

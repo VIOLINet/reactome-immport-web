@@ -147,7 +147,6 @@
               v-model="resultSetNameInput"
               @keyup.enter="analyzeEvent"
               dense
-              :rules="[v => (v).length <= 25 || 'Description must be 25 characters or less']"
               ></v-text-field>
             </v-sheet>
           </v-col>
