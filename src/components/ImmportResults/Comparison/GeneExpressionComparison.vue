@@ -21,14 +21,14 @@
           >
             <span :key="index" v-html="header.text"></span>
           </template>
-          <template v-slot:item.AveExpr="{item}">
+          <template v-slot:item.AveExpr="{ item }">
             <p :title="item.AveExpr && item.AveExpr">
-              {{item.AveExpr && item.AveExpr.toExponential(2)}}
+              {{ item.AveExpr && item.AveExpr.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.AveExpr2="{item}">
+          <template v-slot:item.AveExpr2="{ item }">
             <p :title="item.AveExpr2 && item.AveExpr2">
-              {{item.AveExpr2 && item.AveExpr2.toExponential(2)}}
+              {{ item.AveExpr2 && item.AveExpr2.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.deltaAveExpr="{ item }">
@@ -36,34 +36,40 @@
               {{ item.deltaAveExpr && item.deltaAveExpr.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.adjPValue="{item}">
+          <template v-slot:item.adjPValue="{ item }">
             <p :title="item.adjPValue && item.adjPValue">
-              {{item.adjPValue && item.adjPValue.toExponential(2)}}
+              {{ item.adjPValue && item.adjPValue.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.adjPValue2="{item}">
+          <template v-slot:item.adjPValue2="{ item }">
             <p :title="item.adjPValue2 && item.adjPValue2">
-              {{item.adjPValue2 && item.adjPValue2.toExponential(2)}}
+              {{ item.adjPValue2 && item.adjPValue2.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.logPVal1Over2="{item}">
+          <template v-slot:item.logPVal1Over2="{ item }">
             <p :title="item.logPVal1Over2 && item.logPVal1Over2">
-              {{item.logPVal1Over2 && Math.round((item.logPVal1Over2 + Number.EPSILON)*100)/100}}
+              {{
+                item.logPVal1Over2 &&
+                Math.round((item.logPVal1Over2 + Number.EPSILON) * 100) / 100
+              }}
             </p>
           </template>
-          <template v-slot:item.logFC="{item}">
+          <template v-slot:item.logFC="{ item }">
             <p :title="item.logFC && item.logFC">
-              {{item.logFC && item.logFC.toExponential(2)}}
+              {{ item.logFC && item.logFC.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.logFC2="{item}">
+          <template v-slot:item.logFC2="{ item }">
             <p :title="item.logFC2 && item.logFC2">
-              {{item.logFC2 && item.logFC2.toExponential(2)}}
+              {{ item.logFC2 && item.logFC2.toExponential(2) }}
             </p>
           </template>
-          <template v-slot:item.logFCRatio="{item}">
+          <template v-slot:item.logFCRatio="{ item }">
             <p :title="item.logFCRatio && item.logFCRatio">
-              {{item.logFCRatio && Math.round((item.logFCRatio + Number.EPSILON)*100)/100}}
+              {{
+                item.logFCRatio &&
+                Math.round((item.logFCRatio + Number.EPSILON) * 100) / 100
+              }}
             </p>
           </template>
           <template v-slot:body.append>
@@ -161,9 +167,9 @@ export default {
           text: "log(AdjPVal" + "a".sup() + "/AdjPVal" + "b".sup() + ")",
           value: "logPVal1Over2",
           filter: (value) => {
-            if(!this.logPVal1Over2Input || value === undefined) return true;
+            if (!this.logPVal1Over2Input || value === undefined) return true;
             return Math.abs(value) >= this.logPVal1Over2Input;
-          }
+          },
         },
         {
           text: "Log" + "2".sub() + "FC" + "a".sup(),
@@ -174,12 +180,21 @@ export default {
           value: "logFC2",
         },
         {
-          text: "(Log" + "2".sub() + "FC" + "a".sup() + "/Log" + "2".sub() + "FC" + "b".sup() + ")",
+          text:
+            "(Log" +
+            "2".sub() +
+            "FC" +
+            "a".sup() +
+            "/Log" +
+            "2".sub() +
+            "FC" +
+            "b".sup() +
+            ")",
           value: "logFCRatio",
           filter: (value) => {
-            if(!this.logFCRatioInput || value === undefined) return true;
-            return Math.abs(value) >= this.logFCRatioInput
-          }
+            if (!this.logFCRatioInput || value === undefined) return true;
+            return Math.abs(value) >= this.logFCRatioInput;
+          },
         },
       ];
     },
@@ -199,11 +214,10 @@ export default {
         row.deltaAveExpr = compareItem.AveExpr - row.AveExpr;
         row.adjPValue2 = compareItem.adjPValue;
         row.logPVal1Over2 = Math.log(
-          (row.adjPValue ? row.adjPValue : 0) /
-          (row.adjPValue2)
-        )
+          (row.adjPValue ? row.adjPValue : 0) / row.adjPValue2
+        );
         row.logFC2 = compareItem.logFC;
-        row.logFCRatio = (row.logFC ? row.logFC : 0) / (row.logFC2)
+        row.logFCRatio = (row.logFC ? row.logFC : 0) / row.logFC2;
         secondaryGenes.delete(row.gene_name);
       });
 
