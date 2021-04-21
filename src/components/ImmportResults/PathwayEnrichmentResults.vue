@@ -3,8 +3,7 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-                      <a target="_blank" :href="reactomeFireworksURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
-
+        <a target="_blank" :href="reactomeFireworksURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
