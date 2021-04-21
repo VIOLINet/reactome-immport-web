@@ -294,7 +294,7 @@ export default {
             )
             .map((s) => s.immport_study_accession)
         ),
-      ];
+      ].sort();
     },
     availablePlatforms() {
       return [
@@ -309,7 +309,7 @@ export default {
             )
             .map((s) => s.platform_desc)
         ),
-      ];
+      ].sort();
     },
     availableDayDefinitions() {
       return [
@@ -325,7 +325,7 @@ export default {
             )
             .map((s) => s.day_0_def_foreach)
         ),
-      ];
+      ].sort();
     },
     availableGenders() {
       const samples = this.biosampleMetaData.filter(
@@ -337,7 +337,7 @@ export default {
           this.selectedPlatforms.includes(sample.platform_desc) &&
           this.selectedDayDefinitions.includes(sample.day_0_def_foreach)
       );
-      return [...new Set(samples.map((s) => s.gender))];
+      return [...new Set(samples.map((s) => s.gender))].sort();
     },
     availableAgeGroups() {
       const samples = this.biosampleMetaData.filter(
@@ -350,7 +350,7 @@ export default {
           this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
           this.selectedGenders.includes(sample.gender)
       );
-      return [...new Set(samples.map((s) => s.age_group))];
+      return [...new Set(samples.map((s) => s.age_group))].sort();
     },
     availableRaces() {
       return [
@@ -369,7 +369,7 @@ export default {
             )
             .map((s) => s.race)
         ),
-      ];
+      ].sort();
     },
   },
   watch: {
