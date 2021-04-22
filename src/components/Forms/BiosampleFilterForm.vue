@@ -7,19 +7,16 @@
             dense
             open-all
             selectable
-            selection-type="independent"
-            v-model="vaccinesSelected"
+            selection-type="leaf"
+            v-model="vaccineIdsSelected"
             :items="vaccineHierarchy"
             class="smallFont"
           ></v-treeview
         ></v-sheet>
       </v-col>
       <v-col cols="12" md="3">
-        <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          >
-          <p class="header">
-            Studies
-          </p>
+        <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
+          <p class="header">Studies</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -42,9 +39,7 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          <p class="header">
-            Platform Description
-          </p>
+          <p class="header">Platform Description</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -69,9 +64,7 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          ><p class="header">
-            Day 0 Definition
-          </p>
+          ><p class="header">Day 0 Definition</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -94,9 +87,7 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          <p class="header">
-            Gender
-          </p>
+          <p class="header">Gender</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -121,9 +112,7 @@
       </v-col>
       <v-col cols="12" md="3">
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
-          ><p class="header">
-            Age
-          </p>
+          ><p class="header">Age</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -146,9 +135,7 @@
           ></v-checkbox
         ></v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          <p class="header">
-            Race
-          </p>
+          <p class="header">Race</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -189,59 +176,72 @@ export default {
     vaccineHierarchy: [
       {
         name: "vaccine",
-        id: "VO_0000001",
+        id: 0,
+        voId: "VO_0000001",
         children: [
           {
             name: "inactivated vaccine",
-            id: "VO_0000315",
+            id: 1,
+            voId: "VO_0000315",
             children: [
               {
                 name: "2008-2009 trivalent influenza vaccine",
-                id: "VO_0004809",
+                id: 2,
+                voId: "VO_0004809",
               },
               {
                 name: "Fluarix",
-                id: "VO_0000045",
+                id: 3,
+                voId: "VO_0000045",
               },
               {
                 name: "Fluzone",
-                id: "VO_0000047",
+                id: 4,
+                voId: "VO_0000047",
               },
             ],
           },
           {
             name: "live attenuated vaccine",
-            id: "VO_0000367",
+            id: 5,
+            voId: "VO_0000367",
             children: [
               {
                 name: "FluMist",
-                id: "VO_0000044",
+                id: 6,
+                voId: "VO_0000044",
               },
             ],
           },
           {
             name: "viral vaccine",
-            id: "VO_0000609",
+            id: 7,
+            voId: "VO_0000609",
             children: [
               {
                 name: "Influenze Virus Vaccine",
-                id: "VO_0000642",
+                id: 8,
+                voId: "VO_0000642",
                 children: [
                   {
                     name: "2008-2009 trivalent influenza vaccine",
-                    id: "VO_0004809",
+                    id: 9,
+                    voId: "VO_0004809",
                   },
                   {
                     name: "Fluarix",
-                    id: "VO_0000045",
+                    id: 10,
+                    voId: "VO_0000045",
                   },
                   {
                     name: "FluMist",
-                    id: "VO_0000044",
+                    id: 11,
+                    voId: "VO_0000044",
                   },
                   {
                     name: "Fluzone",
-                    id: "VO_0000047",
+                    id: 12,
+                    voId: "VO_0000047",
                   },
                 ],
               },
@@ -251,16 +251,21 @@ export default {
       },
     ],
     vaccineMap: [
-      {id:"VO_0000047", name:"Fluzone"},
-      {id:"VO_0000044", name:"FluMist"},
-      {id:"VO_0000045", name:"Fluarix"},
-      {id:"VO_0004809", name:"2008-2009 trivalent influenza vaccine"},
-      {id:"VO_0000642", name:"Influenze Virus Vaccine"},
-      {id:"VO_0000609", name:"viral vaccine"},
-      {id:"VO_0000315", name:"inactivated vaccine"},
-      {id:"VO_0000001", name:"vaccine"}
+      { voId: "VO_0000047", ids: [4, 12], name: "Fluzone" },
+      { voId: "VO_0000044", ids: [6, 11], name: "FluMist" },
+      { voId: "VO_0000045", ids: [3, 10], name: "Fluarix" },
+      {
+        voId: "VO_0004809",
+        ids: [2, 9],
+        name: "2008-2009 trivalent influenza vaccine",
+      },
+      { voId: "VO_0000642", ids: [8], name: "Influenze Virus Vaccine" },
+      { voId: "VO_0000609", ids: [7], name: "viral vaccine" },
+      { voId: "VO_0000315", ids: [1], name: "inactivated vaccine" },
+      { voId: "VO_0000001", ids: [0], name: "vaccine" },
+      { voId: "VO_0000367", ids: [5], name: "live attenuated vaccine" },
     ],
-    vaccinesSelected: [],
+    vaccineIdsSelected: [],
     selectedGenders: [],
     selectedAges: [],
     selectedRaces: [],
@@ -283,6 +288,42 @@ export default {
     },
   },
   computed: {
+    vaccinesSelected() {
+      var vaccines = [
+        ...new Set(
+          this.vaccineMap
+            .filter((row) =>
+              row.ids.some((id) => this.vaccineIdsSelected.includes(id))
+            )
+            .map((vaccine) => vaccine.voId)
+        ),
+      ];
+
+      //reverse nested structure to select all necessary parents based on included nodes
+      if (
+        vaccines.includes("VO_0000047") &&
+        vaccines.includes("VO_0000045") &&
+        vaccines.includes("VO_0000047") &&
+        vaccines.includes("VO_0000044")
+      )
+        vaccines.push("VO_0000642");
+      if (vaccines.includes("VO_0000642")) vaccines.push("VO_0000609");
+      if (
+        vaccines.includes("VO_0000047") &&
+        vaccines.includes("VO_0000045") &&
+        vaccines.includes("VO_0000047")
+      )
+        vaccines.push("VO_0000315");
+      if (vaccines.includes("VO_0000044")) vaccines.push("VO_0000367");
+      if (
+        vaccines.includes("VO_0000315") &&
+        vaccines.includes("VO_0000367") &&
+        vaccines.includes("VO_0000609")
+      )
+        vaccines.push("VO_0000001");
+
+      return vaccines;
+    },
     availableStudies() {
       return [
         ...new Set(
@@ -363,7 +404,9 @@ export default {
                 ) &&
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc) &&
-                this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
+                this.selectedDayDefinitions.includes(
+                  sample.day_0_def_foreach
+                ) &&
                 this.selectedGenders.includes(sample.gender) &&
                 this.selectedAges.includes(sample.age_group)
             )
@@ -373,6 +416,43 @@ export default {
     },
   },
   watch: {
+    vaccineIdsSelected(newVal, oldVal) {
+      //if no change in length, return
+      if (newVal.length === oldVal.length) return;
+
+      //if array grew, check for other ids to add
+      if (newVal.length > oldVal.length) {
+        const addedIds = newVal.filter((num) => !oldVal.includes(num));
+        const otherIdsToAdd = [].concat
+          .apply(
+            [],
+            this.vaccineMap
+              .filter((vaccine) =>
+                vaccine.ids.some((id) => addedIds.includes(id))
+              )
+              .map((vaccine) => vaccine.ids)
+          )
+          .filter((id) => !addedIds.includes(id));
+        this.vaccineIdsSelected.push(...new Set(otherIdsToAdd));
+        return;
+      }
+
+      //if array shrank, check others to remove
+      const removedIds = oldVal.filter((num) => !newVal.includes(num));
+      const otherIdsToRemove = [].concat
+        .apply(
+          [],
+          this.vaccineMap
+            .filter((vaccine) =>
+              vaccine.ids.some((id) => removedIds.includes(id))
+            )
+            .map((vaccine) => vaccine.ids)
+        )
+        .filter((id) => !removedIds.includes(id));
+      this.vaccineIdsSelected = this.vaccineIdsSelected.filter(
+        (el) => !otherIdsToRemove.includes(el)
+      );
+    },
     availableGenders() {
       this.selectedGenders = [];
       this.selectAllGenders = false;
@@ -509,14 +589,16 @@ export default {
           races: this.selectedRaces,
         },
         formVariables: {
-          selectedVaccines: this.vaccineMap.filter(vaccine => this.vaccinesSelected.includes(vaccine.id)).map(vaccine => vaccine.name),
+          selectedVaccines: this.vaccineMap
+            .filter((vaccine) => this.vaccinesSelected.includes(vaccine.id))
+            .map((vaccine) => vaccine.name),
           selectedStudies: this.selectedStudies,
           selectedPlatforms: this.selectedPlatforms,
           selectedDayDefinitions: this.selectedDayDefinitions,
           selectedGenders: this.selectedGenders,
           selectedAges: this.selectedAges,
-          selectedRaces: this.selectedRaces
-        }
+          selectedRaces: this.selectedRaces,
+        },
       });
     },
   },
@@ -535,7 +617,7 @@ export default {
   font-size: 14px !important;
 }
 .header {
-  font-size:17px !important;
+  font-size: 17px !important;
   font-weight: bold;
 }
 </style>
