@@ -37,7 +37,7 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title :title="formData.studyCohort.length > 0 ?formData.studyCohort.join(', ') : 'None'"><b>Study Cohort:</b> {{formData.studyCohort.length > 0 ?formData.studyCohort.join(", ") : "None"}}</v-list-item-title>
+        <v-list-item-title :title="formData.studyVariables.length > 0 ?formData.studyVariables.join(', ') : 'None'"><b>Study Variables:</b> {{formData.studyVariables.length > 0 ?formData.studyVariables.join(", ") : "None"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <v-list-item dense class="text-left">
