@@ -70,6 +70,14 @@
                   hide-details
                 ></v-text-field></td>
               <td colspan="1">
+                <v-text-field
+                  prefix="≤"
+                  v-model="pValInput"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  hide-details
+                ></v-text-field>
               </td>
               <td>
                 <v-text-field
@@ -102,6 +110,7 @@ export default {
   },
   data: () => ({
     show: true,
+    pValInput: 1,
     adjustedPValInput: 0.05,
     geneExpressionSearch: "",
     absLogFCInput: 0,
@@ -129,7 +138,12 @@ export default {
             return Math.abs(value) >= this.absLogFCInput;
           },
         },
-        { text: "pVal", value: "pValue" },
+        { text: "pVal", value: "pValue",
+          filter: (value) => {
+            if(!this.pValInput) return true;
+            return value <= this.pValInput;
+          }
+        },
         {
           text: "Adjusted pVal",
           value: "adjPValue",
