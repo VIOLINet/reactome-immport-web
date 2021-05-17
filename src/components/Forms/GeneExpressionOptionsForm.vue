@@ -128,8 +128,10 @@
                   </v-checkbox>
                 </v-col>
               </v-row>
+              <div class="flex space-around">
+                <div>
               <p class="text-left">
-                The results can be corrected for the platform
+                The results can be platform corrected
               </p>
               <v-checkbox
                 dense
@@ -137,6 +139,17 @@
                 v-model="corrected"
                 label="Corrected"
               ></v-checkbox>
+              </div>
+              <div class="ml-10">
+                <p class="text-left">Use Paired Data</p>
+                <v-checkbox
+                  dense
+                  class="shrink ma-0 pa-0"
+                  v-model="usePairedDataInput"
+                  label="Paired"
+                ></v-checkbox>
+              </div>
+              </div>
               <p class="text-left" style="margin-bottom:0;">
                 Name this Result Set
               </p>
@@ -194,6 +207,7 @@ export default {
     ],
     selectedConfoundingVariables: [],
     corrected: true,
+    usePairedDataInput: true,
     resultSetNameInput: "",
     errormsg: "",
   }),
@@ -314,8 +328,9 @@ export default {
           return;
         }
       }
-      data.studyCohort = this.selectedConfoundingVariables;
+      data.studyVariables = this.selectedConfoundingVariables;
       data.platformCorrection = this.corrected;
+      data.usePairedData = this.usePairedDataInput;
       data.variableGenes = false; //set as default. Could be added to form later
       this.errormsg = "";
       this.resultSetNameInput = "";
@@ -333,6 +348,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.space-around{
+  justify-content: flex-start;
+  
 }
 .scrollable {
   overflow: scroll;

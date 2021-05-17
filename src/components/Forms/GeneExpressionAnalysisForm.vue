@@ -83,7 +83,7 @@ export default {
           );
       const data = {};
       data.GSMids = [...new Set(samples.map((sample) => sample.gsm))];
-      data.studyVariables = this.studyVariables;
+      data.studyCohort = this.studyVariables;
       Object.assign(data, selectedOptions);
 
       const rtn = {};
