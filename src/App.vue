@@ -50,6 +50,16 @@
           </template>
         </GeneExpResultPanel>
       </section>
+      <v-overlay opacity=".8" :value="dataAnalysisFailed">
+        <v-card>
+          <v-card-text class="flex">
+            <p>
+            An error occured with this result set.
+            </p>
+            <v-btn @click="dataAnalysisFailed = false">close</v-btn>
+            </v-card-text>
+        </v-card>
+      </v-overlay>
     </v-container>
   </v-app>
 </template>
@@ -80,6 +90,7 @@ export default {
     loadingReactomeAnalyses: false,
     showCompareFromForm: false,
     compareFromId: undefined,
+    dataAnalysisFailed: false
   }),
   watch: {
     resultSets(newVal, oldVal) {
@@ -107,6 +118,10 @@ export default {
 
       //load gene expression analysis before unshifting
       await this.loadGeneExpressionAnalysis(data);
+      if(data.geneExpressionResults.length === 0){
+        this.dataAnalysisFailed = true;
+        return;
+      }
       data.id = uuidv4();
       data.enrichmentResults = {};
       data.fiNetwork = { network: [], absLogFC:0, adjPValue:1 };
