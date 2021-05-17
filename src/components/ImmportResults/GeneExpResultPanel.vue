@@ -11,6 +11,7 @@
       </div>
       <div>
         <v-btn
+        v-if="showComparisonButton"
           color="primary"
           class="ma-1"
           @click="$emit('compareResults', resultSet.id)"
@@ -74,6 +75,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    showComparisonButton: {
+      type: Boolean,
+      default: () => false
+    }
   },
   data: () => ({
     show: true,

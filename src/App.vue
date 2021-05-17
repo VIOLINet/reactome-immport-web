@@ -32,6 +32,7 @@
           :key="item.id"
           :id="item.id"
           :resultSet="item"
+          :showComparisonButton ="resultSets.length > 1 ? true:false"
           @closeResults="closeResults"
           @fetchPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
           @fetchNetworkAnalysis="fetchNetworkAnalysis"
