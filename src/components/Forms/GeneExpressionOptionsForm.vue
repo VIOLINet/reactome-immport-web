@@ -134,9 +134,7 @@
               <v-checkbox
                 dense
                 class="shrink ma-0 pa-0"
-                :v-model="corrected"
-                :value="corrected"
-                :input-value="corrected"
+                v-model="corrected"
                 label="Corrected"
               ></v-checkbox>
               <p class="text-left" style="margin-bottom:0;">
