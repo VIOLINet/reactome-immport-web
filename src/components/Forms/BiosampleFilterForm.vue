@@ -160,7 +160,32 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="text-right">
+      <v-col cols="12" md="4">
+        <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
+          <p class="header">Type_subtype</p>
+          <v-checkbox
+            dense
+            class="shrink ma-0 pa-0 smallFont"
+            v-if="availableType_subtypes.length > 1"
+            label="Select All"
+            :value="selectAllType_subtypes"
+            :input-value="selectAllType_subtypes"
+            v-model="selectAllType_subtypes"
+          ></v-checkbox>
+          <v-checkbox
+            dense
+            class="shrink ma-0 pa-0 smallFont"
+            v-for="(tst, index) in availableType_subtypes"
+            :key="index"
+            :disabled="availableType_subtypes.length === 1 ? true : false"
+            v-model="selectedType_subtypes"
+            :label="tst"
+            :value="tst"
+            @click="selectAllType_subtypes = false"
+          ></v-checkbox>
+        </v-sheet>
+      </v-col>
+      <v-col cols="12" md="8" class="text-right">
         <span style="color: red" class="mr-5">{{ errormsg }}</span>
         <v-btn color="tertiary" class="mr-2" @click="clearVOForm">Clear</v-btn>
         <v-btn color="primary" @click="filterBiosamples">Next</v-btn>
@@ -272,6 +297,7 @@ export default {
     selectedDayDefinitions: [],
     selectedPlatforms: [],
     selectedStudies: [],
+    selectedType_subtypes: [],
     filteredBiosampleMetaData: [],
     errormsg: "",
     selectAllStudies: false,
@@ -280,6 +306,7 @@ export default {
     selectAllRaces: false,
     selectAllAges: false,
     selectAllGenders: false,
+    selectAllType_subtypes: false,
   }),
   props: {
     biosampleMetaData: {
@@ -413,6 +440,28 @@ export default {
             .map((s) => s.race)
         ),
       ].sort();
+    },
+    availableType_subtypes() {
+      return [
+        ...new Set(
+          this.biosampleMetaData
+            .filter(
+              (sample) =>
+                this.vaccinesSelected.includes(
+                  sample.immport_immune_exposure_material_id
+                ) &&
+                this.selectedStudies.includes(sample.immport_study_accession) &&
+                this.selectedPlatforms.includes(sample.platform_desc) &&
+                this.selectedDayDefinitions.includes(
+                  sample.day_0_def_foreach
+                ) &&
+                this.selectedGenders.includes(sample.gender) &&
+                this.selectedAges.includes(sample.age_group) &&
+                this.selectedRaces.includes(sample.race)
+            )
+            .map((s) => s.type_subtype)
+        ),
+      ];
     },
   },
   watch: {
@@ -558,6 +607,22 @@ export default {
       else if (this.selectedStudies.length === this.availableStudies.length)
         this.selectedStudies = [];
     },
+    availableType_subtypes() {
+      this.selectedType_subtypes = [];
+      this.selectAllType_subtypes = false;
+      if (this.availableType_subtypes.length === 1)
+        this.selectedType_subtypes.push(...this.availableType_subtypes);
+    },
+    selectAllType_subtypes(selected) {
+      if (selected)
+        this.selectedType_subtypes.push(
+          ...this.availableType_subtypes.filter(
+            (tst) => !this.selectedType_subtypes.includes(tst)
+          )
+        );
+        else if(this.selectedType_subtypes.length === this.availableType_subtypes.length)
+          this.selectedType_subtypes = [];
+    },
   },
   methods: {
     //effectively clears all selections because they all depend on vaccinesSelected
@@ -574,7 +639,9 @@ export default {
           this.selectedPlatforms.includes(sample.platform_desc) &&
           this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
           this.selectedGenders.includes(sample.gender) &&
-          this.selectedAges.includes(sample.age_group)
+          this.selectedAges.includes(sample.age_group) &&
+          this.selectedRaces.includes(sample.race) &&
+          this.selectedType_subtypes.includes(sample.type_subtype)
       );
       if (biosamples.length === 0) {
         this.errormsg =
@@ -598,6 +665,7 @@ export default {
           selectedGenders: this.selectedGenders,
           selectedAges: this.selectedAges,
           selectedRaces: this.selectedRaces,
+          selectedType_subtypes: this.selectedType_subtypes
         },
       });
     },
