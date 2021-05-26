@@ -33,22 +33,22 @@
           </template>
           <template v-slot:item.AveExpr="{item}">
             <p :title="item.AveExpr">
-              {{item.AveExpr.toExponential(2)}}
+              {{item && item.AveExpr && item.AveExpr.toExponential(2)}}
             </p>
           </template>
           <template v-slot:item.logFC="{item}">
             <p :title="item.logFC">
-              {{item.logFC.toExponential(2)}}
+              {{item && item.logFC && item.logFC.toExponential(2)}}
             </p>
           </template>
           <template v-slot:item.pValue="{item}">
             <p :title="item.pValue">
-              {{item.pValue.toExponential(2)}}
+              {{item && item.pValue && item.pValue.toExponential(2)}}
             </p>
           </template>
           <template v-slot:item.adjPValue="{item}">
             <p :title="item.adjPValue">
-              {{item.adjPValue.toExponential(2)}}
+              {{item && item.adjPValue && item.adjPValue.toExponential(2)}}
             </p>
           </template>
           <template v-slot:body.append>
