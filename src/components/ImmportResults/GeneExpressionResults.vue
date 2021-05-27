@@ -111,7 +111,7 @@ export default {
   data: () => ({
     show: true,
     pValInput: 1,
-    adjustedPValInput: 0.05,
+    adjustedPValInput: 1,
     geneExpressionSearch: "",
     absLogFCInput: 0,
     filteredPathwayGenes: [],
@@ -158,6 +158,7 @@ export default {
       return this.geneExpressionResults.filter(
         (result) =>
           result.adjPValue <= this.adjustedPValInput &&
+          result.pValue <= this.pValInput &&
           Math.abs(result.logFC) >= this.absLogFCInput
       );
     },
