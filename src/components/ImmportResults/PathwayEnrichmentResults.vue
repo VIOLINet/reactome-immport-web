@@ -3,7 +3,7 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-        <a target="_blank" :href="reactomeFireworksURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
+        <a target="_blank" :href="reactomeFoamURL"><v-btn color="secondary">Open Reactome Foam Tree</v-btn></a>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
@@ -117,8 +117,8 @@ export default {
         },
       ];
     },
-    reactomeFireworksURL(){
-      return `${process.env.VUE_APP_REACTOME_LINK}DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    reactomeFoamURL(){
+      return `${process.env.VUE_APP_REACTFOAM_LINK}&analysis=${this.pathwayEnrichmentResults.summary.token}`
     }
   },
   methods:{
