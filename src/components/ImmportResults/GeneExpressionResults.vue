@@ -61,14 +61,26 @@
                 ></v-text-field>
               </td>
               <td colspan="1"></td>
-              <td colspan="1"><v-text-field
-                  prefix="abs(logFC)≥"
-                  v-model="absLogFCInput"
+              <td colspan="1" class="flex" style="height:100%;">
+                <v-text-field
+                  v-model="logFCLowerBoundInput"
+                  type="number"
+                  prefix="-"
+                  min="0"
+                  step="0.01"
+                  hide-details
+                  style="width:.15px;"
+                ></v-text-field>
+                <p class="log-text">≥logFC≥</p>
+                <v-text-field
+                  v-model="logFCUpperBoundInput"
                   type="number"
                   min="0"
                   step="0.01"
                   hide-details
-                ></v-text-field></td>
+                  style="width:15px;"
+                ></v-text-field>
+              </td>
               <td colspan="1">
                 <v-text-field
                   prefix="≤"
@@ -113,7 +125,8 @@ export default {
     pValInput: 1,
     adjustedPValInput: 1,
     geneExpressionSearch: "",
-    absLogFCInput: 0,
+    logFCLowerBoundInput:0,
+    logFCUpperBoundInput:0,
     filteredPathwayGenes: [],
     filteredFINetworkGenes: []
   }),
@@ -134,8 +147,8 @@ export default {
           text: "log" + "2".sub() + "FC",
           value: "logFC",
           filter: (value) => {
-            if (!this.absLogFCInput) return true;
-            return Math.abs(value) >= this.absLogFCInput;
+            if (!this.logFCLowerBoundInput && !this.logFCUpperBoundInput) return true;
+            return value >= this.logFCUpperBoundInput || value <= (-1 * this.logFCLowerBoundInput);
           },
         },
         { text: "pVal", value: "pValue",
@@ -185,4 +198,9 @@ export default {
 </script>
 
 <style scoped>
+.log-text{
+  padding: 0 1em;
+  margin: 0 !important;
+  align-self: bottom;
+}
 </style>
