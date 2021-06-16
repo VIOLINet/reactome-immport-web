@@ -267,6 +267,7 @@ export default {
       this.totalNodesInput = this.totalNodes;
       this.cy.elements().layout({ name: "cose" }).run();
       this.totalNodesInput = this.totalNodes
+      this.clustersLoaded = false;
     },
   },
   computed: {
@@ -289,7 +290,7 @@ export default {
           this.cyElements
         );
         this.addClusteringToFIData(data);
-        this.doClusterToggle(true);
+        // this.doClusterToggle(true);
       } catch (err) {
         console.log(err);
       }

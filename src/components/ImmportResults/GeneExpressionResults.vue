@@ -61,24 +61,25 @@
                 ></v-text-field>
               </td>
               <td colspan="1"></td>
-              <td colspan="1" class="flex" style="height:100%;">
+              <td colspan="1" class="flex" style="height:100%; padding:5px;">
                 <v-text-field
                   v-model="logFCLowerBoundInput"
                   type="number"
-                  prefix="-"
+                  prefix="logFC <"
                   min="0"
                   step="0.01"
                   hide-details
-                  style="width:.15px;"
+                  style="width:50px;"
                 ></v-text-field>
-                <p class="log-text">≥logFC≥</p>
+                <h1 class="union">U</h1>
                 <v-text-field
                   v-model="logFCUpperBoundInput"
+                  prefix="logFC > "
                   type="number"
                   min="0"
                   step="0.01"
                   hide-details
-                  style="width:15px;"
+                  style="width:50px;"
                 ></v-text-field>
               </td>
               <td colspan="1">
@@ -172,7 +173,7 @@ export default {
         (result) =>
           result.adjPValue <= this.adjustedPValInput &&
           result.pValue <= this.pValInput &&
-          Math.abs(result.logFC) >= this.absLogFCInput
+          (result.logFC <= this.logFCLowerBoundInput || result.logFC >= this.logFCUpperBoundInput)
       );
     },
   },
@@ -198,9 +199,16 @@ export default {
 </script>
 
 <style scoped>
+.flex {
+  align-self: center;
+  justify-content: space-around;
+}
 .log-text{
   padding: 0 1em;
   margin: 0 !important;
   align-self: bottom;
+}
+.union{
+  margin: 5px;
 }
 </style>
