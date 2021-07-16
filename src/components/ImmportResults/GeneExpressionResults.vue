@@ -71,7 +71,7 @@
                   hide-details
                   style="width:50px;"
                 ></v-text-field>
-                <h1 class="union">U</h1>
+                <h4 class="union">or</h4>
                 <v-text-field
                   v-model="logFCUpperBoundInput"
                   prefix="logFC > "
@@ -149,7 +149,7 @@ export default {
           value: "logFC",
           filter: (value) => {
             if (!this.logFCLowerBoundInput && !this.logFCUpperBoundInput) return true;
-            return value >= this.logFCUpperBoundInput || value <= (-1 * this.logFCLowerBoundInput);
+            return value >= this.logFCUpperBoundInput || value <= (this.logFCLowerBoundInput);
           },
         },
         { text: "pVal", value: "pValue",
