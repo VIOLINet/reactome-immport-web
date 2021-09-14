@@ -198,7 +198,7 @@
 export default {
   name: "BiosampleFilterForm",
   data: () => ({
-    vaccineHierarchy: [
+ vaccineHierarchy: [
       {
         name: "vaccine",
         id: 0,
@@ -236,7 +236,39 @@ export default {
                 id: 6,
                 voId: "VO_0000044",
               },
+              {
+                name: "Dryvax",
+                id: 13,
+                voId: "VO_0000035",
+              },
+              {
+                name: "YF-Vax",
+                id: 14,
+                voId: "VO_0000121",
+              },
+              {
+                name: "Zostavax",
+                id: 15,
+                voId: "VO_0000124",
+              },
             ],
+          },
+          {
+            name: "conjugate vaccine",
+            id: 16,
+            voId: "VO_0000195",
+            children: [
+              {
+                name: "Menactra",
+                id: 17,
+                voID: "VO_0000071",
+              },
+              { 
+              name: "Pnemovax 23",
+              id: 18,
+              voID: "VO_0000088",
+              },
+            ]
           },
           {
             name: "viral vaccine",
@@ -244,7 +276,7 @@ export default {
             voId: "VO_0000609",
             children: [
               {
-                name: "Influenze Virus Vaccine",
+                name: "Influenza Virus Vaccine",
                 id: 8,
                 voId: "VO_0000642",
                 children: [
@@ -270,8 +302,78 @@ export default {
                   },
                 ],
               },
+              {
+                name: "Yellow Fever Virus Vaccine",
+                id: 19,
+                voId: "VO_0000121",
+                children: [
+                  {
+                    name: "YF-Vax",
+                    id: 20,
+                    voId: "VO_0000121",
+                  },
+                ],
+              },
+              {
+                name: "Smallpox Virus Vaccine",
+                id: 21,
+                voId: "VO_0000651",
+                children: [
+                  {
+                    name: "Dryvax",
+                    id: 22,
+                    voId: "VO_0000035",
+                  },
+                ],
+              },
+              {
+                name: "Varicella-zoster Virus Vaccine",
+                id: 23,
+                voId: "VO_0000669",
+                children: [
+                  {
+                    name: "Zostavax",
+                    id: 24,
+                    voId: "VO_0000659",
+                  },
+                ],
+              },
             ],
           },
+          {
+          name: 'bacterial vaccine',
+            id: 25,
+            voId: "VO_0000165",
+            children: [
+                {
+                name: "Neisseria meningitidis vaccine",
+                id: 26,
+                voId: "VO_0000053", 
+                children: [
+                  { 
+                    name: 'Menactra',
+                    id: 27,
+                    voID: "VO_0000071"
+                    },
+                ],
+                },
+                {
+                name: "Streptoccoal pneumoniae vaccine",
+                id: 27,
+                voID: "VO_0000675",
+                children: [
+                  {
+                    name: "Pneumovax 23",
+                    id: 28,
+                    voID: "VO_0000088",
+                  },
+                ],
+                },
+           
+            ]
+
+          }  
+    
         ],
       },
     ],
