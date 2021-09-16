@@ -381,16 +381,13 @@ export default {
       { voId: "VO_0000047", ids: [4, 12], name: "Fluzone" },
       { voId: "VO_0000044", ids: [6, 11], name: "FluMist" },
       { voId: "VO_0000045", ids: [3, 10], name: "Fluarix" },
-      {
-        voId: "VO_0004809",
-        ids: [2, 9],
-        name: "2008-2009 trivalent influenza vaccine",
-      },
+      { voId: "VO_0004809", ids: [2, 9],  name: "2008-2009 trivalent influenza vaccine"},
       { voId: "VO_0000642", ids: [8], name: "Influenze Virus Vaccine" },
       { voId: "VO_0000609", ids: [7], name: "viral vaccine" },
       { voId: "VO_0000315", ids: [1], name: "inactivated vaccine" },
       { voId: "VO_0000001", ids: [0], name: "vaccine" },
       { voId: "VO_0000367", ids: [5], name: "live attenuated vaccine" },
+      { voId: "VO_0000121", ids: [14, 20], name: "YF-Vax"},
     ],
     vaccineIdsSelected: [],
     selectedGenders: [],
@@ -493,7 +490,7 @@ export default {
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc)
             )
-            .map((s) => s.day_0_def_foreach)
+            .map((s) => s.day_0_def)
         ),
       ].sort();
     },
@@ -505,7 +502,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def_foreach)
+          this.selectedDayDefinitions.includes(sample.day_0_def)
       );
       return [...new Set(samples.map((s) => s.gender))].sort();
     },
@@ -517,7 +514,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
+          this.selectedDayDefinitions.includes(sample.day_0_def) &&
           this.selectedGenders.includes(sample.gender)
       );
       return [...new Set(samples.map((s) => s.age_group))].sort();
@@ -534,7 +531,7 @@ export default {
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc) &&
                 this.selectedDayDefinitions.includes(
-                  sample.day_0_def_foreach
+                  sample.day_0_def
                 ) &&
                 this.selectedGenders.includes(sample.gender) &&
                 this.selectedAges.includes(sample.age_group)
@@ -555,7 +552,7 @@ export default {
                 this.selectedStudies.includes(sample.immport_study_accession) &&
                 this.selectedPlatforms.includes(sample.platform_desc) &&
                 this.selectedDayDefinitions.includes(
-                  sample.day_0_def_foreach
+                  sample.day_0_def
                 ) &&
                 this.selectedGenders.includes(sample.gender) &&
                 this.selectedAges.includes(sample.age_group) &&
@@ -739,7 +736,7 @@ export default {
           ) &&
           this.selectedStudies.includes(sample.immport_study_accession) &&
           this.selectedPlatforms.includes(sample.platform_desc) &&
-          this.selectedDayDefinitions.includes(sample.day_0_def_foreach) &&
+          this.selectedDayDefinitions.includes(sample.day_0_def) &&
           this.selectedGenders.includes(sample.gender) &&
           this.selectedAges.includes(sample.age_group) &&
           this.selectedRaces.includes(sample.race) &&
