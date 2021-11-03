@@ -1,7 +1,7 @@
 <template>
-  <v-card-text>
+  <v-container fluid>
     <v-row class="text-left">
-      <v-col cols="12" md="3">
+      <v-col>
         <v-sheet color="grey lighten-2" class="pa-2 scrollable" height="24.5em"
           ><v-treeview
             dense
@@ -14,7 +14,7 @@
           ></v-treeview
         ></v-sheet>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
           <p class="header">Studies</p>
           <v-checkbox
@@ -62,7 +62,7 @@
           ></v-checkbox>
         </v-sheet>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
           ><p class="header">Day 0 Definition</p>
           <v-checkbox
@@ -110,7 +110,7 @@
           ></v-checkbox>
         </v-sheet>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox"
           ><p class="header">Age</p>
           <v-checkbox
@@ -158,10 +158,9 @@
           ></v-checkbox>
         </v-sheet>
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" md="4">
-        <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
+      <v-col>
+        <!-- Following the same height as the first one. This is hard-coded! - NB by GW -->
+        <v-sheet color="grey lighten-2" class="pa-2 scrollable" height="24.5em">
           <p class="header">Type_subtype</p>
           <v-checkbox
             dense
@@ -185,13 +184,15 @@
           ></v-checkbox>
         </v-sheet>
       </v-col>
+    </v-row>
+    <v-row justify="end">
       <v-col cols="12" md="8" class="text-right">
         <span style="color: red" class="mr-5">{{ errormsg }}</span>
         <v-btn color="tertiary" class="mr-2" @click="clearVOForm">Clear</v-btn>
         <v-btn color="primary" @click="filterBiosamples">Next</v-btn>
       </v-col>
     </v-row>
-  </v-card-text>
+  </v-container>
 </template>
 
 <script>

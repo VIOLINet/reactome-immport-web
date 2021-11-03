@@ -9,7 +9,7 @@
         Filter Biosamples
       </v-stepper-step>
       <v-divider></v-divider>
-      <v-stepper-step step="2"> Choose Options </v-stepper-step>
+      <v-stepper-step step="2">Setup Analysis</v-stepper-step>
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
