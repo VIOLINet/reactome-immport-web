@@ -3,7 +3,7 @@
     <Docs />
     <v-container fluid>
       <GeneExpressionAnalysisForm
-        :currentResultNames="resultSets.map((set) => set.displayName)"
+        :currentResultNames="resultSets.map((set) => set.formData.resultSetName)"
         @analyzeData="analyzeData"
         class="mb-5"
       />
@@ -54,7 +54,7 @@
         <v-card>
           <v-card-text class="flex">
             <p>
-            An error occured with this result set.
+            An error occured with this analysis result.
             </p>
             <v-btn @click="dataAnalysisFailed = false">close</v-btn>
             </v-card-text>

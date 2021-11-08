@@ -44,3 +44,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Debug in VS Code
+Following the procedures listed here: [Debugging in VS Code](https://vuejs.org/v2/cookbook/debugging-in-vscode.html#Vue-Devtools)

@@ -2,13 +2,15 @@
   <v-card-text>
     <div>
       <v-radio-group v-model="modelTime">
+        <!-- Alawys perform two groups differentila expression analysis
         <v-radio
           :value="true"
           :label="`Use the time directly in the model`"
         ></v-radio>
+        -->
         <v-radio
           :value="false"
-          :label="`Create two groups for differential analysis`"
+          :label="`Create two groups for differential analysis by dragging samples from the first panel and then dropping them into Group 1 or Group 2 in the second panel`"
         ></v-radio>
       </v-radio-group>
       <div>
@@ -151,7 +153,7 @@
               </div>
               </div>
               <p class="text-left" style="margin-bottom:0;">
-                Name this Result Set
+                Name the analysis result
               </p>
               <v-text-field
               placeholder="Name"
@@ -208,7 +210,8 @@ export default {
     selectedConfoundingVariables: [],
     corrected: true,
     usePairedDataInput: true,
-    resultSetNameInput: "",
+    analysisCounter: 0,
+    resultSetNameInput: "Untitled",
     errormsg: "",
   }),
   watch: {
@@ -309,11 +312,11 @@ export default {
     analyzeEvent() {
       const data = {};
       if(!this.resultSetNameInput || this.resultSetNameInput.length === 0){
-        this.errormsg = "Please name result set before analyzing.";
+        this.errormsg = "Please name an analysis result before analyzing.";
         return;
       }
       if(this.currentResultNames.includes(this.resultSetNameInput)){
-        this.errormsg = "Please choose a unique name for each result set.";
+        this.errormsg = "Please choose a unique name for each analysis result.";
         return;
       }
       data.resultSetName = this.resultSetNameInput;
@@ -324,7 +327,7 @@ export default {
           group2: this.groupTwo.map((s) => s.time),
         };
         if(data.analysisGroups.group1.length < 1 || data.analysisGroups.group2.length < 1){
-          this.errormsg = "Use time directly in model or select at least 1 time per group.";
+          this.errormsg = "Select at least 1 time per group.";
           return;
         }
       }
@@ -333,7 +336,8 @@ export default {
       data.usePairedData = this.usePairedDataInput;
       data.variableGenes = false; //set as default. Could be added to form later
       this.errormsg = "";
-      this.resultSetNameInput = "";
+      this.analysisCounter = this.analysisCounter + 1;
+      this.resultSetNameInput = "Untitled_" + this.analysisCounter;
       this.$emit("optionsSelectedEvent", data);
     },
     fireBackEvent() {

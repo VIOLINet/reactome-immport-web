@@ -238,11 +238,6 @@ export default {
                 voId: "VO_0000044",
               },
               {
-                name: "Dryvax",
-                id: 13,
-                voId: "VO_0000035",
-              },
-              {
                 name: "YF-Vax",
                 id: 14,
                 voId: "VO_0000121",
@@ -316,18 +311,6 @@ export default {
                 ],
               },
               {
-                name: "Smallpox Virus Vaccine",
-                id: 21,
-                voId: "VO_0000651",
-                children: [
-                  {
-                    name: "Dryvax",
-                    id: 22,
-                    voId: "VO_0000035",
-                  },
-                ],
-              },
-              {
                 name: "Varicella-zoster Virus Vaccine",
                 id: 23,
                 voId: "VO_0000669",
@@ -389,6 +372,9 @@ export default {
       { voId: "VO_0000001", ids: [0], name: "vaccine" },
       { voId: "VO_0000367", ids: [5], name: "live attenuated vaccine" },
       { voId: "VO_0000121", ids: [14, 20], name: "YF-Vax"},
+      { voId: "VO_0000124", ids: [15, 24], name: "Zostavax"},
+      { voId: "VO_0000071", ids: [17, 27], name: "Menactra"},
+      { voId: "VO_0000088", ids: [18, 28], name: "Pnemovax 23"}
     ],
     vaccineIdsSelected: [],
     selectedGenders: [],
@@ -757,7 +743,7 @@ export default {
         },
         formVariables: {
           selectedVaccines: this.vaccineMap
-            .filter((vaccine) => this.vaccinesSelected.includes(vaccine.id))
+            .filter((vaccine) => this.vaccinesSelected.includes(vaccine.voId))
             .map((vaccine) => vaccine.name),
           selectedStudies: this.selectedStudies,
           selectedPlatforms: this.selectedPlatforms,
