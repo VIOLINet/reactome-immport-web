@@ -199,8 +199,8 @@
 export default {
   name: "BiosampleFilterForm",
   data: () => ({
- vaccineHierarchy: [
-      {
+  vaccineHierarchy: [
+    {
         name: "vaccine",
         id: 0,
         voId: "VO_0000001",
@@ -225,156 +225,250 @@ export default {
                 id: 4,
                 voId: "VO_0000047",
               },
+              {
+              name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+              id: 5,
+              voId: "VO_0004810"
+                  },
             ],
           },
           {
             name: "live attenuated vaccine",
-            id: 5,
+            id: 6,
             voId: "VO_0000367",
             children: [
               {
-                name: "FluMist",
-                id: 6,
-                voId: "VO_0000044",
+                name: "live attenuated influenza vaccine",
+                id: 7,
+                voId: "VO_0001178",
+                children: [
+                  {
+                    name: "FluMist",
+                     id: 8,
+                    voId: "VO_0000044",
+                  },
+                ]
               },
               {
                 name: "YF-Vax",
-                id: 14,
+                id: 9,
                 voId: "VO_0000121",
               },
               {
                 name: "Zostavax",
-                id: 15,
+                id: 10,
                 voId: "VO_0000124",
-              },
-            ],
+              }
+            ]
           },
           {
             name: "conjugate vaccine",
-            id: 16,
+            id: 11,
             voId: "VO_0000195",
             children: [
               {
                 name: "Menactra",
-                id: 17,
-                voID: "VO_0000071",
+                id: 12,
+                voId: "VO_0000071",
               },
               { 
-              name: "Pnemovax 23",
-              id: 18,
-              voID: "VO_0000088",
+                name: "Pnemovax 23",
+                id: 13,
+                voId: "VO_0000088",
               },
+              { 
+                name: "Menveo",
+                id: 14,
+                voId: "VO_0001246",
+              }             
+            ]
+          },
+          {
+            name: "recombinant viral vector vaccine",
+            id: 15,
+            voId: "VO_0005331",
+            children: [
+              {
+                name: "Menactra",
+                id: 16,
+                voId: "VO_0000071",
+              },
+              { 
+              name: "MVA85A",
+              id: 17,
+              voId: "VO_0003120",
+              },
+              {
+                name: "MRKAd5 HIV-1 gag/pol/nef",
+                id: 18,
+                voId: "VO_0003133",
+              }       
+            ]
+          },
+          {
+            name: "subunit vaccine",
+            id: 19,
+            void: "VO_0000534",
+            children:  [
+                {
+                name: "ACWY Vax",
+                id: 20,
+                voId: "VO_0003138", 
+                }
             ]
           },
           {
             name: "viral vaccine",
-            id: 7,
+            id: 21,
             voId: "VO_0000609",
             children: [
               {
                 name: "Influenza Virus Vaccine",
-                id: 8,
+                id: 22,
                 voId: "VO_0000642",
                 children: [
                   {
                     name: "2008-2009 trivalent influenza vaccine",
-                    id: 9,
+                    id: 23,
                     voId: "VO_0004809",
                   },
                   {
                     name: "Fluarix",
-                    id: 10,
+                    id: 24,
                     voId: "VO_0000045",
                   },
                   {
-                    name: "FluMist",
-                    id: 11,
-                    voId: "VO_0000044",
-                  },
-                  {
                     name: "Fluzone",
-                    id: 12,
+                    id: 25,
                     voId: "VO_0000047",
                   },
-                ],
+                  {
+                    name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+                    id: 26,
+                    voId: "VO_0004810"
+                  },
+                  {            	
+                    name: "live attenuated influenza vaccine",
+                    id: 27,
+                    voId: "VO_0001178",
+                    children: [
+                      {
+                      name: "FluMist",
+                       id: 28,
+                      voId: "VO_0000044",
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 name: "Yellow Fever Virus Vaccine",
-                id: 19,
+                id: 29,
                 voId: "VO_0000121",
                 children: [
                   {
                     name: "YF-Vax",
-                    id: 20,
+                    id: 30,
                     voId: "VO_0000121",
+                  },
+                  {
+                    name: "Starmarill",
+                    id: 31,
+                    voId: "VO_0003129",
                   },
                 ],
               },
               {
-                name: "Varicella-zoster Virus Vaccine",
-                id: 23,
+                name: "Varicella-Zoster Virus Vaccine",
+                id: 32,
                 voId: "VO_0000669",
                 children: [
                   {
                     name: "Zostavax",
-                    id: 24,
+                    id: 33,
                     voId: "VO_0000659",
+                  },
+                ],
+              },
+              {
+                name: "HIV Virus Vaccine",
+                id: 34,
+                voId: "VO_0000295",
+                children: [
+                  {
+                    name: "MRKAd5 HIV-1 gag/pol/nef",
+                    id: 35,
+                    voId: "VO_0003133",
                   },
                 ],
               },
             ],
           },
           {
-          name: 'bacterial vaccine',
-            id: 25,
+            name: 'bacterial vaccine',
+            id: 36,
             voId: "VO_0000165",
             children: [
-                {
+              {
                 name: "Neisseria meningitidis vaccine",
-                id: 26,
+                id: 37,
                 voId: "VO_0000053", 
                 children: [
                   { 
                     name: 'Menactra',
-                    id: 27,
-                    voID: "VO_0000071"
+                    id: 38,
+                    voId: "VO_0000071"
                     },
-                ],
-                },
-                {
+                  {
+                    name: "ACWY Vax",
+                    id: 39,
+                    voId: "VO_0003138", 
+                  },
+                  {
+                    name: "Menveo",
+                    id: 40,
+                    voId: "VO_0001246", 
+                  },
+                  {
+                    name: "Meningococcal Polysaccharide Vaccine, Groups A & C, Menomune A/C",
+                    id: 41,
+                    voId: "VO_0001075", 
+                  },
+                ]
+              },
+              {
                 name: "Streptoccoal pneumoniae vaccine",
-                id: 27,
-                voID: "VO_0000675",
+                id: 42,
+                voId: "VO_0000675",
                 children: [
                   {
                     name: "Pneumovax 23",
-                    id: 28,
-                    voID: "VO_0000088",
+                    id: 43,
+                    voId: "VO_0000088",
                   },
                 ],
-                },
-           
+              },
+              {
+                name: "Mycobacterium tuberculosis vaccine",
+                id: 44,
+                voId: "VO_0000072",
+                children: [
+                  {
+                    name: "MVA85A",
+                    id: 45,
+                    voId: "VO_0003120",
+                  },
+                ],
+              },
             ]
-
+          },
+          {
+            name: "malarial vaccine",
+            id: 46,
+            voId: "VO_0000087",
           }  
-    
-        ],
-      },
-    ],
-    vaccineMap: [
-      { voId: "VO_0000047", ids: [4, 12], name: "Fluzone" },
-      { voId: "VO_0000044", ids: [6, 11], name: "FluMist" },
-      { voId: "VO_0000045", ids: [3, 10], name: "Fluarix" },
-      { voId: "VO_0004809", ids: [2, 9],  name: "2008-2009 trivalent influenza vaccine"},
-      { voId: "VO_0000642", ids: [8], name: "Influenze Virus Vaccine" },
-      { voId: "VO_0000609", ids: [7], name: "viral vaccine" },
-      { voId: "VO_0000315", ids: [1], name: "inactivated vaccine" },
-      { voId: "VO_0000001", ids: [0], name: "vaccine" },
-      { voId: "VO_0000367", ids: [5], name: "live attenuated vaccine" },
-      { voId: "VO_0000121", ids: [14, 20], name: "YF-Vax"},
-      { voId: "VO_0000124", ids: [15, 24], name: "Zostavax"},
-      { voId: "VO_0000071", ids: [17, 27], name: "Menactra"},
-      { voId: "VO_0000088", ids: [18, 28], name: "Pnemovax 23"}
+        ]
+      }
     ],
     vaccineIdsSelected: [],
     selectedGenders: [],
@@ -401,6 +495,37 @@ export default {
     },
   },
   computed: {
+    vaccineMap() {
+      // Basically try to traversal the tree
+      let void2vaccine = new Map()
+      let current = new Array()
+      current.push(this.vaccineHierarchy[0])
+      let next = new Array()  
+      while (current.length > 0) {
+        for (let i = 0; i < current.length; i++) {
+          let temp = current[i]
+          let vaccine = void2vaccine.get(temp.voId)
+          if (vaccine === undefined) {
+            vaccine = {}
+            vaccine.name = temp.name
+            vaccine.ids = [temp.id]
+            vaccine.voId = temp.voId
+            void2vaccine.set(vaccine.voId, vaccine)
+          }
+          else {
+            vaccine.ids.push(temp.id)
+          }
+          if (temp.children !== undefined) {
+            next.push.apply(next, temp.children)
+          }
+        }
+        // Clear the current array
+        current.length = 0
+        current.push.apply(current, next)
+        next.length = 0
+      }
+      return [...new Set(void2vaccine.values())]
+    },
     vaccinesSelected() {
       var vaccines = [
         ...new Set(
