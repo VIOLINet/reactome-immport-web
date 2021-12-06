@@ -2,6 +2,7 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
+      <!-- <GeneExpressionResults class="mb-5"></GeneExpressionResults> -->
       <GeneExpressionAnalysisForm
         :currentResultNames="resultSets.map((set) => set.formData.resultSetName)"
         @analyzeData="analyzeData"
@@ -57,7 +58,7 @@
             An error occured with this analysis result.
             </p>
             <v-btn @click="dataAnalysisFailed = false">close</v-btn>
-            </v-card-text>
+          </v-card-text>
         </v-card>
       </v-overlay>
     </v-container>
@@ -68,16 +69,19 @@
 import ImmportService from "./service/ImmportService";
 import GeneExpressionAnalysisForm from "./components/Forms/GeneExpressionAnalysisForm";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
+// import GeneExpressionResults from "./components/ImmportResults/GeneExpressionResults";
 import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
 import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
 import Docs from "./components/Docs";
 import _isEqual from "lodash/isEqual";
 import { v4 as uuidv4 } from "uuid";
+
 export default {
   name: "App",
   components: {
     GeneExpressionAnalysisForm,
     GeneExpResultPanel,
+    // GeneExpressionResults,
     Docs,
     ComparisonForm,
     CompareResultsPanel,
