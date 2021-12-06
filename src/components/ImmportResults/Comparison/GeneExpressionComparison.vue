@@ -8,11 +8,17 @@
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-show="show">
+        <plot :geneExpressionOne="geneExpressionOne"
+              :geneExpressionTwo="geneExpressionTwo"
+              :titleOne="titleOne"
+              :titleTwo="titleTwo">
+        </plot>
+        <v-card outlined>
         <v-data-table
           dense
           :headers="geneAnalysisHeaders"
           :items="items"
-          :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }"
           no-results-text="No genes. Try a less strict filter thresholds."
         >
           <template
@@ -111,13 +117,22 @@
                 ></v-text-field>
               </td>
             </tr>
-          </template> </v-data-table></v-card-text></v-expand-transition
+          </template> 
+          </v-data-table>
+          </v-card>
+          </v-card-text>
+          </v-expand-transition
   ></v-card>
 </template>
 
 <script>
+import ComparisonVolcanoPlot from "../VolcanoPlot/ComparisonVolcanoPlot"
+
 export default {
   name: "GeneExpressionComparison",
+  components: {
+    plot: ComparisonVolcanoPlot
+  },
   props: {
     geneExpressionOne: {
       type: Array,
@@ -127,6 +142,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    titleOne: {
+        type: String,
+        default: "Data One"
+    },
+    titleTwo: {
+        type: String,
+        default: "Data Two"
+    }
   },
   computed: {
     geneAnalysisHeaders() {
@@ -236,7 +259,7 @@ export default {
     },
   },
   data: () => ({
-    show: false,
+    show: true,
     deltaAveExprInput: 0,
     logPVal1Over2Input: 0,
     logFCRatioInput: 0,

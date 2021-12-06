@@ -47,7 +47,12 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title :title="formData.modelTime === true ? 'Yes' : 'No'"><b>Use time directly in the model?</b> {{formData.modelTime === true ? "Yes" : "No"}}</v-list-item-title>
+        <v-list-item-title :title="formData.analysisGroups.group1.join(', ')"><b>Group 1 (Time: days):</b> {{formData.analysisGroups.group1.join(", ")}}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <v-list-item dense class="text-left">
+      <v-list-item-content>
+        <v-list-item-title :title="formData.analysisGroups.group2.join(', ')"><b>Group 2 (Time: days):</b> {{formData.analysisGroups.group2.join(", ")}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </v-sheet>

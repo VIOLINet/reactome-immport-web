@@ -7,6 +7,7 @@
             dense
             open-all
             selectable
+            hoverable
             selection-type="leaf"
             v-model="vaccineIdsSelected"
             :items="vaccineHierarchy"
@@ -226,10 +227,11 @@ export default {
                 voId: "VO_0000047",
               },
               {
-              name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+              name: "2011?2012 trivalent inactivated vaccine...",
+              // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
               id: 5,
               voId: "VO_0004810"
-                  },
+              },
             ],
           },
           {
@@ -343,7 +345,8 @@ export default {
                     voId: "VO_0000047",
                   },
                   {
-                    name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+                    name: "2011?2012 trivalent inactivated vaccine...",
+                    // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
                     id: 26,
                     voId: "VO_0004810"
                   },
@@ -372,9 +375,9 @@ export default {
                     voId: "VO_0000121",
                   },
                   {
-                    name: "Starmarill",
+                    name: "Stamaril",
                     id: 31,
-                    voId: "VO_0003129",
+                    voId: "VO_0003139",
                   },
                 ],
               },
@@ -386,7 +389,7 @@ export default {
                   {
                     name: "Zostavax",
                     id: 33,
-                    voId: "VO_0000659",
+                    voId: "VO_0000124",
                   },
                 ],
               },
@@ -430,9 +433,9 @@ export default {
                     voId: "VO_0001246", 
                   },
                   {
-                    name: "Meningococcal Polysaccharide Vaccine, Groups A & C, Menomune A/C",
+                    name: "Meningococcal Polysaccharide Vaccine...",
                     id: 41,
-                    voId: "VO_0001075", 
+                    voId: "VO_0010725", 
                   },
                 ]
               },

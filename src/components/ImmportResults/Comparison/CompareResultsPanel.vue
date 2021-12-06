@@ -33,6 +33,8 @@
       <GeneExpressionComparison
         :geneExpressionOne="compareFrom.geneExpressionResults"
         :geneExpressionTwo="compareTo.geneExpressionResults"
+        :titleOne="compareFrom.formData.resultSetName"
+        :titleTwo="compareTo.formData.resultSetName"
       />
       <PathwayEnrichmentComparison
         class="mt-5"

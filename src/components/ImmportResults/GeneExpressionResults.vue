@@ -144,8 +144,8 @@ export default {
     pValInput: 0.05,
     adjustedPValInput: 1,
     geneExpressionSearch: "",
-    logFCLowerBoundInput: -0.25, // a little less than 1.2 fold change
-    logFCUpperBoundInput: 0.25,
+    logFCLowerBoundInput: -0.2, // around 1.15 fold change
+    logFCUpperBoundInput: 0.2,
     filteredPathwayGenes: [],
     filteredFINetworkGenes: [],
   }),
@@ -165,7 +165,7 @@ export default {
           value: "AveExpr",
         },
         {
-          text: "log" + "2".sub() + "FC",
+          text: "Log" + "2".sub() + "FC",
           value: "logFC",
           filter: (value) => {
             if (!this.logFCLowerBoundInput && !this.logFCUpperBoundInput)
@@ -177,7 +177,7 @@ export default {
           },
         },
         {
-          text: "pVal",
+          text: "pValue",
           value: "pValue",
           filter: (value) => {
             if (!this.pValInput) return true;
@@ -185,7 +185,7 @@ export default {
           },
         },
         {
-          text: "Adjusted pVal",
+          text: "Adjusted pValue",
           value: "adjPValue",
           filter: (value) => {
             if (!this.adjustedPValInput) return true;
