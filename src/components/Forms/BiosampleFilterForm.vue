@@ -227,7 +227,7 @@ export default {
                 voId: "VO_0000047",
               },
               {
-              name: "2011?2012 trivalent inactivated vaccine...",
+              name: "2011-2012 trivalent inactivated vaccine...",
               // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
               id: 5,
               voId: "VO_0004810"
@@ -249,158 +249,173 @@ export default {
                      id: 8,
                     voId: "VO_0000044",
                   },
+                  {
+                    name: "Fluvirin",
+                    id: 9,
+                    voId: "VO_0000046",
+                  },
                 ]
               },
               {
                 name: "YF-Vax",
-                id: 9,
+                id: 10,
                 voId: "VO_0000121",
               },
               {
                 name: "Zostavax",
-                id: 10,
+                id: 11,
                 voId: "VO_0000124",
               }
             ]
           },
           {
             name: "conjugate vaccine",
-            id: 11,
+            id: 12,
             voId: "VO_0000195",
             children: [
               {
                 name: "Menactra",
-                id: 12,
+                id: 13,
                 voId: "VO_0000071",
               },
               { 
                 name: "Pnemovax 23",
-                id: 13,
+                id: 14,
                 voId: "VO_0000088",
               },
               { 
                 name: "Menveo",
-                id: 14,
+                id: 15,
                 voId: "VO_0001246",
               }             
             ]
           },
           {
             name: "recombinant viral vector vaccine",
-            id: 15,
+            id: 16,
             voId: "VO_0005331",
             children: [
               {
                 name: "Menactra",
-                id: 16,
+                id: 17,
                 voId: "VO_0000071",
               },
               { 
               name: "MVA85A",
-              id: 17,
+              id: 18,
               voId: "VO_0003120",
               },
               {
                 name: "MRKAd5 HIV-1 gag/pol/nef",
-                id: 18,
+                id: 19,
                 voId: "VO_0003133",
               }       
             ]
           },
           {
             name: "subunit vaccine",
-            id: 19,
+            id: 20,
             void: "VO_0000534",
             children:  [
                 {
                 name: "ACWY Vax",
-                id: 20,
+                id: 21,
                 voId: "VO_0003138", 
                 }
             ]
           },
           {
             name: "viral vaccine",
-            id: 21,
+            id: 22,
             voId: "VO_0000609",
             children: [
               {
                 name: "Influenza Virus Vaccine",
-                id: 22,
+                id: 23,
                 voId: "VO_0000642",
                 children: [
                   {
                     name: "2008-2009 trivalent influenza vaccine",
-                    id: 23,
+                    id: 24,
                     voId: "VO_0004809",
                   },
                   {
                     name: "Fluarix",
-                    id: 24,
+                    id: 25,
                     voId: "VO_0000045",
                   },
                   {
                     name: "Fluzone",
-                    id: 25,
+                    id: 26,
                     voId: "VO_0000047",
                   },
                   {
-                    name: "2011?2012 trivalent inactivated vaccine...",
+                    name: "2011-2012 trivalent inactivated vaccine...",
                     // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
-                    id: 26,
+                    id: 27,
                     voId: "VO_0004810"
                   },
                   {            	
                     name: "live attenuated influenza vaccine",
-                    id: 27,
+                    id: 28,
                     voId: "VO_0001178",
                     children: [
                       {
-                      name: "FluMist",
-                       id: 28,
-                      voId: "VO_0000044",
-                      }
+                        name: "FluMist",
+                        id: 29,
+                        voId: "VO_0000044",
+                      },
+                      {
+                        name: "Fluvirin",
+                        id: 30,
+                        voId: "VO_0000046",
+                      },
                     ]
                   }
                 ]
               },
               {
                 name: "Yellow Fever Virus Vaccine",
-                id: 29,
+                id: 31,
                 voId: "VO_0000121",
                 children: [
                   {
                     name: "YF-Vax",
-                    id: 30,
+                    id: 32,
                     voId: "VO_0000121",
                   },
                   {
                     name: "Stamaril",
-                    id: 31,
+                    id: 33,
                     voId: "VO_0003139",
                   },
+                  {
+                    name: "Yellow fever 17D vaccine vector",
+                    id: 34,
+                    voId: "VO_0000122"
+                  }, 
                 ],
               },
               {
                 name: "Varicella-Zoster Virus Vaccine",
-                id: 32,
+                id: 35,
                 voId: "VO_0000669",
                 children: [
                   {
                     name: "Zostavax",
-                    id: 33,
+                    id: 36,
                     voId: "VO_0000124",
                   },
                 ],
               },
               {
                 name: "HIV Virus Vaccine",
-                id: 34,
+                id: 37,
                 voId: "VO_0000295",
                 children: [
                   {
                     name: "MRKAd5 HIV-1 gag/pol/nef",
-                    id: 35,
+                    id: 38,
                     voId: "VO_0003133",
                   },
                 ],
@@ -409,56 +424,56 @@ export default {
           },
           {
             name: 'bacterial vaccine',
-            id: 36,
+            id: 39,
             voId: "VO_0000165",
             children: [
               {
                 name: "Neisseria meningitidis vaccine",
-                id: 37,
+                id: 40,
                 voId: "VO_0000053", 
                 children: [
                   { 
                     name: 'Menactra',
-                    id: 38,
+                    id: 41,
                     voId: "VO_0000071"
                     },
                   {
                     name: "ACWY Vax",
-                    id: 39,
+                    id: 42,
                     voId: "VO_0003138", 
                   },
                   {
                     name: "Menveo",
-                    id: 40,
+                    id: 43,
                     voId: "VO_0001246", 
                   },
                   {
                     name: "Meningococcal Polysaccharide Vaccine...",
-                    id: 41,
+                    id: 44,
                     voId: "VO_0010725", 
                   },
                 ]
               },
               {
                 name: "Streptoccoal pneumoniae vaccine",
-                id: 42,
+                id: 45,
                 voId: "VO_0000675",
                 children: [
                   {
-                    name: "Pneumovax 23",
-                    id: 43,
+                    name: "Pneumovax 23 (USA)",
+                    id: 46,
                     voId: "VO_0000088",
                   },
                 ],
               },
               {
                 name: "Mycobacterium tuberculosis vaccine",
-                id: 44,
+                id: 47,
                 voId: "VO_0000072",
                 children: [
                   {
                     name: "MVA85A",
-                    id: 45,
+                    id: 48,
                     voId: "VO_0003120",
                   },
                 ],
@@ -467,8 +482,15 @@ export default {
           },
           {
             name: "malarial vaccine",
-            id: 46,
-            voId: "VO_0000087",
+            id: 49,
+            voId: "VO_0000761",
+            children: [
+              {
+                name: "Plasmodium flaciparum vaccine",
+                id: 50,
+                voId: "VO_0000087"
+              }
+            ]
           }  
         ]
       }
@@ -562,6 +584,8 @@ export default {
         vaccines.includes("VO_0000609")
       )
         vaccines.push("VO_0000001");
+      if (vaccines.includes("VO_0000087"))
+        vaccines.push("VO_0000761")
 
       return vaccines;
     },
