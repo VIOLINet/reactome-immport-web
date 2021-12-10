@@ -57,7 +57,7 @@ export default {
                 x: [1, 2, 3, 4],
                 y: [10, 15, 13, 17],
                 text: ["p1", "p2", "p3", "p4"],
-                type: "scatter",
+                type: "scattergl", // Make sure scattergl is used to use webgl for performance
                 mode: "markers", // This should be insde
                 marker: {
                     size: 3,
@@ -69,7 +69,7 @@ export default {
                 x: [],
                 y: [],
                 text: [],
-                type: "scatter",
+                type: "scattergl",
                 mode: "markers", // This should be insde
                 marker: {
                     size: 3,
