@@ -28,24 +28,33 @@ export default {
   components: {
     plotly: Plotly,
   },
-  
-  data: () => ({
-    layout: {
-      showlegend: false,
-      xaxis: {
-        title: "Log" + "2".sub() + "FC",
-      },
-      yaxis: {
-        title: "-Log10(pValue)",
-      },
-    },
-  }),
+
+  data() {
+    return {
+      offset: 0.05,
+      dashType: 'dot',
+      lineWidth: 1,
+      lineColor: "#ffd699",
+    }
+  },
 
   computed: {
       results: function() {
             var plotData = this.initData()
             plotData = this.updatePlot(plotData)
             return plotData
+      },
+      // Defined as a computed prop so that it can be overriden in the parent component
+      layout: function() {
+        return {
+          showlegend: false,
+          xaxis: {
+            title: "Log" + "2".sub() + "FC",
+          },
+          yaxis: {
+            title: "-Log10(pValue)",
+          },
+        };
       }
   },
 
