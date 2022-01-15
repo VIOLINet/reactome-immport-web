@@ -35,7 +35,7 @@ export default {
     // which may be more efficient.
     layout: function () {
       return {
-        showlegend: true,
+        showlegend: false,
         xaxis: {
           title: "Log" + "2".sub() + "FC",
           range: this.xrange,
@@ -50,7 +50,7 @@ export default {
             x0: this.logFDLower,
             y0: 0,
             x1: this.logFDLower,
-            y1: this.yrange[1],
+            y1: this.yrange[1] + this.offset,
             line: {
               color: this.lineColor,
               width: this.lineWidth,
@@ -62,7 +62,7 @@ export default {
             x0: this.logFDUpper,
             y0: 0,
             x1: this.logFDUpper,
-            y1: this.yrange[1],
+            y1: this.yrange[1] + this.offset,
             line: {
               color: this.lineColor,
               width: this.lineWidth,
@@ -71,9 +71,9 @@ export default {
           },
           {
             type: "line",
-            x0: this.xrange[0],
+            x0: this.xrange[0] - this.offset,
             y0: -Math.log10(this.pValueCutoff),
-            x1: this.xrange[1],
+            x1: this.xrange[1] + this.offset,
             y1: -Math.log10(this.pValueCutoff),
             line: {
               color: this.lineColor,
