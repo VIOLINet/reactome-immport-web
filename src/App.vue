@@ -38,6 +38,7 @@
           @fetchPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
           @fetchNetworkAnalysis="fetchNetworkAnalysis"
           @compareResults="compareResults"
+          @cutoffValuesUpdated="updateCutoffValues"
           class="mt-5"
         >
           <template v-slot:[`${compareFromId}`]>
@@ -67,6 +68,7 @@
 
 <script>
 import ImmportService from "./service/ImmportService";
+import EventBus from "./service/EventBus";
 import GeneExpressionAnalysisForm from "./components/Forms/GeneExpressionAnalysisForm";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 // import GeneExpressionResults from "./components/ImmportResults/GeneExpressionResults";
@@ -210,6 +212,16 @@ export default {
       this.comparisonSets = this.comparisonSets.filter(
         (set) => !(set.includes(ids[0]) && set.includes(ids[1]))
       );
+    },
+    updateCutoffValues(values) {
+      let result = this.resultSets.find(rs => rs.id == values.id)
+      if (result !== undefined)
+        if (result.cutoffValues === undefined)
+          result.cutoffValues = values;
+        else
+          Object.assign(result.cutoffValues, values);
+      // Re-fire this event for other components globally
+      EventBus.$emit('cutoffValuesUpdated', result.cutoffValues);
     },
   },
 };

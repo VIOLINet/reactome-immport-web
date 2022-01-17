@@ -35,19 +35,18 @@ export default {
       dashType: 'dot',
       lineWidth: 1,
       lineColor: "#ffd699",
+      showlegend: false,
     }
   },
 
   computed: {
       results: function() {
-            var plotData = this.initData()
-            plotData = this.updatePlot(plotData)
-            return plotData
+        return this.generateResults();
       },
       // Defined as a computed prop so that it can be overriden in the parent component
       layout: function() {
         return {
-          showlegend: false,
+          showlegend: this.showlegend,
           xaxis: {
             title: "Log" + "2".sub() + "FC",
           },
@@ -59,22 +58,24 @@ export default {
   },
 
   methods: {
+
+    generateResults() {
+      let plotData = this.initData()
+      plotData = this.updatePlot(plotData)
+      return plotData
+    },
+
     initData() {
         var plotData = [
-            {
-                name: "Selected",
-                x: [1, 2, 3, 4],
-                y: [10, 15, 13, 17],
-                text: ["p1", "p2", "p3", "p4"],
-                type: "scattergl", // Make sure scattergl is used to use webgl for performance
-                mode: "markers", // This should be insde
-                marker: {
-                    size: 3,
-                    color: "#0000FF",
-                }
-            },
-            {
-                name: "Filtered-out",
+          this.createData('Selected', '#0000FF'),
+          this.createData('Filtered-out', '#D8D8D8'),
+        ];
+        return plotData
+    },
+
+    createData(name, color) {
+      return {
+               name: name,
                 x: [],
                 y: [],
                 text: [],
@@ -82,18 +83,53 @@ export default {
                 mode: "markers", // This should be insde
                 marker: {
                     size: 3,
-                    color: "#D8D8D8",
-                }
-            }
-        ];
-        return plotData
+                    color: color,
+                },
+      };
+    },
+
+    splitData(diffExpResults, 
+              pValueCutoff, 
+              adjPValueCutoff,
+              logFDLower, 
+              logFDUpper,
+              chosenData,
+              filteredData) {
+      const chosenX = [];
+      const chosenY = [];
+      const chosenText = [];
+      const filteredX = [];
+      const filteredY = [];
+      const filteredText = [];
+      for (let i = 0; i < diffExpResults.length; i++) {
+        let tmp = diffExpResults[i];
+        if (
+          tmp.pValue < pValueCutoff &&
+          tmp.adjPValue < adjPValueCutoff &&
+          (tmp.logFC < logFDLower || tmp.logFC > logFDUpper)
+        ) {
+          chosenX.push(tmp.logFC);
+          chosenY.push(-Math.log10(tmp.pValue));
+          chosenText.push(this.createText(tmp));
+        } else {
+          filteredX.push(tmp.logFC);
+          filteredY.push(-Math.log10(tmp.pValue));
+          filteredText.push(this.createText(tmp));
+        }
+      }
+      chosenData.x = chosenX;
+      chosenData.y = chosenY;
+      chosenData.text = chosenText;
+      filteredData.x = filteredX;
+      filteredData.y = filteredY;
+      filteredData.text = filteredText;
     },
 
     createText(diffExpResult) {
         var text = "<b>Gene: " +
               diffExpResult.gene_name +
               "</b><br>" +
-              "logFC: " +
+              "Log" + "2".sub() + "FC: " +
               diffExpResult.logFC.toExponential(2) +
               "<br>" +
               "AveExpr: " +

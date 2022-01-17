@@ -121,35 +121,13 @@ export default {
     },
 
     updatePlot(data) {
-      const diffExpResults = this.geneExpressionResults;
-      const chosenX = [];
-      const chosenY = [];
-      const chosenText = [];
-      const filteredX = [];
-      const filteredY = [];
-      const filteredText = [];
-      for (let i = 0; i < diffExpResults.length; i++) {
-        let tmp = diffExpResults[i];
-        if (
-          tmp.pValue < this.pValueCutoff &&
-          tmp.adjPValue < this.adjPValueCutoff &&
-          (tmp.logFC < this.logFDLower || tmp.logFC > this.logFDUpper)
-        ) {
-          chosenX.push(tmp.logFC);
-          chosenY.push(-Math.log10(tmp.pValue));
-          chosenText.push(this.createText(tmp));
-        } else {
-          filteredX.push(tmp.logFC);
-          filteredY.push(-Math.log10(tmp.pValue));
-          filteredText.push(this.createText(tmp));
-        }
-      }
-      data[0].x = chosenX;
-      data[0].y = chosenY;
-      data[0].text = chosenText;
-      data[1].x = filteredX;
-      data[1].y = filteredY;
-      data[1].text = filteredText;
+      this.splitData(this.geneExpressionResults,
+                     this.pValueCutoff,
+                     this.adjPValueCutoff,
+                     this.logFDLower,
+                     this.logFDUpper,
+                     data[0],
+                     data[1]);
       return data;
     },
 

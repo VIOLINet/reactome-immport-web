@@ -8,10 +8,8 @@
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-show="show">
-        <plot :geneExpressionOne="geneExpressionOne"
-              :geneExpressionTwo="geneExpressionTwo"
-              :titleOne="titleOne"
-              :titleTwo="titleTwo">
+        <plot :compareFrom="compareFrom"
+              :compareTo="compareTo">
         </plot>
         <v-card outlined>
         <v-data-table
@@ -133,24 +131,12 @@ export default {
   components: {
     plot: ComparisonVolcanoPlot
   },
+  
   props: {
-    geneExpressionOne: {
-      type: Array,
-      default: () => [],
-    },
-    geneExpressionTwo: {
-      type: Array,
-      default: () => [],
-    },
-    titleOne: {
-        type: String,
-        default: "Data One"
-    },
-    titleTwo: {
-        type: String,
-        default: "Data Two"
-    }
+    compareFrom: Object,
+    compareTo: Object,
   },
+
   computed: {
     geneAnalysisHeaders() {
       return [
@@ -222,9 +208,9 @@ export default {
       ];
     },
     items() {
-      const items = [...this.geneExpressionOne];
+      const items = [...this.compareFrom.geneExpressionResults];
       const secondaryGenes = new Map();
-      this.geneExpressionTwo.forEach((gene) =>
+      this.compareTo.geneExpressionResults.forEach((gene) =>
         secondaryGenes.set(gene.gene_name, gene)
       );
 
