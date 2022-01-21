@@ -38,19 +38,18 @@ export default {
         showlegend: false,
         xaxis: {
           title: "Log" + "2".sub() + "FC",
-          range: this.xrange,
         },
         yaxis: {
           title: "-Log10(pValue)",
-          range: this.yrange,
         },
         shapes: [
           {
             type: "line",
+            yref: "paper",
             x0: this.logFDLower,
             y0: 0,
             x1: this.logFDLower,
-            y1: this.yrange[1] + this.offset,
+            y1: 1,
             line: {
               color: this.lineColor,
               width: this.lineWidth,
@@ -59,10 +58,11 @@ export default {
           },
           {
             type: "line",
+            yref: "paper",
             x0: this.logFDUpper,
             y0: 0,
             x1: this.logFDUpper,
-            y1: this.yrange[1] + this.offset,
+            y1: 1,
             line: {
               color: this.lineColor,
               width: this.lineWidth,
@@ -71,9 +71,10 @@ export default {
           },
           {
             type: "line",
-            x0: this.xrange[0] - this.offset,
+            xref: 'paper',
+            x0: 0,
             y0: -Math.log10(this.pValueCutoff),
-            x1: this.xrange[1] + this.offset,
+            x1: 1,
             y1: -Math.log10(this.pValueCutoff),
             line: {
               color: this.lineColor,
@@ -83,31 +84,6 @@ export default {
           },
         ],
       };
-    },
-
-    xrange: function() {
-      const diffExpResults = this.geneExpressionResults;
-      let min = Number.MAX_VALUE;
-      let max = Number.MIN_VALUE;
-      for (let i = 0; i < diffExpResults.length; i++) {
-        let tmp = diffExpResults[i];
-        if (tmp.logFC < min) 
-          min = tmp.logFC;
-        else if (tmp.logFC > max)
-          max = tmp.logFC;
-      }
-      return [min - this.offset, max + this.offset]
-    },
-
-    yrange: function() {
-      const diffExpResults = this.geneExpressionResults;
-      let max = Number.MIN_VALUE;
-      for (let i = 0; i < diffExpResults.length; i++) {
-        let tmp = diffExpResults[i];
-        tmp = -Math.log10(tmp.pValue)
-        if (tmp > max) max = tmp;
-      }
-      return [0, max + this.offset]
     },
   },
 

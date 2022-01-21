@@ -6,7 +6,7 @@ Please install nvm through homebrew on a Mac, (or follow the documentation [here
 
 Next, install the latest version of Node:
 ```
-nvm install --lts
+npm install --lts
 ```
 
 Finally, install Vue CLI 3

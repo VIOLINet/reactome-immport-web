@@ -10,11 +10,15 @@
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-show="show">
+        <plot :pathwayEnrichmentResults="pathwayEnrichmentResults.pathways"
+              :pvalueCutoff="pValInput">
+        </plot>
+        <v-card outlined>
         <v-data-table
           dense
           :headers="pathwayEnrichmentHeaders"
           :items="pathwayEnrichmentResults.pathways"
-          :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }"
           no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template v-slot:item.stId="{item}">
@@ -70,14 +74,21 @@
             </tr>
           </template>
         </v-data-table>
+        </v-card>
       </v-card-text>
     </v-expand-transition>
   </v-card>
 </template>
 
 <script>
+
+import PathwayResultsPlot from './VolcanoPlot/PathwayResultsPlot.vue';
+
 export default {
   name: "PathwayEnrichmentResults",
+  components: {
+    plot: PathwayResultsPlot,
+  },
   props: {
     pathwayEnrichmentResults: {
       type: Object,

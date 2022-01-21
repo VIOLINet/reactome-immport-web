@@ -41,7 +41,9 @@
           compareTo.enrichmentResults.pathways
         "
         :pathwayEnrichmentOne="compareFrom.enrichmentResults"
+        :titleOne="compareFrom.formData.resultSetName"
         :pathwayEnrichmentTwo="compareTo.enrichmentResults"
+        :titleTwo="compareTo.formData.resultSetName"
       />
       <CyInstance
         v-if="fiNetwork.length > 0"

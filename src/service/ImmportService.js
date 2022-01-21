@@ -29,6 +29,21 @@ class ImmportService {
     });
   }
 
+  // It may be easy to use fetch API here. However, to make this function
+  // consistent with others, axios is still used
+  static listPathways() {
+    return new Promise((resolve, reject) => {
+      axios
+       .get(`${url}analysis/pathway_list`)
+       .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   // This function is used for setting up GUIs with a quick loading.
   // Make sure the Java API has set up correctly by providing the file.
   static fetchTestGeneExpressionAnalysis() {

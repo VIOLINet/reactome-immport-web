@@ -8,133 +8,155 @@
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-if="show">
-        <v-data-table
-          dense
-          :headers="pathwayEnrichmentHeaders"
-          :items="items"
-          :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
-          no-results-text="No pathways. Try a less strict filter thresholds."
+        <plot
+          :pathwayEnrichmentResults1="pathwayEnrichmentOne.pathways"
+          :title1="titleOne"
+          :pathwayEnrichmentResults2="pathwayEnrichmentTwo.pathways"
+          :title2="titleTwo"
         >
-          <template
-            v-for="(h, index) in pathwayEnrichmentHeaders"
-            v-slot:[`header.${h.value}`]="{ header }"
+        </plot>
+        <v-card outlined>
+          <v-data-table
+            dense
+            :headers="pathwayEnrichmentHeaders"
+            :items="items"
+            :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }"
+            no-results-text="No pathways. Try a less strict filter thresholds."
           >
-            <span :key="index" v-html="header.text"></span>
-          </template>
-          <template v-slot:item.entities.ratio="{ item }">
-            <p :title="item.entities && item.entities.ratio">
-              {{ item.entities && item.entities.ratio.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.entities2.ratio="{ item }">
-            <p :title="item.entities2 && item.entities2.ratio">
-              {{ item.entities2 && item.entities2.ratio.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.entities.pValue="{ item }">
-            <p :title="item.entities && item.entities.pValue">
-              {{ item.entities && item.entities.pValue.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.entities2.pValue="{ item }">
-            <p :title="item.entities2 && item.entities2.pValue">
-              {{ item.entities2 && item.entities2.pValue.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.entitiesFoundRatio="{ item }">
-            <p :title="item.entitiesFoundRatio">
-              {{
-                item.entitiesFoundRatio &&
-                Math.round((item.entitiesFoundRatio + Number.EPSILON) * 100) /
-                  100
-              }}
-            </p>
-          </template>
-          <template v-slot:item.logPVal1Over2="{ item }">
-            <p :title="item.logPVal1Over2 && item.logPVal1Over2">
-              {{
-                item.logPVal1Over2 &&
-                Math.round((item.logPVal1Over2 + Number.EPSILON) * 100) / 100
-              }}
-            </p>
-          </template>
-          <template v-slot:item.entities.fdr="{ item }">
-            <p :title="item.entities && item.entities.fdr">
-              {{ item.entities && item.entities.fdr.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.entities2.fdr="{ item }">
-            <p :title="item.entities2 && item.entities2.fdr">
-              {{ item.entities2 && item.entities2.fdr.toExponential(2) }}
-            </p>
-          </template>
-          <template v-slot:item.logFdr1Over2="{ item }">
-            <p :title="item.logFdr1Over2">
-              {{
-                item.logFdr1Over2 &&
-                Math.round((item.logFdr1Over2 + Number.EPSILON) * 100) / 100
-              }}
-            </p>
-          </template>
-          <template v-slot:body.append>
-            <tr>
-              <td colspan="1"></td>
-              <td>
-                <v-text-field
-                  placeholder="Search name"
-                  v-model="pathwaySearchInput"
-                  hide-details
-                ></v-text-field>
-              </td>
-              <td colspan="2"></td>
-              <td colspan="1">
-                <v-text-field
-                  prefix="abs(Δ)≥"
-                  v-model="ratioComparisonInput"
-                  type="number"
-                  min="0"
-                  hide-details
-                ></v-text-field>
-              </td>
-              <td colspan="2"></td>
-              <td>
-                <v-text-field
-                  prefix="abs()≥"
-                  v-model="logPval1Over2Input"
-                  type="number"
-                  min="0"
-                  hide-details
-                ></v-text-field>
-              </td>
-              <td colspan="2"></td>
-              <td colspan="1">
-                <v-text-field
-                  prefix="abs()≥"
-                  v-model="logFDR1FDR2Input"
-                  type="number"
-                  min="0"
-                  hide-details
-                ></v-text-field>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
+            <template
+              v-for="(h, index) in pathwayEnrichmentHeaders"
+              v-slot:[`header.${h.value}`]="{ header }"
+            >
+              <span :key="index" v-html="header.text"></span>
+            </template>
+            <template v-slot:item.entities.ratio="{ item }">
+              <p :title="item.entities && item.entities.ratio">
+                {{ item.entities && item.entities.ratio.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.entities2.ratio="{ item }">
+              <p :title="item.entities2 && item.entities2.ratio">
+                {{ item.entities2 && item.entities2.ratio.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.entities.pValue="{ item }">
+              <p :title="item.entities && item.entities.pValue">
+                {{ item.entities && item.entities.pValue.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.entities2.pValue="{ item }">
+              <p :title="item.entities2 && item.entities2.pValue">
+                {{ item.entities2 && item.entities2.pValue.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.entitiesFoundRatio="{ item }">
+              <p :title="item.entitiesFoundRatio">
+                {{
+                  item.entitiesFoundRatio &&
+                  Math.round((item.entitiesFoundRatio + Number.EPSILON) * 100) /
+                    100
+                }}
+              </p>
+            </template>
+            <template v-slot:item.logPVal1Over2="{ item }">
+              <p :title="item.logPVal1Over2 && item.logPVal1Over2">
+                {{
+                  item.logPVal1Over2 &&
+                  Math.round((item.logPVal1Over2 + Number.EPSILON) * 100) / 100
+                }}
+              </p>
+            </template>
+            <template v-slot:item.entities.fdr="{ item }">
+              <p :title="item.entities && item.entities.fdr">
+                {{ item.entities && item.entities.fdr.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.entities2.fdr="{ item }">
+              <p :title="item.entities2 && item.entities2.fdr">
+                {{ item.entities2 && item.entities2.fdr.toExponential(2) }}
+              </p>
+            </template>
+            <template v-slot:item.logFdr1Over2="{ item }">
+              <p :title="item.logFdr1Over2">
+                {{
+                  item.logFdr1Over2 &&
+                  Math.round((item.logFdr1Over2 + Number.EPSILON) * 100) / 100
+                }}
+              </p>
+            </template>
+            <template v-slot:body.append>
+              <tr>
+                <td colspan="1"></td>
+                <td>
+                  <v-text-field
+                    placeholder="Search name"
+                    v-model="pathwaySearchInput"
+                    hide-details
+                  ></v-text-field>
+                </td>
+                <td colspan="2"></td>
+                <td colspan="1">
+                  <v-text-field
+                    prefix="abs(Δ)≥"
+                    v-model="ratioComparisonInput"
+                    type="number"
+                    min="0"
+                    hide-details
+                  ></v-text-field>
+                </td>
+                <td colspan="2"></td>
+                <td>
+                  <v-text-field
+                    prefix="abs()≥"
+                    v-model="logPval1Over2Input"
+                    type="number"
+                    min="0"
+                    hide-details
+                  ></v-text-field>
+                </td>
+                <td colspan="2"></td>
+                <td colspan="1">
+                  <v-text-field
+                    prefix="abs()≥"
+                    v-model="logFDR1FDR2Input"
+                    type="number"
+                    min="0"
+                    hide-details
+                  ></v-text-field>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card>
       </v-card-text>
     </v-expand-transition>
   </v-card>
 </template>
 
 <script>
+import ComparisonPathwayPlot from "../VolcanoPlot/ComparisonPathwayPlot.vue";
+
 export default {
   name: "PathwayEnrichmentComparison",
+  components: {
+    plot: ComparisonPathwayPlot,
+  },
   props: {
     pathwayEnrichmentOne: {
       type: Object,
       default: () => {},
     },
+    titleOne: {
+      type: String,
+      default: "Result One",
+    },
     pathwayEnrichmentTwo: {
       type: Object,
       default: () => {},
+    },
+    titleTwo: {
+      type: String,
+      default: "Result Two",
     },
   },
   data: () => ({
@@ -159,7 +181,7 @@ export default {
         { text: "Entities Found" + "a".sup(), value: "entities.found" },
         { text: "Entities Found" + "b".sup(), value: "entities2.found" },
         {
-          text: "Found" + "a".sup() + "/ Found" + "b".sup(),
+          text: "Found" + "a".sup() + " - Found" + "b".sup(),
           value: "entitiesFoundRatio",
           filter: (value) => {
             if (!this.ratioComparisonInput) return true;
@@ -195,30 +217,33 @@ export default {
       ];
     },
     items() {
-      const pathwaysOne = [...this.pathwayEnrichmentOne.pathways];
+      // We need to make a copy of the object to avoid data modification
+      const pathwaysOne = [];
+      for (let pathway of this.pathwayEnrichmentOne.pathways)
+        pathwaysOne.push(Object.create(pathway));
       const secondaryPathways = new Map();
       this.pathwayEnrichmentTwo.pathways &&
         this.pathwayEnrichmentTwo.pathways.forEach((pw) =>
-          secondaryPathways.set(pw.stId, pw)
+          secondaryPathways.set(pw.stId, Object.create(pw))
         );
 
       //loop over primary pathways and add secondary entities if available
       pathwaysOne &&
         pathwaysOne.forEach((pathway) => {
-          const secondaryPW = { ...secondaryPathways.get(pathway.stId) };
+          const secondaryPW = secondaryPathways.get(pathway.stId);
           if (!secondaryPW) return;
           pathway.entities2 = secondaryPW.entities;
           pathway.entitiesFoundRatio =
-            (pathway.entities ? pathway.entities.found : 0) /
+            (pathway.entities ? pathway.entities.found : 0) -
             (pathway.entities2 ? pathway.entities2.found : 1);
-          pathway.logPVal1Over2 = Math.log(
+          pathway.logPVal1Over2 = Math.log10(
             (pathway.entities ? pathway.entities.pValue : 0) /
               (pathway.entities2 ? pathway.entities2.pValue : 1)
           );
           pathway.logFdr1Over2 =
             pathway.entities2 &&
             pathway.entities &&
-            Math.log(pathway.entities.fdr / pathway.entities2.fdr);
+            Math.log10(pathway.entities.fdr / pathway.entities2.fdr);
           secondaryPathways.delete(pathway.stId);
         });
 

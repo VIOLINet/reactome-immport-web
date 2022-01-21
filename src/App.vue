@@ -96,7 +96,9 @@ export default {
     loadingReactomeAnalyses: false,
     showCompareFromForm: false,
     compareFromId: undefined,
-    dataAnalysisFailed: false
+    dataAnalysisFailed: false,
+    // Used to cache pathway list:
+    pathwayList: undefined,
   }),
   watch: {
     resultSets(newVal, oldVal) {
@@ -147,6 +149,11 @@ export default {
     },
     async fetchPathwayEnrichmentAnalysis(id, genes) {
       try {
+        // Handle pathway list that is used as the base for plot
+        if (!sessionStorage.getItem('reactome_pathway_list')) {
+          let pathwayList = await ImmportService.listPathways();
+          sessionStorage.setItem('reactome_pathway_list', JSON.stringify(pathwayList));
+        }
         this.resultSets.find(
           (rs) => rs.id === id
         ).enrichmentResults = await ImmportService.fetchPathwayEnrichmentAnalysis(
@@ -157,6 +164,7 @@ export default {
         console.log(err);
       }
     },
+
     async fetchNetworkAnalysis(id, props) {
       console.log(props.absLogFC)
       console.log(props.adjPValue)

@@ -31,7 +31,6 @@ export default {
 
   data() {
     return {
-      offset: 0.05,
       dashType: 'dot',
       lineWidth: 1,
       lineColor: "#ffd699",
@@ -66,7 +65,7 @@ export default {
     },
 
     initData() {
-        var plotData = [
+        let plotData = [
           this.createData('Selected', '#0000FF'),
           this.createData('Filtered-out', '#D8D8D8'),
         ];
