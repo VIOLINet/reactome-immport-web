@@ -17,7 +17,7 @@
         </div>
       </div>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-show="show">
       <DescriptionComparisonPanel
         class="mb-5"
         :formDatas="[compareFrom.formData, compareTo.formData]"
