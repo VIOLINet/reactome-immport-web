@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Immport Reactome Analysis</h2>
+    <h2>ImmPort Reactome Analysis</h2>
 
     <p>
       This form allows users to select a set of vaccines for analysis. Return data can be filtered

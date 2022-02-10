@@ -247,7 +247,7 @@ export default {
 
       this.biosampleMetaData.forEach((sample) => {
         if (sample.immport_vaccination_time === undefined) return;
-        const time = parseInt(sample.immport_vaccination_time);
+        const time = parseFloat(sample.immport_vaccination_time);
         if (!this.timeSamples.some((ts) => ts.time === time)) {
           this.timeSamples.push({
             time: time,
@@ -263,7 +263,7 @@ export default {
       let timesArray = [];
       this.biosampleMetaData.forEach((sample) => {
         if (sample.immport_vaccination_time === undefined) return;
-        const time = parseInt(sample.immport_vaccination_time);
+        const time = parseFloat(sample.immport_vaccination_time);
         if (!timesArray.some((ts) => ts.time === time)) {
           timesArray.push({
             time: time,

@@ -162,7 +162,7 @@
       <v-col>
         <!-- Following the same height as the first one. This is hard-coded! - NB by GW -->
         <v-sheet color="grey lighten-2" class="pa-2 scrollable" height="24.5em">
-          <p class="header">Type_subtype</p>
+          <p class="header">Cell Type</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"

@@ -37,6 +37,11 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
+        <v-list-item-title :title="formData.selectedType_subtypes.join(', ')"><b>Cell Type:</b> {{formData.selectedType_subtypes.join(", ")}}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <v-list-item dense class="text-left">
+      <v-list-item-content>
         <v-list-item-title :title="formData.studyVariables.length > 0 ?formData.studyVariables.join(', ') : 'None'"><b>Study Variables:</b> {{formData.studyVariables.length > 0 ?formData.studyVariables.join(", ") : "None"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>

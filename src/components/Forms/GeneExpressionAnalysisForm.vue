@@ -79,7 +79,7 @@ export default {
             [
               ...selectedOptions.analysisGroups.group1,
               ...selectedOptions.analysisGroups.group2,
-            ].includes(parseInt(sample.immport_vaccination_time))
+            ].includes(parseFloat(sample.immport_vaccination_time))
           );
       const data = {};
       data.GSMids = [...new Set(samples.map((sample) => sample.gsm))];
