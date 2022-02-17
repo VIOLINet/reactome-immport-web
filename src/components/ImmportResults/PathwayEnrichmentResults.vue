@@ -22,20 +22,48 @@
           no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template v-slot:item.stId="{item}">
-            <a target="_blank" :href="getReactomeDiagramURL(item)">{{item.stId}}</a>
+            <p class="table_p">
+            <v-tooltip bottom open-delay="500">
+              <template v-slot:activator="{on, attrs}">
+                <a 
+                  target="_reactome" 
+                  :href="getReactomeDiagramURL(item)"
+                  v-bind="attrs"
+                  v-on="on">
+                  {{item.stId}}
+                </a>
+              </template>
+              Open Reactome for {{item.name}}
+            </v-tooltip>
+            </p>
+          </template>
+          <template v-slot:item.name="{ item }">
+            <p class="table_p">
+              {{ item.name}}
+            </p>
+          </template>
+          <template v-slot:item.entities.found="{ item }">
+            <p class="table_p">
+              {{ item.entities.found}}
+            </p>
+          </template>
+          <template v-slot:item.entities.total="{ item }">
+            <p class="table_p">
+              {{item.entities.total}}
+            </p>
           </template>
           <template v-slot:item.entities.ratio="{ item }">
-            <p :title="item.entities.ratio">
+            <p :title="item.entities.ratio" class="table_p">
               {{ item.entities.ratio.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.entities.pValue="{ item }"
-            ><p :title="item.entities.pValue">
+            ><p :title="item.entities.pValue" class="table_p">
               {{ item.entities.pValue.toExponential(2) }}
             </p></template
           >
           <template v-slot:item.entities.fdr="{ item }"
-            ><p :title="item.entities.fdr">
+            ><p :title="item.entities.fdr" class="table_p">
               {{ item.entities.fdr.toExponential(2) }}
             </p></template
           >
@@ -143,5 +171,10 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
+}
+.table_p {
+  text-align:left; 
+  margin-top: 0.25em; 
+  margin-bottom: 0.25em;
 }
 </style>

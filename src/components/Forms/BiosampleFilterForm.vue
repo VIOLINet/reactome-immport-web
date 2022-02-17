@@ -8,16 +8,35 @@
             open-all
             selectable
             hoverable
+            activatable
             selection-type="leaf"
             v-model="vaccineIdsSelected"
             :items="vaccineHierarchy"
             class="smallFont"
-          ></v-treeview
-        ></v-sheet>
+          >
+          <!-- Based on https://stackoverflow.com/questions/54719453/how-to-bind-an-event-to-a-treeview-node-in-vuetify/54719701 -->
+          <template slot="label" slot-scope="{ item }">
+            <div>
+              <v-tooltip bottom open-delay="500">
+                <template v-slot:activator="{on, attrs}">
+                  <a 
+                    target="_ontobee"
+                    :href="'http://purl.obolibrary.org/obo/' + item.voId"
+                    v-bind="attrs" 
+                    v-on="on">
+                    {{ item.name }}
+                  </a>
+                </template>
+                Open Ontobee for {{item.name}}
+              </v-tooltip>
+            </div>
+          </template>
+          </v-treeview>
+        </v-sheet>
       </v-col>
       <v-col>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
-          <p class="header">Studies</p>
+          <p class="header">ImmPort Studies</p>
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
@@ -34,11 +53,26 @@
             :key="index"
             :disabled="availableStudies.length === 1 ? true : false"
             v-model="selectedStudies"
-            :label="def"
             :value="def"
             @click="selectAllStudies = false"
-          ></v-checkbox
-        ></v-sheet>
+          >
+          <!-- The following code is based on https://vuetifyjs.com/en/components/checkboxes/#inline-text-field -->
+          <template v-slot:label>
+            <div>
+              <v-tooltip bottom open-delay="500">
+                <template v-slot:activator="{on}">
+                  <a target="_immport"
+                     :href="'https://www.immport.org/shared/study/' + def"
+                    @click.stop
+                    v-on="on">{{def}}
+                  </a>
+                </template>
+              Open Immport for {{def}}
+              </v-tooltip>
+            </div>
+          </template>
+          </v-checkbox>
+        </v-sheet>
         <v-sheet color="grey lighten-2" class="pa-2 ma-1 inputBox">
           <p class="header">Platform Description</p>
           <v-checkbox
@@ -867,6 +901,7 @@ export default {
     clearVOForm() {
       this.vaccinesSelected = [];
     },
+
     filterBiosamples() {
       const biosamples = this.biosampleMetaData.filter(
         (sample) =>

@@ -63,6 +63,7 @@
         </v-card>
       </v-overlay>
     </v-container>
+    <Footer />
   </v-app>
 </template>
 
@@ -75,6 +76,7 @@ import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
 import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
 import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
 import Docs from "./components/Docs";
+import Footer from "./components/Footer";
 import _isEqual from "lodash/isEqual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -85,6 +87,7 @@ export default {
     GeneExpResultPanel,
     // GeneExpressionResults,
     Docs,
+    Footer,
     ComparisonForm,
     CompareResultsPanel,
   },

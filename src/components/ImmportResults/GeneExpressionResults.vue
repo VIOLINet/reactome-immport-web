@@ -45,23 +45,39 @@
             >
               <span :key="index" v-html="header.text"></span>
             </template>
+            <template v-slot:item.gene_name="{ item }">
+              <p class="table_p">
+                <v-tooltip bottom open-delay="500">
+                  <template v-slot:activator="{on, attrs}">
+                    <a 
+                      target="_genecard" 
+                      v-bind:href="'https://www.genecards.org/cgi-bin/carddisp.pl?gene=' + item.gene_name"
+                      v-on="on"
+                      v-bind="attrs">
+                    {{ item.gene_name }}
+                    </a>
+                  </template>
+                Open GeneCard for {{item.gene_name}}
+                </v-tooltip>
+              </p>
+            </template>
             <template v-slot:item.AveExpr="{ item }">
-              <p :title="item.AveExpr">
+              <p :title="item.AveExpr" class="table_p">
                 {{ item && item.AveExpr && item.AveExpr.toExponential(2) }}
               </p>
             </template>
             <template v-slot:item.logFC="{ item }">
-              <p :title="item.logFC">
+              <p :title="item.logFC" class="table_p">
                 {{ item && item.logFC && item.logFC.toExponential(2) }}
               </p>
             </template>
             <template v-slot:item.pValue="{ item }">
-              <p :title="item.pValue">
+              <p :title="item.pValue" class="table_p">
                 {{ item && item.pValue && item.pValue.toExponential(2) }}
               </p>
             </template>
             <template v-slot:item.adjPValue="{ item }">
-              <p :title="item.adjPValue">
+              <p :title="item.adjPValue" class="table_p">
                 {{ item && item.adjPValue && item.adjPValue.toExponential(2) }}
               </p>
             </template>
@@ -275,5 +291,11 @@ export default {
 }
 .union {
   margin: 5px;
+}
+
+.table_p {
+  text-align:left; 
+  margin-top: 0.25em; 
+  margin-bottom: 0.25em;
 }
 </style>
