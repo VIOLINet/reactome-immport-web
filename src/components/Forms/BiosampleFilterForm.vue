@@ -46,12 +46,13 @@
             :input-value="selectAllStudies"
             v-model="selectAllStudies"
           ></v-checkbox>
+          <!-- Don't disable the following checkbox when there is only one study. Otherwise,
+           the link provided in the template is disabled -->
           <v-checkbox
             dense
             class="shrink ma-0 pa-0 smallFont"
             v-for="(def, index) in availableStudies"
             :key="index"
-            :disabled="availableStudies.length === 1 ? true : false"
             v-model="selectedStudies"
             :value="def"
             @click="selectAllStudies = false"
