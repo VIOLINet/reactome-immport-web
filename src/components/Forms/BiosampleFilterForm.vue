@@ -412,7 +412,7 @@ export default {
               {
                 name: "Yellow Fever Virus Vaccine",
                 id: 31,
-                voId: "VO_0000121",
+                voId: "VO_0000123",
                 children: [
                   {
                     name: "YF-Vax",

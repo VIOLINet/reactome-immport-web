@@ -56,9 +56,13 @@
         <v-card>
           <v-card-text class="flex">
             <p>
-            An error occured with this analysis result.
+            An error occured with this analysis result, most likely caused by <br>
+            limited data with other options checked. Try to uncheck "Paired" <br>
+            or other options and then run the analysis again.
             </p>
+            <p>
             <v-btn @click="dataAnalysisFailed = false">close</v-btn>
+            </p>
           </v-card-text>
         </v-card>
       </v-overlay>

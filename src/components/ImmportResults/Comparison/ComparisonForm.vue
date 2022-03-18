@@ -2,7 +2,7 @@
   <v-card light outlined class="full-width">
       <v-card-text>
       <p class="text-left from-text">Compare from: <strong>{{this.resultSets.find(rs => rs.id === this.compareFromId).formData.resultSetName}}</strong></p>
-      <v-select :items="compareToNames" item-text="title" item-value="id" label="Comarison Options" v-model="selectedId"></v-select>
+      <v-select :items="compareToNames" item-text="title" item-value="id" label="Comparison Options" v-model="selectedId"></v-select>
       <div class="flex">
           <v-btn small color="secondary" @click="$emit('cancelComparison')">Cancel</v-btn>
         <v-btn color="primary" @click="selectedId !== null && $emit('addComparison', {compareFrom: compareFromId, compareTo: selectedId})">Compare!</v-btn>
