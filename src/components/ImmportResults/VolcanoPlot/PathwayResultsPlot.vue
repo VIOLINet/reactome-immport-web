@@ -55,21 +55,6 @@ export default {
         yaxis: {
           title: "-Log10(pValue)",
         },
-        // The following code cannot work in this type of plot!
-        //   shape: [{
-        //       type: 'line',
-        //       yref: 'paper',
-        //       xref: 'paper',
-        //       x0: 0,
-        //       y0: 0.5,
-        //       x1: 1,
-        //       y1: 0.5,
-        //       line: {
-        //           color: '#00FF00',
-        //           width: 2.0,
-        //           dash: 'line'
-        //       }
-        //   }]
       };
     },
   },

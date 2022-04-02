@@ -2,6 +2,10 @@
   <v-card outlined>
     <v-card-title class="flex">
       <h4>Pathway Enrichment Comparison</h4>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" class="ma-1" @click="downloadTable">
+        Download Results
+      </v-btn>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
@@ -217,6 +221,12 @@ export default {
       ];
     },
     items() {
+      return this.generateItems();
+    },
+  },
+
+  methods: {
+    generateItems() {
       // We need to make a copy of the object to avoid data modification
       const pathwaysOne = [];
       for (let pathway of this.pathwayEnrichmentOne.pathways)
@@ -256,7 +266,31 @@ export default {
       pathwaysOne.push(...secondaryPathways.values());
       return pathwaysOne;
     },
+
+    downloadTable() {
+      let str = "Stable Identifier,Pathway Name,Entities Found_a,Entities Found_b,Found_a-Found_b,pValue_a,pValue_b,log(pVal_a/pVal_b),FDR_a,FDR_b,log(FDR_a/FDR_b)\n";
+      let items = this.generateItems();
+      items.forEach(item => {
+        str += `${item.stId},` + `"${item.name}",`;
+        (item.entities) ? str += `${item.entities.found},` : str += ",";
+        (item.entities2) ? str += `${item.entities2.found},` : str +=',';
+        (item.entitiesFoundRatio) ? str += `${item.entitiesFoundRatio},` : str += ',';
+        (item.entities) ? str += `${item.entities.pValue},` : str += ",";
+        (item.entities2) ? str += `${item.entities2.pValue},` : str +=',';
+        (item.logPVal1Over2) ? str += `${item.logPVal1Over2},` : str += ',';
+        (item.entities) ? str += `${item.entities.fdr},` : str += ",";
+        (item.entities2) ? str += `${item.entities2.fdr},` : str +=',';
+        (item.logFdr1Over2) ? str += `${item.logFdr1Over2}` : str += '';
+        str += "\n";
+      });
+      const blob = new Blob([str], { type: "blob" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'PathwayEnrichmentComparison.csv';
+      link.click();
+    },
   },
+
 };
 </script>
 

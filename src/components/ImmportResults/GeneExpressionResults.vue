@@ -3,9 +3,9 @@
     <v-card-title>
       <h4>Gene Expression Analysis</h4>
       <v-spacer></v-spacer>
-      <!-- <v-btn color="primary" class="ma-1" @click="loadTestData">
-        Load Test Data
-      </v-btn> -->
+      <v-btn color="primary" class="ma-1" @click="downloadTable">
+        Download Results
+      </v-btn>
       <v-btn
         color="primary"
         class="ma-1"
@@ -275,6 +275,19 @@ export default {
       this.geneExpressionResults =
         await ImmportService.fetchTestGeneExpressionAnalysis();
     },
+
+    downloadTable() {
+      let str = "Gene Name,Average Expression,Log2FC,pValue,Adjusted pValue\n";
+      this.geneExpressionResults.forEach((result) => {
+        str += `${result.gene_name},${result.AveExpr},${result.logFC},${result.pValue},${result.adjPValue}\n`;
+      });
+      const blob = new Blob([str], { type: "blob" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'GeneExpressionAnalysis.csv';
+      link.click();
+    },    
+
   },
 };
 </script>

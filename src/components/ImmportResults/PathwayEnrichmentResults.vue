@@ -3,7 +3,10 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-        <a target="_blank" :href="reactomeFoamURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
+      <v-btn color="primary" class="ma-1" @click="downloadTable">
+        Download Results
+      </v-btn>
+      <a target="_blank" :href="reactomeFoamURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
@@ -163,6 +166,19 @@ export default {
   methods:{
     getReactomeDiagramURL(item){
       return `${process.env.VUE_APP_REACTOME_LINK}${item.stId}&DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    },
+
+    downloadTable() {
+      let str = "Stable Identifier,Pathway Name,Entities Found,Entities Total,Entities Ratio,Entitis pValue,Entities FDR\n";
+      this.pathwayEnrichmentResults.pathways.forEach((result) => {
+        // Quote pathway names in case there are "," in the pathway name.
+        str += `${result.stId},"${result.name}",${result.entities.found},${result.entities.total},${result.entities.ratio},${result.entities.pValue},${result.entities.fdr}\n`;
+      });
+      const blob = new Blob([str], { type: "blob" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'PathwayEnrichmentAnalysis.csv';
+      link.click();
     }
   }
 };
