@@ -242,10 +242,15 @@ export default {
         voId: "VO_0000001",
         children: [
           {
-            name: "inactivated vaccine",
-            id: 1,
-            voId: "VO_0000315",
-            children: [
+          name: "inactivated vaccine",
+          id: 1,
+          voId: "VO_0000315",
+          children: [
+              {
+              name: "inactivated influenza vaccine",
+              id: 52,
+              voId: "VO_0001176",
+              children: [
               {
                 name: "2008-2009 trivalent influenza vaccine",
                 id: 2,
@@ -262,12 +267,19 @@ export default {
                 voId: "VO_0000047",
               },
               {
-              name: "2011-2012 trivalent inactivated vaccine...",
-              // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
-              id: 5,
-              voId: "VO_0004810"
+                name: "2011-2012 trivalent inactivated vaccine...",
+                // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+                id: 5,
+                voId: "VO_0004810"
               },
-            ],
+              {
+                name: "Fluvirin",
+                id: 9,
+                voId: "VO_0000046",
+              },
+              ],
+              },
+          ],
           },
           {
             name: "live attenuated vaccine",
@@ -283,11 +295,6 @@ export default {
                     name: "FluMist",
                      id: 8,
                     voId: "VO_0000044",
-                  },
-                  {
-                    name: "Fluvirin",
-                    id: 9,
-                    voId: "VO_0000046",
                   },
                 ]
               },
@@ -370,25 +377,37 @@ export default {
                 voId: "VO_0000642",
                 children: [
                   {
-                    name: "2008-2009 trivalent influenza vaccine",
-                    id: 24,
-                    voId: "VO_0004809",
-                  },
-                  {
-                    name: "Fluarix",
-                    id: 25,
-                    voId: "VO_0000045",
-                  },
-                  {
-                    name: "Fluzone",
-                    id: 26,
-                    voId: "VO_0000047",
-                  },
-                  {
-                    name: "2011-2012 trivalent inactivated vaccine...",
-                    // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
-                    id: 27,
-                    voId: "VO_0004810"
+                    name: "inactivated influenza vaccine",
+                    id: 51,
+                    voId: "VO_0001176",
+                    children: [
+                      {
+                        name: "2008-2009 trivalent influenza vaccine",
+                        id: 24,
+                        voId: "VO_0004809",
+                      },
+                      {
+                        name: "Fluarix",
+                        id: 25,
+                        voId: "VO_0000045",
+                      },
+                      {
+                        name: "Fluzone",
+                        id: 26,
+                        voId: "VO_0000047",
+                      },
+                      {
+                        name: "2011-2012 trivalent inactivated vaccine...",
+                        // name: "2011?2012 trivalent inactivated vaccine (A/California/7/09/ (H1N1,) A/Perth /16/2009 (H3N2), and B/Brisbane /60/2008)",
+                        id: 27,
+                        voId: "VO_0004810"
+                      },
+                      {
+                        name: "Fluvirin",
+                        id: 30,
+                        voId: "VO_0000046",
+                      },
+                    ]
                   },
                   {            	
                     name: "live attenuated influenza vaccine",
@@ -399,11 +418,6 @@ export default {
                         name: "FluMist",
                         id: 29,
                         voId: "VO_0000044",
-                      },
-                      {
-                        name: "Fluvirin",
-                        id: 30,
-                        voId: "VO_0000046",
                       },
                     ]
                   }
