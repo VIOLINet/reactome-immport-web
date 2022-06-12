@@ -173,8 +173,8 @@ export default {
     },
 
     async fetchNetworkAnalysis(id, props) {
-      console.log(props.absLogFC)
-      console.log(props.adjPValue)
+      // console.log(props.absLogFC)
+      // console.log(props.adjPValue)
       try {
         this.resultSets.find((rs) => rs.id === id).fiNetwork = {
           network: this.addExpressionToNodes(

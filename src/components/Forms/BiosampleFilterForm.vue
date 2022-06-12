@@ -9,7 +9,7 @@
             selectable
             hoverable
             activatable
-            selection-type="independent"
+            selection-type="leaf"
             v-model="vaccineIdsSelected"
             :items="vaccineHierarchy"
             class="smallFont"
@@ -600,47 +600,23 @@ export default {
       }
       return [...new Set(void2vaccine.values())]
     },
+    // NB by Guanming: Since the leaf selection mode is selected, this method is used to add parent vaccines into the selected
+    // vaccines automatically. However, because of this, we may not be able to select studies annotated for a child
+    // vaccine only. See: FluMist (SDY269) and live attenuated influenza vaccine (SDY522). But I believe this behavior
+    // is more biologist-intuitive and follows the ontology structure.
     vaccinesSelected() {
-      var vaccines = [
-        ...new Set(
+      let vaccines = new Set(
           this.vaccineMap
             .filter((row) =>
               row.ids.some((id) => this.vaccineIdsSelected.includes(id))
             )
-            .map((vaccine) => vaccine.voId)
-        ),
-      ];
-
-      // //reverse nested structure to select all necessary parents based on included nodes
-      // //since these parents have their own data provided in the sample meta file.
-      // // Since only leaf can be selected (configured above for the v-tree), we need to do this
-      // // reverse search!
-      // if (
-      //   vaccines.includes("VO_0000047") &&
-      //   vaccines.includes("VO_0000045") &&
-      //   vaccines.includes("VO_0000047") &&
-      //   vaccines.includes("VO_0000044")
-      // )
-      //   vaccines.push("VO_0000642");
-      // if (vaccines.includes("VO_0000642")) vaccines.push("VO_0000609");
-      // if (
-      //   vaccines.includes("VO_0000047") &&
-      //   vaccines.includes("VO_0000045") &&
-      //   vaccines.includes("VO_0000047")
-      // )
-      //   vaccines.push("VO_0000315");
-      // if (vaccines.includes("VO_0000044")) 
-      //   vaccines.push("VO_0001178");
-      // if (
-      //   vaccines.includes("VO_0000315") &&
-      //   vaccines.includes("VO_0000367") &&
-      //   vaccines.includes("VO_0000609")
-      // )
-      //   vaccines.push("VO_0000001");
-      // if (vaccines.includes("VO_0000087"))
-      //   vaccines.push("VO_0000761")
-
-      return vaccines;
+            .map((vaccine) => vaccine.voId))
+      let currentSize = -1 // Do at least one check
+      while (vaccines.size > currentSize) {
+        currentSize = vaccines.size
+        this.fill_vaccines(this.vaccineHierarchy[0], vaccines)
+      }
+      return [...vaccines]
     },
     availableStudies() {
       return [
@@ -961,6 +937,35 @@ export default {
         },
       });
     },
+
+    // A recurse method to automatically select parent vaccines based on their children's selection
+    // states
+    fill_vaccines(tree_node, vaccines) {
+      // Done already
+      if (vaccines.has(tree_node.voId))
+        return
+      // Nothing to check
+      if (tree_node.children === undefined)
+        return
+      let needed = true
+      for (let i = 0; i < tree_node.children.length; i++) {
+        let child = tree_node.children[i]
+        if (!vaccines.has(child.voId)) {
+          needed = false;
+          break;
+        }
+      }
+      if (needed) {
+        vaccines.add(tree_node.voId)
+        return; // There is no need to check it children
+      }
+      // Some children have not been added
+      for (let i = 0; i < tree_node.children.length; i++) {
+        let child = tree_node.children[i]
+        this.fill_vaccines(child, vaccines)
+      }
+    },
+
   },
 };
 </script>
