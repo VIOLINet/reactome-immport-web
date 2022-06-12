@@ -9,7 +9,7 @@
             selectable
             hoverable
             activatable
-            selection-type="leaf"
+            selection-type="independent"
             v-model="vaccineIdsSelected"
             :items="vaccineHierarchy"
             class="smallFont"
@@ -611,30 +611,34 @@ export default {
         ),
       ];
 
-      //reverse nested structure to select all necessary parents based on included nodes
-      if (
-        vaccines.includes("VO_0000047") &&
-        vaccines.includes("VO_0000045") &&
-        vaccines.includes("VO_0000047") &&
-        vaccines.includes("VO_0000044")
-      )
-        vaccines.push("VO_0000642");
-      if (vaccines.includes("VO_0000642")) vaccines.push("VO_0000609");
-      if (
-        vaccines.includes("VO_0000047") &&
-        vaccines.includes("VO_0000045") &&
-        vaccines.includes("VO_0000047")
-      )
-        vaccines.push("VO_0000315");
-      if (vaccines.includes("VO_0000044")) vaccines.push("VO_0000367");
-      if (
-        vaccines.includes("VO_0000315") &&
-        vaccines.includes("VO_0000367") &&
-        vaccines.includes("VO_0000609")
-      )
-        vaccines.push("VO_0000001");
-      if (vaccines.includes("VO_0000087"))
-        vaccines.push("VO_0000761")
+      // //reverse nested structure to select all necessary parents based on included nodes
+      // //since these parents have their own data provided in the sample meta file.
+      // // Since only leaf can be selected (configured above for the v-tree), we need to do this
+      // // reverse search!
+      // if (
+      //   vaccines.includes("VO_0000047") &&
+      //   vaccines.includes("VO_0000045") &&
+      //   vaccines.includes("VO_0000047") &&
+      //   vaccines.includes("VO_0000044")
+      // )
+      //   vaccines.push("VO_0000642");
+      // if (vaccines.includes("VO_0000642")) vaccines.push("VO_0000609");
+      // if (
+      //   vaccines.includes("VO_0000047") &&
+      //   vaccines.includes("VO_0000045") &&
+      //   vaccines.includes("VO_0000047")
+      // )
+      //   vaccines.push("VO_0000315");
+      // if (vaccines.includes("VO_0000044")) 
+      //   vaccines.push("VO_0001178");
+      // if (
+      //   vaccines.includes("VO_0000315") &&
+      //   vaccines.includes("VO_0000367") &&
+      //   vaccines.includes("VO_0000609")
+      // )
+      //   vaccines.push("VO_0000001");
+      // if (vaccines.includes("VO_0000087"))
+      //   vaccines.push("VO_0000761")
 
       return vaccines;
     },
