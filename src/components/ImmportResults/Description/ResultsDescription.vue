@@ -37,7 +37,12 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title :title="formData.studyCohort.length > 0 ?formData.studyCohort.join(', ') : 'None'"><b>Study Cohort:</b> {{formData.studyCohort.length > 0 ?formData.studyCohort.join(", ") : "None"}}</v-list-item-title>
+        <v-list-item-title :title="formData.selectedType_subtypes.join(', ')"><b>Cell Type:</b> {{formData.selectedType_subtypes.join(", ")}}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <v-list-item dense class="text-left">
+      <v-list-item-content>
+        <v-list-item-title :title="formData.studyVariables.length > 0 ?formData.studyVariables.join(', ') : 'None'"><b>Study Variables:</b> {{formData.studyVariables.length > 0 ?formData.studyVariables.join(", ") : "None"}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <v-list-item dense class="text-left">
@@ -47,7 +52,12 @@
     </v-list-item>
     <v-list-item dense class="text-left">
       <v-list-item-content>
-        <v-list-item-title :title="formData.modelTime === true ? 'Yes' : 'No'"><b>Use time directly in the model?</b> {{formData.modelTime === true ? "Yes" : "No"}}</v-list-item-title>
+        <v-list-item-title :title="formData.analysisGroups.group1.join(', ')"><b>Group 1 (Time: days):</b> {{formData.analysisGroups.group1.join(", ")}}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <v-list-item dense class="text-left">
+      <v-list-item-content>
+        <v-list-item-title :title="formData.analysisGroups.group2.join(', ')"><b>Group 2 (Time: days):</b> {{formData.analysisGroups.group2.join(", ")}}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </v-sheet>

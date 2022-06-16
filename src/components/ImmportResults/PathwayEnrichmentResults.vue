@@ -3,35 +3,70 @@
     <v-card-title>
       <h4>Pathway Enrichment Analysis</h4>
       <v-spacer></v-spacer>
-        <a target="_blank" :href="reactomeFireworksURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
+      <v-btn color="primary" class="ma-1" @click="downloadTable">
+        Download Results
+      </v-btn>
+      <a target="_blank" :href="reactomeFoamURL"><v-btn color="secondary">Open in Reactome</v-btn></a>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
     </v-card-title>
     <v-expand-transition>
       <v-card-text v-show="show">
+        <plot :pathwayEnrichmentResults="pathwayEnrichmentResults.pathways"
+              :pvalueCutoff="pValInput">
+        </plot>
+        <v-card outlined>
         <v-data-table
           dense
           :headers="pathwayEnrichmentHeaders"
           :items="pathwayEnrichmentResults.pathways"
-          :footer-props="{ 'items-per-page-options': [20, 40, 50, 100] }"
+          :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }"
           no-results-text="No pathways. Try a less strict filter thresholds."
         >
           <template v-slot:item.stId="{item}">
-            <a target="_blank" :href="getReactomeDiagramURL(item)">{{item.stId}}</a>
+            <p class="table_p">
+            <v-tooltip bottom open-delay="500">
+              <template v-slot:activator="{on, attrs}">
+                <a 
+                  target="_reactome" 
+                  :href="getReactomeDiagramURL(item)"
+                  v-bind="attrs"
+                  v-on="on">
+                  {{item.stId}}
+                </a>
+              </template>
+              Open Reactome for {{item.name}}
+            </v-tooltip>
+            </p>
+          </template>
+          <template v-slot:item.name="{ item }">
+            <p class="table_p">
+              {{ item.name}}
+            </p>
+          </template>
+          <template v-slot:item.entities.found="{ item }">
+            <p class="table_p">
+              {{ item.entities.found}}
+            </p>
+          </template>
+          <template v-slot:item.entities.total="{ item }">
+            <p class="table_p">
+              {{item.entities.total}}
+            </p>
           </template>
           <template v-slot:item.entities.ratio="{ item }">
-            <p :title="item.entities.ratio">
+            <p :title="item.entities.ratio" class="table_p">
               {{ item.entities.ratio.toExponential(2) }}
             </p>
           </template>
           <template v-slot:item.entities.pValue="{ item }"
-            ><p :title="item.entities.pValue">
+            ><p :title="item.entities.pValue" class="table_p">
               {{ item.entities.pValue.toExponential(2) }}
             </p></template
           >
           <template v-slot:item.entities.fdr="{ item }"
-            ><p :title="item.entities.fdr">
+            ><p :title="item.entities.fdr" class="table_p">
               {{ item.entities.fdr.toExponential(2) }}
             </p></template
           >
@@ -70,14 +105,21 @@
             </tr>
           </template>
         </v-data-table>
+        </v-card>
       </v-card-text>
     </v-expand-transition>
   </v-card>
 </template>
 
 <script>
+
+import PathwayResultsPlot from './VolcanoPlot/PathwayResultsPlot.vue';
+
 export default {
   name: "PathwayEnrichmentResults",
+  components: {
+    plot: PathwayResultsPlot,
+  },
   props: {
     pathwayEnrichmentResults: {
       type: Object,
@@ -117,13 +159,26 @@ export default {
         },
       ];
     },
-    reactomeFireworksURL(){
-      return `${process.env.VUE_APP_REACTOME_LINK}DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    reactomeFoamURL(){
+      return `${process.env.VUE_APP_REACTFOAM_LINK}&analysis=${this.pathwayEnrichmentResults.summary.token}`
     }
   },
   methods:{
     getReactomeDiagramURL(item){
       return `${process.env.VUE_APP_REACTOME_LINK}${item.stId}&DTAB=AN&ANALYSIS=${this.pathwayEnrichmentResults.summary.token}`
+    },
+
+    downloadTable() {
+      let str = "Stable Identifier,Pathway Name,Entities Found,Entities Total,Entities Ratio,Entitis pValue,Entities FDR\n";
+      this.pathwayEnrichmentResults.pathways.forEach((result) => {
+        // Quote pathway names in case there are "," in the pathway name.
+        str += `${result.stId},"${result.name}",${result.entities.found},${result.entities.total},${result.entities.ratio},${result.entities.pValue},${result.entities.fdr}\n`;
+      });
+      const blob = new Blob([str], { type: "blob" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'PathwayEnrichmentAnalysis.csv';
+      link.click();
     }
   }
 };
@@ -132,5 +187,10 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
+}
+.table_p {
+  text-align:left; 
+  margin-top: 0.25em; 
+  margin-bottom: 0.25em;
 }
 </style>

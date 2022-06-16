@@ -6,7 +6,7 @@ Please install nvm through homebrew on a Mac, (or follow the documentation [here
 
 Next, install the latest version of Node:
 ```
-nvm install --lts
+npm install --lts
 ```
 
 Finally, install Vue CLI 3
@@ -44,3 +44,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Debug in VS Code
+Following the procedures listed here: [Debugging in VS Code](https://vuejs.org/v2/cookbook/debugging-in-vscode.html#Vue-Devtools)

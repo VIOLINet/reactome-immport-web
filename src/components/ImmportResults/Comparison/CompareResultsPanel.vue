@@ -17,7 +17,7 @@
         </div>
       </div>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-show="show">
       <DescriptionComparisonPanel
         class="mb-5"
         :formDatas="[compareFrom.formData, compareTo.formData]"
@@ -31,8 +31,8 @@
         }"
       />
       <GeneExpressionComparison
-        :geneExpressionOne="compareFrom.geneExpressionResults"
-        :geneExpressionTwo="compareTo.geneExpressionResults"
+        :compareFrom="compareFrom"
+        :compareTo="compareTo"
       />
       <PathwayEnrichmentComparison
         class="mt-5"
@@ -41,7 +41,9 @@
           compareTo.enrichmentResults.pathways
         "
         :pathwayEnrichmentOne="compareFrom.enrichmentResults"
+        :titleOne="compareFrom.formData.resultSetName"
         :pathwayEnrichmentTwo="compareTo.enrichmentResults"
+        :titleTwo="compareTo.formData.resultSetName"
       />
       <CyInstance
         v-if="fiNetwork.length > 0"

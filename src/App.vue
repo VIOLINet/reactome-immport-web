@@ -2,8 +2,9 @@
   <v-app id="app">
     <Docs />
     <v-container fluid>
+      <!-- <GeneExpressionResults class="mb-5"></GeneExpressionResults> -->
       <GeneExpressionAnalysisForm
-        :currentResultNames="resultSets.map((set) => set.displayName)"
+        :currentResultNames="resultSets.map((set) => set.formData.resultSetName)"
         @analyzeData="analyzeData"
         class="mb-5"
       />
@@ -32,10 +33,12 @@
           :key="item.id"
           :id="item.id"
           :resultSet="item"
+          :showComparisonButton ="resultSets.length > 1 ? true:false"
           @closeResults="closeResults"
           @fetchPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
           @fetchNetworkAnalysis="fetchNetworkAnalysis"
           @compareResults="compareResults"
+          @cutoffValuesUpdated="updateCutoffValues"
           class="mt-5"
         >
           <template v-slot:[`${compareFromId}`]>
@@ -49,25 +52,46 @@
           </template>
         </GeneExpResultPanel>
       </section>
+      <v-overlay opacity=".8" :value="dataAnalysisFailed">
+        <v-card>
+          <v-card-text class="flex">
+            <p>
+            An error occured with this analysis result, most likely caused by <br>
+            limited data with other options checked. Try to uncheck "Paired" <br>
+            or other options and then run the analysis again.
+            </p>
+            <p>
+            <v-btn @click="dataAnalysisFailed = false">close</v-btn>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-overlay>
     </v-container>
+    <Footer />
   </v-app>
 </template>
 
 <script>
 import ImmportService from "./service/ImmportService";
+import EventBus from "./service/EventBus";
 import GeneExpressionAnalysisForm from "./components/Forms/GeneExpressionAnalysisForm";
 import GeneExpResultPanel from "./components/ImmportResults/GeneExpResultPanel";
+// import GeneExpressionResults from "./components/ImmportResults/GeneExpressionResults";
 import ComparisonForm from "./components/ImmportResults/Comparison/ComparisonForm";
 import CompareResultsPanel from "./components/ImmportResults/Comparison/CompareResultsPanel";
 import Docs from "./components/Docs";
+import Footer from "./components/Footer";
 import _isEqual from "lodash/isEqual";
 import { v4 as uuidv4 } from "uuid";
+
 export default {
   name: "App",
   components: {
     GeneExpressionAnalysisForm,
     GeneExpResultPanel,
+    // GeneExpressionResults,
     Docs,
+    Footer,
     ComparisonForm,
     CompareResultsPanel,
   },
@@ -79,6 +103,9 @@ export default {
     loadingReactomeAnalyses: false,
     showCompareFromForm: false,
     compareFromId: undefined,
+    dataAnalysisFailed: false,
+    // Used to cache pathway list:
+    pathwayList: undefined,
   }),
   watch: {
     resultSets(newVal, oldVal) {
@@ -106,6 +133,10 @@ export default {
 
       //load gene expression analysis before unshifting
       await this.loadGeneExpressionAnalysis(data);
+      if(data.geneExpressionResults.length === 0){
+        this.dataAnalysisFailed = true;
+        return;
+      }
       data.id = uuidv4();
       data.enrichmentResults = {};
       data.fiNetwork = { network: [], absLogFC:0, adjPValue:1 };
@@ -125,6 +156,11 @@ export default {
     },
     async fetchPathwayEnrichmentAnalysis(id, genes) {
       try {
+        // Handle pathway list that is used as the base for plot
+        if (!sessionStorage.getItem('reactome_pathway_list')) {
+          let pathwayList = await ImmportService.listPathways();
+          sessionStorage.setItem('reactome_pathway_list', JSON.stringify(pathwayList));
+        }
         this.resultSets.find(
           (rs) => rs.id === id
         ).enrichmentResults = await ImmportService.fetchPathwayEnrichmentAnalysis(
@@ -135,9 +171,10 @@ export default {
         console.log(err);
       }
     },
+
     async fetchNetworkAnalysis(id, props) {
-      console.log(props.absLogFC)
-      console.log(props.adjPValue)
+      // console.log(props.absLogFC)
+      // console.log(props.adjPValue)
       try {
         this.resultSets.find((rs) => rs.id === id).fiNetwork = {
           network: this.addExpressionToNodes(
@@ -190,6 +227,16 @@ export default {
       this.comparisonSets = this.comparisonSets.filter(
         (set) => !(set.includes(ids[0]) && set.includes(ids[1]))
       );
+    },
+    updateCutoffValues(values) {
+      let result = this.resultSets.find(rs => rs.id == values.id)
+      if (result !== undefined)
+        if (result.cutoffValues === undefined)
+          result.cutoffValues = values;
+        else
+          Object.assign(result.cutoffValues, values);
+      // Re-fire this event for other components globally
+      EventBus.$emit('cutoffValuesUpdated', result.cutoffValues);
     },
   },
 };

@@ -2,13 +2,15 @@
   <v-card-text>
     <div>
       <v-radio-group v-model="modelTime">
+        <!-- Alawys perform two groups differentila expression analysis
         <v-radio
           :value="true"
           :label="`Use the time directly in the model`"
         ></v-radio>
+        -->
         <v-radio
           :value="false"
-          :label="`Create two groups for differential analysis`"
+          :label="`Create two groups for differential analysis by dragging samples from the first panel and then dropping them into Group 1 or Group 2 in the second panel`"
         ></v-radio>
       </v-radio-group>
       <div>
@@ -23,7 +25,7 @@
                 dense
                 style="background-color: transparent"
                 height="100%"
-                :class="(modelTime) && 'disableable'"
+                :class="modelTime && 'disableable'"
               >
                 <draggable
                   v-model="timeSamples"
@@ -31,7 +33,12 @@
                   style="height: 100%"
                 >
                   <template v-for="ts in timeSamples">
-                    <v-list-item dense :key="ts.time" :disabled="modelTime" class="listItem">
+                    <v-list-item
+                      dense
+                      :key="ts.time"
+                      :disabled="modelTime"
+                      class="listItem"
+                    >
                       <div class="flex">
                         <div>
                           {{ ts.time }}
@@ -54,10 +61,7 @@
               Group 1
               <v-divider></v-divider>
               <v-list dense class="inputBoxList scrollable" height="90%">
-                <draggable
-                  v-model="groupOne"
-                  :group="'grouping'"
-                >
+                <draggable v-model="groupOne" :group="'grouping'">
                   <template
                     v-for="ts2 in groupOne
                       .slice()
@@ -110,11 +114,11 @@
             Other Options
             <v-sheet color="#ddd" class="scrollable pa-2" height="24.5em">
               <p class="text-left">
-                Analysis can be adjusted by choosing the following variables:
+                Adjust the analysis by checking the following variables:
               </p>
               <v-row>
                 <v-col
-                  cols="6"
+                  cols="auto"
                   v-for="variable in confoundingVariables"
                   :key="variable.value"
                 >
@@ -128,25 +132,45 @@
                   </v-checkbox>
                 </v-col>
               </v-row>
-              <p class="text-left">
-                The results can be corrected for the platform
-              </p>
-              <v-checkbox
-                dense
-                class="shrink ma-0 pa-0"
-                :v-model="corrected"
-                :value="corrected"
-                :input-value="corrected"
-                label="Corrected"
-              ></v-checkbox>
-              <p class="text-left" style="margin-bottom:0;">
-                Name this Result Set
+              <p class="text-left">Correct the results for:</p>
+              <v-row>
+                <v-col>
+                  <v-checkbox
+                    dense
+                    class="shrink ma-0 pa-0"
+                    v-model="corrected"
+                    label="Platform"
+                  ></v-checkbox>
+                </v-col>
+                <v-col>
+                  <v-checkbox
+                    dense
+                    class="shrink ma-0 pa-0"
+                    v-model="batch"
+                    label="Batch"
+                  ></v-checkbox>
+                </v-col>
+              </v-row>
+              <p class="text-left">Use paired data by checking:</p>
+              <v-row>
+                <v-col>
+                <v-checkbox
+                  dense
+                  class="shrink ma-0 pa-0"
+                  v-model="usePairedDataInput"
+                  label="Paired"
+                ></v-checkbox>
+                </v-col>
+              </v-row>
+              <v-spacer></v-spacer>
+              <p class="text-left" style="margin-bottom: 0">
+                Name the analysis result
               </p>
               <v-text-field
-              placeholder="Name"
-              v-model="resultSetNameInput"
-              @keyup.enter="analyzeEvent"
-              dense
+                placeholder="Name"
+                v-model="resultSetNameInput"
+                @keyup.enter="analyzeEvent"
+                dense
               ></v-text-field>
             </v-sheet>
           </v-col>
@@ -180,8 +204,8 @@ export default {
     },
     currentResultNames: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data: () => ({
     modelTime: false,
@@ -195,8 +219,13 @@ export default {
       { displayName: "Race", value: "race" },
     ],
     selectedConfoundingVariables: [],
+    // Default as false since batch correction should take care of this
+    // platform correction
     corrected: true,
-    resultSetNameInput: "",
+    batch: true,
+    usePairedDataInput: true,
+    analysisCounter: 0,
+    resultSetNameInput: "Untitled",
     errormsg: "",
   }),
   watch: {
@@ -218,7 +247,7 @@ export default {
 
       this.biosampleMetaData.forEach((sample) => {
         if (sample.immport_vaccination_time === undefined) return;
-        const time = parseInt(sample.immport_vaccination_time);
+        const time = parseFloat(sample.immport_vaccination_time);
         if (!this.timeSamples.some((ts) => ts.time === time)) {
           this.timeSamples.push({
             time: time,
@@ -234,7 +263,7 @@ export default {
       let timesArray = [];
       this.biosampleMetaData.forEach((sample) => {
         if (sample.immport_vaccination_time === undefined) return;
-        const time = parseInt(sample.immport_vaccination_time);
+        const time = parseFloat(sample.immport_vaccination_time);
         if (!timesArray.some((ts) => ts.time === time)) {
           timesArray.push({
             time: time,
@@ -244,25 +273,35 @@ export default {
         timesArray.find((ts) => ts.time === time).sampleCount += 1;
       });
 
-      this.groupOne = this.groupOne.filter(ts => timesArray.some( ta => ta.time === ts.time))
-      this.groupOne.forEach(ts => {
-        ts.sampleCount = timesArray.find(ta => ta.time === ts.time).sampleCount
-        timesArray = timesArray.filter(ta => ta.time !== ts.time)
+      this.groupOne = this.groupOne.filter((ts) =>
+        timesArray.some((ta) => ta.time === ts.time)
+      );
+      this.groupOne.forEach((ts) => {
+        ts.sampleCount = timesArray.find(
+          (ta) => ta.time === ts.time
+        ).sampleCount;
+        timesArray = timesArray.filter((ta) => ta.time !== ts.time);
       });
 
-      this.groupTwo = this.groupTwo.filter(ts => timesArray.some(ta => ta.time === ts.time));
-      this.groupTwo.forEach(ts => {
-        ts.sampleCount = timesArray.find(ta => ta.time === ts.time).sampleCount
-        timesArray = timesArray.filter(ta => ta.time !== ts.time)
+      this.groupTwo = this.groupTwo.filter((ts) =>
+        timesArray.some((ta) => ta.time === ts.time)
+      );
+      this.groupTwo.forEach((ts) => {
+        ts.sampleCount = timesArray.find(
+          (ta) => ta.time === ts.time
+        ).sampleCount;
+        timesArray = timesArray.filter((ta) => ta.time !== ts.time);
       });
 
-      this.timeSamples = this.timeSamples.filter(ts => timesArray.includes(ts.time))
-      timesArray.forEach(ta => {
-        if(this.timeSamples.some(ts => ts.time === ta.time))
-          this.timeSamples.find(ts => ts.time === ta.time).sampleCount = ta.sampleCount
-        else
-          this.timeSamples.push(ta)
-      })
+      this.timeSamples = this.timeSamples.filter((ts) =>
+        timesArray.includes(ts.time)
+      );
+      timesArray.forEach((ta) => {
+        if (this.timeSamples.some((ts) => ts.time === ta.time))
+          this.timeSamples.find((ts) => ts.time === ta.time).sampleCount =
+            ta.sampleCount;
+        else this.timeSamples.push(ta);
+      });
       this.timeSamples.sort((a, b) => a.time - b.time);
     },
     moveTime(startingCol, ts) {
@@ -282,6 +321,7 @@ export default {
       this.resetTimes();
       this.selectedConfoundingVariables = [];
       this.corrected = true;
+      this.batch = true;
       this.errormsg = "";
     },
     resetTimes() {
@@ -296,12 +336,12 @@ export default {
     },
     analyzeEvent() {
       const data = {};
-      if(!this.resultSetNameInput || this.resultSetNameInput.length === 0){
-        this.errormsg = "Please name result set before analyzing.";
+      if (!this.resultSetNameInput || this.resultSetNameInput.length === 0) {
+        this.errormsg = "Please name an analysis result before analyzing.";
         return;
       }
-      if(this.currentResultNames.includes(this.resultSetNameInput)){
-        this.errormsg = "Please choose a unique name for each result set.";
+      if (this.currentResultNames.includes(this.resultSetNameInput)) {
+        this.errormsg = "Please choose a unique name for each analysis result.";
         return;
       }
       data.resultSetName = this.resultSetNameInput;
@@ -311,16 +351,22 @@ export default {
           group1: this.groupOne.map((s) => s.time),
           group2: this.groupTwo.map((s) => s.time),
         };
-        if(data.analysisGroups.group1.length < 1 || data.analysisGroups.group2.length < 1){
-          this.errormsg = "Use time directly in model or select at least 1 time per group.";
+        if (
+          data.analysisGroups.group1.length < 1 ||
+          data.analysisGroups.group2.length < 1
+        ) {
+          this.errormsg = "Select at least 1 time per group.";
           return;
         }
       }
-      data.studyCohort = this.selectedConfoundingVariables;
+      data.studyVariables = this.selectedConfoundingVariables;
       data.platformCorrection = this.corrected;
+      data.usePairedData = this.usePairedDataInput;
+      data.batchCorrection = this.batch;
       data.variableGenes = false; //set as default. Could be added to form later
       this.errormsg = "";
-      this.resultSetNameInput = "";
+      this.analysisCounter = this.analysisCounter + 1;
+      this.resultSetNameInput = "Untitled_" + this.analysisCounter;
       this.$emit("optionsSelectedEvent", data);
     },
     fireBackEvent() {
@@ -335,6 +381,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.space-around {
+  justify-content: flex-start;
 }
 .scrollable {
   overflow: scroll;

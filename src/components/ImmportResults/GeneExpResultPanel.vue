@@ -11,6 +11,7 @@
       </div>
       <div>
         <v-btn
+        v-if="showComparisonButton"
           color="primary"
           class="ma-1"
           @click="$emit('compareResults', resultSet.id)"
@@ -31,6 +32,7 @@
           :geneExpressionResults="resultSet.geneExpressionResults"
           @doPathwayEnrichmentAnalysis="fetchPathwayEnrichmentAnalysis"
           @doFINetworkAnalysis="fetchNetworkAnalysis"
+          @cutoffValuesUpdated="fireCutoffValuesUpdated"
         />
         <PathwayEnrichmentResults
           class="mt-5"
@@ -74,6 +76,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    showComparisonButton: {
+      type: Boolean,
+      default: () => false
+    }
   },
   data: () => ({
     show: true,
@@ -165,6 +171,10 @@ export default {
     closeResults() {
       this.$emit("closeResults", this.resultSet.id);
     },
+    fireCutoffValuesUpdated(value) {
+      // Attach id for tracking
+      this.$emit('cutoffValuesUpdated', {...value, id: this.resultSet.id});
+    }
   },
 };
 </script>

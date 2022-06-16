@@ -9,7 +9,7 @@
         Filter Biosamples
       </v-stepper-step>
       <v-divider></v-divider>
-      <v-stepper-step step="2"> Choose Options </v-stepper-step>
+      <v-stepper-step step="2">Setup Analysis</v-stepper-step>
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
@@ -79,11 +79,11 @@ export default {
             [
               ...selectedOptions.analysisGroups.group1,
               ...selectedOptions.analysisGroups.group2,
-            ].includes(parseInt(sample.immport_vaccination_time))
+            ].includes(parseFloat(sample.immport_vaccination_time))
           );
       const data = {};
       data.GSMids = [...new Set(samples.map((sample) => sample.gsm))];
-      data.studyVariables = this.studyVariables;
+      data.studyCohort = this.studyVariables;
       Object.assign(data, selectedOptions);
 
       const rtn = {};
