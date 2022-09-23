@@ -104,6 +104,8 @@ class ImmportService {
     var headers = lines.shift();
     headers = headers.split("\t");
     lines.forEach((line) => {
+      if (line === undefined || line.length === 0)
+        return; // Make sure the last empy line is not collected
       const fields = line.split("\t");
       const obj = {};
       for (var i = 0; i < headers.length; i++) {

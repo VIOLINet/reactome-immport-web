@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>ImmPort Reactome Analysis</h2>
+    <h2>VIGET: <em>V</em>acc<em>i</em>ne Response <em>G</em>ene <em>E</em>xpression <em>A</em>nalysis <em>T</em>ool based on Reactome and ImmPort</h2>
     <br>
     <p>
       This web app allows users to select a set of vaccines and gene expression datasets for differential gene expression analysis using

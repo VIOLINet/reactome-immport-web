@@ -628,7 +628,7 @@ export default {
               )
             )
             .map((s) => s.immport_study_accession)
-        ),
+        )
       ].sort();
     },
     availablePlatforms() {
