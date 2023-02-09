@@ -56,9 +56,10 @@
         <v-card>
           <v-card-text class="flex">
             <p>
-            An error occured with this analysis result, most likely caused by <br>
-            limited data with other options checked. Try to uncheck "Paired" <br>
-            or other options and then run the analysis again.
+            An error occured with this analysis, most likely caused by <br>
+            limited data with some options checked or a server-side error.<br>
+            Try to run the analysis again or set up another analysis with <br>
+            different options. For support, please contact <a href="https://violinet.org/contact_us.php" target="_blank">VIOLINET</a>.
             </p>
             <p>
             <v-btn @click="dataAnalysisFailed = false">close</v-btn>
